@@ -51,3 +51,8 @@ check out the configuration git repo, and then use the UI to import from that pa
 * normalizing sshing into the NAS
 * having to define a scratch space for the repo, or a persistent one for that matter. This was confused additionally because I was trying to host the repo on the same machine in almost the same place, and I repeatedly swapped the paths in command lines, treating the master as the checked-out client and vice versa.
 * having to mess with the docker installation just to get a usable version of docker-compose. This may be obsolete but it's hard to even tell how to revert correctly.
+
+## current: VMs
+
+Current lay down is 2 VMs, one control plane and one worker, planning to make the worker larger but
+keep the control fixed as we scale. 

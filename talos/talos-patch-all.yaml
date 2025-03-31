@@ -1,0 +1,24 @@
+# Following https://docs.cilium.io/en/v1.16/installation/k8s-install-helm/
+cluster:
+  network:
+    # cilium will become our CNI.
+    cni:
+      name: none
+    # Much bigger than they need to be, but convenient to make them recognizable.
+    podSubnets:
+      - 10.5.0.0/16
+    serviceSubnets:
+      - 10.6.0.0/16
+  proxy:
+    # Cilium will replace the proxy
+    disabled: true
+machine:
+  features:
+    hostDNS:
+      # Conflicts with Cilium
+      forwardKubeDNSToHost: false
+  install:
+    wipe: true
+    extraKernelArgs:
+      # 1280x1024 for the dashboard:
+      - vga=792

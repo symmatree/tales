@@ -1,0 +1,385 @@
+# Initialized from
+# https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.yaml
+# Deleted all values I'm not changing.
+cilium:
+  # -- (string) Kubernetes service host - use "auto" for automatic lookup from the cluster-info ConfigMap
+  k8sServiceHost: "localhost"
+  # @schema
+  # type: [string, integer]
+  # @schema
+  # -- (string) Kubernetes service port
+  k8sServicePort: 7445
+
+  # If the amount of requests to the Kubernetes API server exceeds the configured
+  # rate limit, the agent will start to throttle requests by delaying
+  # them until there is budget or the request times out.
+  k8sClientRateLimit:
+    # @schema
+    # type: [null, integer]
+    # @schema
+    # -- (int) The sustained request rate in requests per second.
+    # @default -- 10
+    qps: 30
+    # @schema
+    # type: [null, integer]
+    # @schema
+    # -- (int) The burst request rate in requests per second.
+    # The rate limiter will allow short bursts with a higher rate.
+    # @default -- 20
+    burst: 60
+  cluster:
+    # -- Name of the cluster. Only required for Cluster Mesh and mutual authentication with SPIRE.
+    # It must respect the following constraints:
+    # * It must contain at most 32 characters;
+    # * It must begin and end with a lower case alphanumeric character;
+    # * It may contain lower case alphanumeric characters and dashes between.
+    # The "default" name cannot be used if the Cluster ID is different from 0.
+    name: tales
+    # -- (int) Unique ID of the cluster. Must be unique across all connected
+    # clusters and in the range of 1 to 255. Only required for Cluster Mesh,
+    # may be 0 if Cluster Mesh is not used.
+    id: 1
+  serviceAccounts:
+    nodeinit:
+      # -- Enabled is temporary until https://github.com/cilium/cilium-cli/issues/1396 is implemented.
+      # Cilium CLI doesn't create the SAs for node-init, thus the workaround. Helm is not affected by
+      # this issue. Name and automount can be configured, if enabled is set to true.
+      # Otherwise, they are ignored. Enabled can be removed once the issue is fixed.
+      # Cilium-nodeinit DS must also be fixed.
+      enabled: true
+
+  # -- Roll out cilium agent pods automatically when configmap is updated.
+  rollOutCiliumPods: true
+  securityContext:
+    capabilities:
+      # -- Capabilities for the `cilium-agent` container
+      ciliumAgent:
+        # Use to set socket permission
+        - CHOWN
+        # Used to terminate envoy child process
+        - KILL
+        # Used since cilium modifies routing tables, etc...
+        - NET_ADMIN
+        # Used since cilium creates raw sockets, etc...
+        - NET_RAW
+        # Used since cilium monitor uses mmap
+        - IPC_LOCK
+        # Used in iptables. Consider removing once we are iptables-free
+        # SHP: Disabled due to Talos.
+        # - SYS_MODULE
+        # Needed to switch network namespaces (used for health endpoint, socket-LB).
+        # We need it for now but might not need it for >= 5.11 specially
+        # for the 'SYS_RESOURCE'.
+        # In >= 5.8 there's already BPF and PERMON capabilities
+        - SYS_ADMIN
+        # Could be an alternative for the SYS_ADMIN for the RLIMIT_NPROC
+        - SYS_RESOURCE
+        # Both PERFMON and BPF requires kernel 5.8, container runtime
+        # cri-o >= v1.22.0 or containerd >= v1.5.0.
+        # If available, SYS_ADMIN can be removed.
+        #- PERFMON
+        #- BPF
+        # Allow discretionary access control (e.g. required for package installation)
+        - DAC_OVERRIDE
+        # Allow to set Access Control Lists (ACLs) on arbitrary files (e.g. required for package installation)
+        - FOWNER
+        # Allow to execute program that changes GID (e.g. required for package installation)
+        - SETGID
+        # Allow to execute program that changes UID (e.g. required for package installation)
+        - SETUID
+      # -- Capabilities for the `clean-cilium-state` init container
+      cleanCiliumState:
+        # Most of the capabilities here are the same ones used in the
+        # cilium-agent's container because this container can be used to
+        # uninstall all Cilium resources, and therefore it is likely that
+        # will need the same capabilities.
+        # Used since cilium modifies routing tables, etc...
+        - NET_ADMIN
+        # Used in iptables. Consider removing once we are iptables-free
+        # SHP: Disabled due to Talos.
+        # - SYS_MODULE
+        # We need it for now but might not need it for >= 5.11 specially
+        # for the 'SYS_RESOURCE'.
+        # In >= 5.8 there's already BPF and PERMON capabilities
+        - SYS_ADMIN
+        # Could be an alternative for the SYS_ADMIN for the RLIMIT_NPROC
+        - SYS_RESOURCE
+        # Both PERFMON and BPF requires kernel 5.8, container runtime
+        # cri-o >= v1.22.0 or containerd >= v1.5.0.
+        # If available, SYS_ADMIN can be removed.
+        #- PERFMON
+        #- BPF
+  # @schema
+  # type: [boolean, string]
+  # @schema
+  # -- Enable installation of PodCIDR routes between worker
+  # nodes if worker nodes share a common L2 network segment.
+  autoDirectNodeRoutes: true
+  # -- Enable skipping of PodCIDR routes between worker
+  # nodes if the worker nodes are in a different L2 network segment.
+  directRoutingSkipUnreachable: true
+  # -- Configure L2 announcements
+  l2announcements:
+    # -- Enable L2 announcements
+    enabled: true
+    # -- If a lease is not renewed for X duration, the current leader is considered dead, a new leader is picked
+    leaseDuration: 10s
+    # -- The interval at which the leader will renew the lease
+    leaseRenewDeadline: 7s
+    # -- The timeout between retries if renewal fails
+    leaseRetryPeriod: 1s
+  # -- Configure L2 pod announcements
+  l2podAnnouncements:
+    # -- Enable L2 pod announcements
+    enabled: true
+    # -- Interface used for sending Gratuitous ARP pod announcements
+    interface: "enp3s0"
+  pmtuDiscovery:
+    # -- Enable path MTU discovery to send ICMP fragmentation-needed replies to
+    # the client.
+    enabled: true
+  bpf:
+    # -- (bool) Allow cluster external access to ClusterIP services.
+    # @default -- `false`
+    lbExternalClusterIP: true
+    hostLegacyRouting: false
+
+  envoyConfig:
+    # -- Enable CiliumEnvoyConfig CRD
+    # CiliumEnvoyConfig CRD can also be implicitly enabled by other options.
+    enabled: true
+  ingressController:
+    # -- Enable cilium ingress controller
+    # This will automatically set enable-envoy-config as well.
+    enabled: true
+    # -- Set cilium ingress controller to be the default ingress controller
+    # This will let cilium ingress controller route entries without ingress class set
+    default: true
+  gatewayAPI:
+    # -- Enable support for Gateway API in cilium
+    # This will automatically set enable-envoy-config as well.
+    enabled: true
+    # -- Enable Backend Protocol selection support (GEP-1911) for Gateway API via appProtocol.
+    enableAppProtocol: true
+    # -- Enable ALPN for all listeners configured with Gateway API. ALPN will attempt HTTP/2, then HTTP 1.1.
+    # Note that this will also enable `appProtocol` support, and services that wish to use HTTP/2 will need to indicate that via their `appProtocol`.
+    enableAlpn: true
+    # Host Network related configuration
+    hostNetwork:
+      # -- Configure whether the Envoy listeners should be exposed on the host network.
+      enabled: true
+      # Specify the nodes where the Ingress listeners should be exposed
+  externalIPs:
+    # -- Enable ExternalIPs service support.
+    enabled: true
+
+  hubble:
+    # -- Hubble metrics configuration.
+    # See https://docs.cilium.io/en/stable/observability/metrics/#hubble-metrics
+    # for more comprehensive documentation about Hubble metrics.
+    metrics:
+      # @schema
+      # type: [null, array]
+      # @schema
+      # -- Configures the list of metrics to collect. If empty or null, metrics
+      # are disabled.
+      # Example:
+      #
+      #   enabled:
+      #   - dns:query;ignoreAAAA
+      #   - drop
+      #   - tcp
+      #   - flow
+      #   - icmp
+      #   - http
+      #
+      # You can specify the list of metrics from the helm CLI:
+      #
+      #   --set hubble.metrics.enabled="{dns:query;ignoreAAAA,drop,tcp,flow,icmp,http}"
+      #
+      enabled:
+        - dns:query;ignoreAAAA
+        - drop
+        - tcp
+        - flow
+        - icmp
+        - httpV2
+      # -- Enables exporting hubble metrics in OpenMetrics format.
+      enableOpenMetrics: true
+      serviceMonitor:
+        # -- Create ServiceMonitor resources for Prometheus Operator.
+        # This requires the prometheus CRDs to be available.
+        # ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
+        enabled: true
+      # -- Grafana dashboards for hubble
+      # grafana can import dashboards based on the label and value
+      # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
+      dashboards:
+        enabled: true
+    ui:
+      # -- Whether to enable the Hubble UI.
+      # TODO(symmetry): Requires hubble-relay, is it worth it?
+      enabled: false
+      # -- Roll out Hubble-ui pods automatically when configmap is updated.
+      rollOutPods: true
+      backend:
+        livenessProbe:
+          # -- Enable liveness probe for Hubble-ui backend (requires Hubble-ui 0.12+)
+          enabled: true
+        readinessProbe:
+          # -- Enable readiness probe for Hubble-ui backend (requires Hubble-ui 0.12+)
+          enabled: true
+      # ingress:
+      #   enabled: false
+      #   annotations: {}
+      #   # kubernetes.io/ingress.class: nginx
+      #   # kubernetes.io/tls-acme: "true"
+      #   className: ""
+      #   hosts:
+      #     - chart-example.local
+    
+  ipam:
+    # -- Configure IP Address Management mode.
+    # ref: https://docs.cilium.io/en/stable/network/concepts/ipam/
+    mode: "kubernetes"
+
+  # -- Configure Kubernetes specific configuration
+  k8s:
+    # -- requireIPv4PodCIDR enables waiting for Kubernetes to provide the PodCIDR
+    # range via the Kubernetes node resource
+    requireIPv4PodCIDR: true
+  # -- Configure the kube-proxy replacement in Cilium BPF datapath
+  # Valid options are "true" or "false".
+  # ref: https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/
+  kubeProxyReplacement: "true"
+
+  # -- healthz server bind address for the kube-proxy replacement.
+  # To enable set the value to '0.0.0.0:10256' for all ipv4
+  # addresses and this '[::]:10256' for all ipv6 addresses.
+  # By default it is disabled.
+  kubeProxyReplacementHealthzBindAddr: "0.0.0.0:10256"
+  # -- Enable Local Redirect Policy.
+  localRedirectPolicy: false
+
+  # -- Enables IPv4 BIG TCP support which increases maximum IPv4 GSO/GRO limits for nodes and pods
+  enableIPv4BIGTCP: true
+
+  # -- (string) Allows to explicitly specify the IPv4 CIDR for native routing.
+  # When specified, Cilium assumes networking for this CIDR is preconfigured and
+  # hands traffic destined for that range to the Linux network stack without
+  # applying any SNAT.
+  # Generally speaking, specifying a native routing CIDR implies that Cilium can
+  # depend on the underlying networking stack to route packets to their
+  # destination. To offer a concrete example, if Cilium is configured to use
+  # direct routing and the Kubernetes CIDR is included in the native routing CIDR,
+  # the user must configure the routes to reach pods, either manually or by
+  # setting the auto-direct-node-routes flag.
+  ipv4NativeRoutingCIDR: "10.0.0.0/8"
+
+  # -- Configure service load balancing
+  loadBalancer:
+    # -- L7 LoadBalancer
+    l7:
+      # -- Enable L7 service load balancing via envoy proxy.
+      # The request to a k8s service, which has specific annotation e.g. service.cilium.io/lb-l7,
+      # will be forwarded to the local backend proxy to be load balanced to the service endpoints.
+      # Please refer to docs for supported annotations for more configuration.
+      #
+      # Applicable values:
+      #   - envoy: Enable L7 load balancing via envoy proxy. This will automatically set enable-envoy-config as well.
+      #   - disabled: Disable L7 load balancing by way of service annotation.
+      backend: envoy
+  # -- Configure N-S k8s service loadbalancing
+  nodePort:
+    # -- Enable the Cilium NodePort service implementation.
+    enabled: true
+
+  # -- Configure prometheus metrics on the configured port at /metrics
+  prometheus:
+    metricsService: true
+    enabled: true
+    serviceMonitor:
+      # -- Enable service monitors.
+      # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
+      enabled: true
+      trustCRDsExist: true
+  # -- Grafana dashboards for cilium-agent
+  # grafana can import dashboards based on the label and value
+  # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
+  dashboards:
+    enabled: true
+  # Configure Cilium Envoy options.
+  envoy:
+    # @schema
+    # type: [null, boolean]
+    # @schema
+    # -- Enable Envoy Proxy in standalone DaemonSet.
+    # This field is enabled by default for new installation.
+    # @default -- `true` for new installation
+    enabled: true
+    # -- Roll out cilium envoy pods automatically when configmap is updated.
+    rollOutPods: true
+
+    # -- Configure Cilium Envoy Prometheus options.
+    # Note that some of these apply to either cilium-agent or cilium-envoy.
+    prometheus:
+      # -- Enable prometheus metrics for cilium-envoy
+      enabled: true
+      serviceMonitor:
+        # -- Enable service monitors.
+        # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
+        # Note that this setting applies to both cilium-envoy _and_ cilium-agent
+        # with Envoy enabled.
+        enabled: true
+
+  # -- Configure TLS configuration in the agent.
+  tls:
+    # @schema
+    # type: [null, boolean]
+    # @schema
+    # -- Configure if the Cilium Agent will only look in `tls.secretsNamespace` for
+    #    CiliumNetworkPolicy relevant Secrets.
+    #    If false, the Cilium Agent will be granted READ (GET/LIST/WATCH) access
+    #    to _all_ secrets in the entire cluster. This is not recommended and is
+    #    included for backwards compatibility.
+    #    This value obsoletes `tls.secretsBackend`, with `true` == `local` in the old
+    #    setting, and `false` == `k8s`.
+    readSecretsOnlyFromSecretsNamespace: true
+  # -- Enable native-routing mode or tunneling mode.
+  # Possible values:
+  #   - ""
+  #   - native
+  #   - tunnel
+  # @default -- `"tunnel"`
+  routingMode: "native"
+  operator:
+    # -- Roll out cilium-operator pods automatically when configmap is updated.
+    rollOutPods: true
+    # -- Number of replicas to run for the cilium-operator deployment
+    replicas: 1
+    # -- Enable prometheus metrics for cilium-operator on the configured port at
+    # /metrics
+    prometheus:
+      metricsService: true
+      enabled: true
+      serviceMonitor:
+        # -- Enable service monitors.
+        # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
+        enabled: true
+    # -- Grafana dashboards for cilium-operator
+    # grafana can import dashboards based on the label and value
+    # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
+    dashboards:
+      enabled: true
+  # -- Configure cgroup related configuration
+  cgroup:
+    autoMount:
+      # -- Enable auto mount of cgroup2 filesystem.
+      # When `autoMount` is enabled, cgroup2 filesystem is mounted at
+      # `cgroup.hostRoot` path on the underlying host and inside the cilium agent pod.
+      # If users disable `autoMount`, it's expected that users have mounted
+      # cgroup2 filesystem at the specified `cgroup.hostRoot` volume, and then the
+      # volume will be mounted inside the cilium agent pod at the same path.
+      enabled: false
+    # -- Configure cgroup root where cgroup2 filesystem is mounted on the host (see also: `cgroup.autoMount`)
+    hostRoot: /sys/fs/cgroup

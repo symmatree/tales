@@ -1,0 +1,6 @@
+machine:
+  network:
+    hostname: talos-control-1
+  certSANs:
+    # Non-kubernetes name, the endpoint provided to `talosctl gen config`
+    - talos-control.local.symmatree.com

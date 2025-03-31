@@ -142,6 +142,27 @@ talosctl shutdown --wait -e 10.0.1.50 -n 10.0.1.100
 
 Once you restart the VM, it should be green (except for Secure Boot, which, meh).
 
+
+### Validate installation
+
+```
+cilium status --wait -n cilium
+kubectl create namespace cilium-test-1 \
+  && kubectl label namespace cilium-test-1 pod-security.kubernetes.io/enforce=privileged \
+  && kubectl label namespace cilium-test-1 pod-security.kubernetes.io/warn=privileged
+cilium connectivity test -n cilium
+```
+
+Current issues:
+
+* TODO: `Could not modify IPv4 gro_max_size and gso_max_size, disabling BIG TCP`
+* TODO: `msg="Failed to send gratuitous arp" error="failed to craft ARP reply packet: invalid IPv4 address" ipAddr="invalid IP" k8sPodName= subsys=l2-pod-announcements-garp`
+
+```
+ talosctl conformance kubernetes -e 10.0.1.50 -n 10.0.1.50
+```
+
+
 ## Basic layout
 
 I have a [Synology RS1619xs+](https://www.synology.com/en-us/products/RS1619xs+) from

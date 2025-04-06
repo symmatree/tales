@@ -1,7 +1,5 @@
 # Talos Linux Setup and Config
 
-
-
 ## Installation from scratch (new secrets)
 
 First generate a secrets file. This seems to encapsulate all the generated randomness
@@ -34,7 +32,7 @@ I connected to the VM and watched the logs while it incrementally brought things
 new etcd cluster.
 
 ```
-talosctl bootstrap -n 10.0.1.50
+talosctl bootstrap -n talos-control-1.local.symmatree.com
 ```
 
 This will grind a little longer and then sit there complaining about a timeout and a permission denied, but the real problem
@@ -43,7 +41,7 @@ is that it doesn't have a CNI so it can't connect to itself.
 ### Initial Kubernetes config
 
 ```
-talosctl kubeconfig -n 10.0.1.50
+talosctl kubeconfig -n talos-control-1.local.symmatree.com
 ```
 
 If things are far enough along, this will save or update an entry in your `~/.kube/config` file that gives you the keys to access
@@ -117,3 +115,120 @@ Current issues:
 # Fails due to single node.
 talosctl conformance kubernetes -n 10.0.1.50
 ```
+
+## Background and Settings
+
+### Memory reservations
+
+#### Summary
+
+TL;DR: Talos doesn't let you customize cgroup settings passed to the kubelet, but does put a MemMax on the `kubepods`
+cgroup which ought to do at least some basic protecting of the host compared to the no-reservation defaults.
+
+#### Background
+
+Kubernetes nodes are happy to allocate their entire selves and then effectively die because they cannot
+service basic duties like management connections (whether ssh or kubernetes). This can be CPU but
+it is most painful with RAM; at work sometomes we see machines go away for minutes or hours, and
+sometimes eventually emerge and respond again. Often it takes a long time even after OOM-killing something; this may be
+because it killed the wrong thing, or it might be because, before killing it, the node had already
+dumped every single cache and memmap out of the working set, and they page back in pathologically.
+
+So, the two strategies to avoid that are
+
+* separate control plane VM so we have someone to talk to even if the worker is fully saturated
+* reserve memory for the system so it never gets quite so low, we hope
+
+Docs / inputs
+
+* To see kernel-space usage: `talosctl read -n talos-control.local.symmatree.com /proc/meminfo` and `talosctl read -n 10.0.1.100 /proc/meminfo`
+* To see user-space processes: `talosctl processes -n talos-control.local.symmatree.com`
+* Allocating processes to owners: [talos component diagram](https://www.talos.dev/v1.9/learn-more/components/)
+* [kubernetes compute reservations docs](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/)
+* To see a rather nice rollup: `talosctl cgroups -n talos-control.local.symmatree.com --preset=memory`
+
+I cleaned up the process list, partitioned into categories of based on the kubelet divisions, and added the
+`Slab`, `SReclaimable`, `SUnreclaim`, `KernelStack`, and `PageTables` entries from `/proc/meminfo`
+as "kernel". (Note that the kernel usage is similar between idle worker and control plane, only
+the worker has KernelStack and PageTables which makes perfect sense since I had no load running).
+
+Upshot:
+
+| type        | SUM of RESMEM MB |
+| ----------- | ---------------- |
+| kernel      | 123              |
+| kube        | 441              |
+| pod         | 920              |
+| system      | 253              |
+| Grand Total | 1737             |
+
+There is not much distinction between "host" and "talos", I was just trying to identify process
+names more easily. In more detail:
+
+| type   | RESMEM MB | COMMAND                                |
+| ------ | --------- | -------------------------------------- |
+| pod    | 496       | /usr/local/bin/kube-apiserver          |
+| kube   | 166       | /usr/local/bin/etcd                    |
+| pod    | 122       | /usr/bin/cilium-agent                  |
+| system | 104       | /sbin/init                             |
+| pod    | 87        | /usr/local/bin/kube-controller-manager |
+| kube   | 73        | /usr/local/bin/kubelet                 |
+| pod    | 58        | /usr/bin/cilium-operator-generic       |
+| system | 56        | /sbin/dashboard                        |
+| kernel | 54        | Slab:                                  |
+| system | 46        | /apid                                  |
+| kube   | 45        | /bin/containerd                        |
+| system | 44        | /trustd                                |
+| pod    | 44        | /coredns                               |
+| pod    | 44        | /usr/local/bin/kube-scheduler          |
+| pod    | 43        | /coredns                               |
+| kernel | 41        | SUnreclaim:                            |
+| kube   | 21        | /bin/containerd                        |
+| pod    | 20        | /usr/bin/cilium-envoy                  |
+| kernel | 13        | SReclaimable:                          |
+| kube   | 12        | /bin/containerd-shim-runc-v2           |
+| kube   | 12        | /bin/containerd-shim-runc-v2           |
+| kube   | 12        | /bin/containerd-shim-runc-v2           |
+| kube   | 12        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kube   | 11        | /bin/containerd-shim-runc-v2           |
+| kernel | 8         | PageTables:                            |
+| kernel | 8         | KernelStack:                           |
+| pod    | 6         | /usr/bin/cilium-health-responder       |
+| system | 3         | /sbin/systemd-udevd                    |
+
+This is just a snapshot (of a totally idle system with a worker
+that did not get a PodCIDR and is broken), but good enough to go on with, considering that the
+default reservation is 0.
+
+Lol okay I think `talosctl cgroups -n talos-control.local.symmatree.com --preset=memory` is actually all I need,
+since it has them broken into `podruntime`, `system`, and `kubepods` cgroups, with current and peak RAM for each.
+
+Okay what do these columns mean? [kernel docs](https://docs.kernel.org/admin-guide/cgroup-v2.html)
+
+* `memory.low`
+
+> Best-effort memory protection. If the memory usage of a cgroup is within its effective low boundary, the cgroup’s memory won’t be reclaimed unless there is no reclaimable memory available in unprotected cgroups. 
+
+* `memory.high`
+
+> Memory usage throttle limit. If a cgroup’s usage goes over the high boundary, the processes of the cgroup are throttled and put under heavy reclaim pressure.
+
+> Going over the high limit never invokes the OOM killer and under extreme conditions the limit may be breached. The high limit should be used in scenarios where an external process monitors the limited cgroup to alleviate heavy reclaim pressure.
+
+* `memory.max`
+
+> Memory usage hard limit. This is the main mechanism to limit memory usage of a cgroup. If a cgroup’s memory usage reaches this limit and can’t be reduced, the OOM killer is invoked in the cgroup. Under certain circumstances, the usage may go over the limit temporarily.
+
+Currently:
+
+* MemLow is set for `init`, tasks under `podruntime`, `system` and some tasks under it.
+* MemHigh is totally unset
+* MemMax is set for `kubepods` (this might be Allocatable?), `coredns` within it, and `apid`, `dashboard` and `trustd` within `system`
+* Currently (new, idle system) every MemPeak is less than MemLow as well as (almost-of-course) MemMax.

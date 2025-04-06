@@ -105,7 +105,8 @@ it was usable, but higher is better.
 Via the Synology UI: The host and VM are supposed to send / catch ACPI events and shut down somewhat gracefully if you click Shutdown in the 
 Synology UI. Better once we install the guest agent as a daemonset. This is the only way to shut down if you have lost credentials at the talos level.
 
-Via Talos: for example `talosctl reboot -n 10.0.1.100 -e 10.0.1.100` for the worker. Should guarantee an orderly shutdown one hopes.
+Via Talos: for example `talosctl reboot -n 10.0.1.100` for the worker. Should guarantee an orderly shutdown one hopes. However this does not ACTUALLY
+reboot the machine, it only `kexec`s the kernel again, so it does not apply changed kernel parameters.
 
 ### Catching a reboot
 

@@ -8,9 +8,9 @@ op read op://tales-secrets/talos-secrets.yaml/notesPlain > ./secrets.yaml
 echo "talosctl gen config"
 talosctl gen config \
   --with-secrets ./secrets.yaml \
- --config-patch "@${SAVE_DIR}/talos-patch-all.yaml" \
- --config-patch-control-plane "@${SAVE_DIR}/talos-patch-control.yaml" \
- --config-patch-worker "@${SAVE_DIR}/talos-patch-worker.yaml" \
+  --config-patch "@${SAVE_DIR}/talos-patch-all.yaml" \
+  --config-patch-control-plane "@${SAVE_DIR}/talos-patch-control.yaml" \
+  --config-patch-worker "@${SAVE_DIR}/talos-patch-worker.yaml" \
   tales https://talos-control.local.symmatree.com:6443
 rm secrets.yaml
 

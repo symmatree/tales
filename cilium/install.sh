@@ -19,7 +19,7 @@ kubectl create namespace cilium \
   && kubectl label namespace cilium pod-security.kubernetes.io/enforce=privileged \
   && kubectl label namespace cilium pod-security.kubernetes.io/warn=privileged
 
-helm install --namespace cilium cilium "${SAVE_DIR}"
+helm upgrade --install --namespace cilium cilium "${SAVE_DIR}"
 echo "Wait for CRDs to become available"
 sleep 60
 kubectl apply -f "${SAVE_DIR}/additional-manifests.yaml"

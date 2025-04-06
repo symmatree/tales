@@ -1,6 +1,8 @@
 machine:
   network:
-    hostname: talos-control-1
+    # This is used in the cert; a FQDN allows us to use this name to talosctl as -e or -n
+    # rather than only accepting IP addresses.
+    hostname: talos-control-1.local.symmatree.com
   certSANs:
     # Non-kubernetes name, the endpoint provided to `talosctl gen config`
     - talos-control.local.symmatree.com

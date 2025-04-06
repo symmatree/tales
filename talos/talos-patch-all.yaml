@@ -1,16 +1,24 @@
 # Following https://docs.cilium.io/en/v1.16/installation/k8s-install-helm/
 cluster:
   network:
+    # Using a real TLD means I could create public certs if useful.
+    dnsDomain: tales.symmatree.com
+
     # cilium will become our CNI.
     cni:
       name: none
     # These two CIDRs are inside my router's 10.0.0.0/16 so they can
     # just ARP appropriately and things will work.
+    # 10.0.8.0/24 is the "external" IP range in cilium/additional-manifests.yaml
     podSubnets:
-      - 10.0.5.0/24
+      - 10.0.4.0/23
     serviceSubnets:
-      - 10.0.6.0/24
-    # 10.0.7.0/24 is the "external" IP range in cilium/additional-manifests.yaml
+      - 10.0.6.0/23
+  controllerManager:
+    extraArgs:
+      # With /23 allocated total, /25-per-node allows max of 4 nodes
+      "node-cidr-mask-size": 25
+
   proxy:
     # Cilium will replace the proxy
     disabled: true

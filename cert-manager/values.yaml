@@ -1,0 +1,28 @@
+# From
+# https://raw.githubusercontent.com/cert-manager/cert-manager/refs/tags/v1.17.1/deploy/charts/cert-manager/values.yaml
+# keeping only values we override (or want to).
+
+cert-manager:
+  # Default values for cert-manager.
+  # This is a YAML-formatted file.
+  # Declare variables to be passed into your templates.
+  global:
+    # The number of old ReplicaSets to retain to allow rollback (if not set, the default Kubernetes value is set to 10).
+    # +docs:property
+    revisionHistoryLimit: 1
+
+  crds:
+    # This option decides if the CRDs should be installed
+    # as part of the Helm installation.
+    enabled: true
+
+  # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted.
+  enableCertificateOwnerRef: true
+
+  config:
+    enableGatewayAPI: true
+
+  prometheus:
+    servicemonitor:
+      # Create a ServiceMonitor to add cert-manager to Prometheus.
+      enabled: true

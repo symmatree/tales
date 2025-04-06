@@ -216,10 +216,24 @@ cilium:
       # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
       dashboards:
         enabled: true
+    relay:
+      # -- Enable Hubble Relay (requires hubble.enabled=true)
+      enabled: true
+      # -- Roll out Hubble Relay pods automatically when configmap is updated.
+      rollOutPods: true
+
+      # -- Enable prometheus metrics for hubble-relay on the configured port at
+      # /metrics
+      prometheus:
+        enabled: true
+        port: 9966
+        serviceMonitor:
+          # -- Enable service monitors.
+          # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
+          enabled: true
     ui:
       # -- Whether to enable the Hubble UI.
-      # TODO(symmetry): Requires hubble-relay, is it worth it?
-      enabled: false
+      enabled: true
       # -- Roll out Hubble-ui pods automatically when configmap is updated.
       rollOutPods: true
       backend:
@@ -237,7 +251,7 @@ cilium:
       #   className: ""
       #   hosts:
       #     - chart-example.local
-    
+
   ipam:
     # -- Configure IP Address Management mode.
     # ref: https://docs.cilium.io/en/stable/network/concepts/ipam/
@@ -262,7 +276,9 @@ cilium:
   localRedirectPolicy: false
 
   # -- Enables IPv4 BIG TCP support which increases maximum IPv4 GSO/GRO limits for nodes and pods
-  enableIPv4BIGTCP: true
+  # TODO(symmetry): Make this work. Fails with
+  # "Could not modify IPv4 gro_max_size and gso_max_size, disabling BIG TCP"
+  enableIPv4BIGTCP: false
 
   # -- (string) Allows to explicitly specify the IPv4 CIDR for native routing.
   # When specified, Cilium assumes networking for this CIDR is preconfigured and
@@ -274,7 +290,7 @@ cilium:
   # direct routing and the Kubernetes CIDR is included in the native routing CIDR,
   # the user must configure the routes to reach pods, either manually or by
   # setting the auto-direct-node-routes flag.
-  ipv4NativeRoutingCIDR: "10.0.0.0/8"
+  ipv4NativeRoutingCIDR: "10.0.0.0/16"
 
   # -- Configure service load balancing
   loadBalancer:

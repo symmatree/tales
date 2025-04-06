@@ -1,0 +1,5 @@
+# All of these have secrets, try to prevent them from being committed by mistake.
+worker.yaml
+controlplane.yaml
+talosconfig
+secrets.yaml

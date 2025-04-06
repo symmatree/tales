@@ -6,3 +6,4 @@ SAVE_DIR=`pwd`
 popd
 
 helm install --namespace cilium cilium "${SAVE_DIR}"
+kubectl apply -f "${SAVE_DIR}/additional-manifests.yaml"

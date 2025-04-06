@@ -4,21 +4,23 @@ cluster:
     # cilium will become our CNI.
     cni:
       name: none
-    # Much bigger than they need to be, but convenient to make them recognizable.
+    # These two CIDRs are inside my router's 10.0.0.0/16 so they can
+    # just ARP appropriately and things will work.
     podSubnets:
-      - 10.5.0.0/16
+      - 10.0.5.0/24
     serviceSubnets:
-      - 10.6.0.0/16
+      - 10.0.6.0/24
+    # 10.0.7.0/24 is the "external" IP range in cilium/additional-manifests.yaml
   proxy:
     # Cilium will replace the proxy
     disabled: true
 machine:
   features:
     hostDNS:
-      # Conflicts with Cilium
+      # Enabling this conflicts with Cilium.
       forwardKubeDNSToHost: false
   install:
     wipe: true
     extraKernelArgs:
       # 1280x1024 for the dashboard:
-      - vga=792
+      - vga=795

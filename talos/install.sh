@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+set -euo pipefail
 OUT_DIR=`pwd`
 pushd "$(dirname "$0")"
 SAVE_DIR=`pwd`
 
-op item read op://tales-secrets/talos/secrets.yaml/notesPlain > ./secrets.yaml
+op read op://tales-secrets/talos-secrets.yaml/notesPlain > ./secrets.yaml
+echo "talosctl gen config"
 talosctl gen config \
   --with-secrets ./secrets.yaml \
  --config-patch "@${SAVE_DIR}/talos-patch-all.yaml" \
@@ -15,10 +16,11 @@ rm secrets.yaml
 
 TALOSCONFIG=./talosconfig talosctl config endpoint talos-control.local.symmatree.com
 
-op item edit --vault tales-secrets "talos/worker.yaml" "notesPlain=$(cat worker.yaml)"
-op item edit --vault tales-secrets "talos/talosconfig" "notesPlain=$(cat talosconfig)"
-op item edit --vault tales-secrets "talos/controlplane.yaml" "notesPlain=$(cat controlplane.yaml)"
+echo "Writing generated files to 1password"
+op item edit --vault tales-secrets "talos-worker.yaml" "notesPlain=$(cat worker.yaml)" > /dev/null
+op item edit --vault tales-secrets "talos-talosconfig" "notesPlain=$(cat talosconfig)" > /dev/null
+op item edit --vault tales-secrets "talos-controlplane.yaml" "notesPlain=$(cat controlplane.yaml)" > /dev/null
 
+echo "Copying talosconfig to ~/.talos/config"
 cp talosconfig ~/.talos/config
-talosctl config endpoint 
 rm talosconfig

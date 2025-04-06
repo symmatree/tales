@@ -24,7 +24,8 @@ but I keep the expanded templates in 1password just in case. (Also handled by th
 From the top of the repo, I ran
 
 ```
-./talos/install.sh
+cd talos
+./install.sh
 talosctl apply-config --insecure --nodes 10.0.1.50 --file controlplane.yaml
 rm controlplane.yaml
 ```
@@ -57,11 +58,19 @@ straight from their github repo: `./prometheus-operator-crd/install.sh` (which j
 
 ## Install Cilium
 
-Now we can install cilium:  `./cilium/install.sh`
+Now we can install cilium: 
+
+```
+./prometheus-operator-crd/install.sh
+./cilium/install.sh
+```
+
 
 This installs a small Helm chart of our own, coincidentally named cilium, which exists to install its singular dependency (the actual cilium
-Helm chart). This pattern comes from ArgoCD as a way to reuse an external Helm chart with some values overrides. This might require having
-run `helm dep update` in the `tales/cilium` dir first, to pull the external dependency locally.
+Helm chart). This pattern comes from ArgoCD as a way to reuse an external Helm chart with some values overrides.
+
+Note that Cilium will be partially healthy - Hubble Relay and Hubble UI don't have a toleration for the control plane so they won't
+schedule just yet.
 
 ### Reboot
 
@@ -102,7 +111,6 @@ cilium connectivity test -n cilium
 
 Current issues:
 
-* TODO: ``
 * TODO: `msg="Failed to send gratuitous arp" error="failed to craft ARP reply packet: invalid IPv4 address" ipAddr="invalid IP" k8sPodName= subsys=l2-pod-announcements-garp`
 
 ```

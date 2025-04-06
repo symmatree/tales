@@ -115,6 +115,11 @@ saves you from having to click blindly.) At that point you're in a grub menu in 
 
 ### Resetting
 
+```
+talosctl reset -n 10.0.1.100
+talosctl reset -n 10.0.1.50 --graceful=false
+```
+
 Sometimes you just want to start over. On a given node, `talosctl reset` is kind of like `kubeadm reset`, it mostly removes the state on the node
 itself, but if you tell it to be graceful then it will exit the cluster first. (Otherwise you'll need to delete the node yourself in Kubernetes
 and possibly some dangling resources like local PVs and things.)
@@ -131,3 +136,5 @@ to put it first in order, but this is already plenty.)
 If you deleted the config and don't have the keys to connect to talos, or the networking is broken in a fundamental way or something, you can
 instead trigger a reset interactively at the GRUB menu - you have to trigger a reboot using the VM controls in Synology, then "catch" the
 menu and startup and choose to reset. 
+
+Note: Once the reset is complete, the drives will be wiped and you'll need to change back to boot once from CD-ROM ISO image again.

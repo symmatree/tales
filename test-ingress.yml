@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tls-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: real-cert
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: hipstershop.local.symmatree.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: details
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: bookinfo.local.symmatree.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: details
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - bookinfo.local.symmatree.com
+        - hipstershop.local.symmatree.com
+      secretName: demo-cert

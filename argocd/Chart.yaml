@@ -1,6 +1,6 @@
 apiVersion: v2
-name: cert-manager
-description: cert-manager
+name: argo-cd
+description: argo-cd deployment
 type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
@@ -11,9 +11,9 @@ version: 0.1.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
-appVersion: "1.17.1"
+appVersion: "7.8.23"
 
 dependencies:
-  - name: cert-manager
-    version: ~1.17.1
-    repository: https://charts.jetstack.io
+  - name: argo-cd
+    version: ~7.8.23
+    repository: https://argoproj.github.io/argo-helm

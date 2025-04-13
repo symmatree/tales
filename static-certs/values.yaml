@@ -4,3 +4,4 @@ staticCerts:
 - name: raconteur
   subdomain: .ad
 - name: morpheus
+- name: homeassistant

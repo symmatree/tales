@@ -15,7 +15,7 @@ spec:
     algorithm: ECDSA
     encoding: PKCS1
     rotationPolicy: Always
-    size: 521
+    size: 384
   revisionHistoryLimit: 2
 ---
 {{- end }}

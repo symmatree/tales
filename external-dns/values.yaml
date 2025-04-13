@@ -48,7 +48,7 @@ external-dns:
 
   # -- Extra arguments to provide to _ExternalDNS_.
   extraArgs:
-    - --rfc2136-host=raconteur.ad.local.symmatree.com
+    - --rfc2136-host=10.0.99.1
     - --rfc2136-port=53
     - --rfc2136-zone=local.symmatree.com
     - --rfc2136-zone=0.10.in-addr.arpa

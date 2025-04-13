@@ -29,6 +29,22 @@ external-dns:
   provider:  # @schema type: [object, string];
     # -- _ExternalDNS_ provider name; for the available providers and how to configure them see [README](https://github.com/kubernetes-sigs/external-dns/blob/master/charts/external-dns/README.md#providers).
     name: rfc2136
+  env:
+  - name: TSIG_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: external-dns-secret
+        key: TSIG_SECRET
+  - name: TSIG_SECRET_ALG
+    valueFrom:
+      secretKeyRef:
+        name: external-dns-secret
+        key: TSIG_SECRET_ALG
+  - name: TSIG_SECRET_KEYNAME
+    valueFrom:
+      secretKeyRef:
+        name: external-dns-secret
+        key: TSIG_SECRET_KEYNAME
 
   # -- Extra arguments to provide to _ExternalDNS_.
   extraArgs:

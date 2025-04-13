@@ -1,6 +1,6 @@
 dependencies:
-- name: connect
-  repository: https://1password.github.io/connect-helm-charts/
-  version: 1.17.0
-digest: sha256:bfb25ffb9121b10014fc0a67372e99ccff1991b30259addf41095c0e6d6ca434
-generated: "2025-04-06T16:22:20.152077669-04:00"
+- name: external-dns
+  repository: https://kubernetes-sigs.github.io/external-dns/
+  version: 1.16.1
+digest: sha256:bf55af68726f927ba71358854a29c8a0f2db20a9c8137770bc54427b473a6438
+generated: "2025-04-12T20:15:06.455680225-04:00"

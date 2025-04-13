@@ -40,11 +40,11 @@ external-dns:
       secretKeyRef:
         name: external-dns-secret
         key: TSIG_SECRET_ALG
-  - name: TSIG_SECRET_KEYNAME
+  - name: TSIG_KEYNAME
     valueFrom:
       secretKeyRef:
         name: external-dns-secret
-        key: TSIG_SECRET_KEYNAME
+        key: TSIG_KEYNAME
 
   # -- Extra arguments to provide to _ExternalDNS_.
   extraArgs:

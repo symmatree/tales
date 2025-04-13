@@ -1,0 +1,6 @@
+baseDomain: local.symmatree.com
+clusterIssuer: real-cert
+staticCerts:
+- name: raconteur
+  subdomain: .ad
+- name: morpheus

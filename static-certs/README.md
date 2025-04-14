@@ -10,8 +10,7 @@ Until I decide which Unifi-scripting mechanism I hate least, I can just
 pull the cert and key manually every month:
 
 ```
-k get secret -n static-certs morpheus-cert -o jsonpath="{.data['tls\.crt']}" | base64 --decode > morpheus-cert.crt
-k get secret -n static-certs morpheus-cert -o jsonpath="{.data['tls\.key']}" | base64 --decode > morpheus-cert.key
-k get secret -n static-certs raconteur-cert -o jsonpath="{.data['tls\.crt']}" | base64 --decode > raconteur-cert.crt
-k get secret -n static-certs raconteur-cert -o jsonpath="{.data['tls\.key']}" | base64 --decode > raconteur-cert.key
+export NAME=morpheus
+k get secret -n static-certs ${NAME}-cert -o jsonpath="{.data['tls\.crt']}" | base64 --decode > ${NAME}-cert.crt
+k get secret -n static-certs ${NAME}-cert -o jsonpath="{.data['tls\.key']}" | base64 --decode > ${NAME}-cert.key
 ```

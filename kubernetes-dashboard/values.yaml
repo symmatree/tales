@@ -45,7 +45,8 @@ kubernetes-dashboard:
     ingress:
       enabled: true
       hosts:
-        - tales-.local.symmatree.com
+        - tales.local.symmatree.com
+        - dashboard.local.symmatree.com
       ingressClassName: cilium
       # This will append our Ingress with annotations required by our default configuration.
       #    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"

@@ -62,7 +62,7 @@ kubernetes-dashboard:
         name: real-cert
         scope: cluster
       annotations:
-        - ingress.cilium.io/tls-passthrough: enabled
+        "ingress.cilium.io/tls-passthrough": enabled
     tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/control-plane

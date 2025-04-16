@@ -17,7 +17,7 @@ spec:
             project: symm-custodes
             serviceAccountSecretRef:
               name: clouddns-sa
-              key: key.json
+              key: credential.json
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -38,4 +38,4 @@ spec:
             project: symm-custodes
             serviceAccountSecretRef:
               name: clouddns-sa
-              key: key.json
+              key: credential.json

@@ -32,7 +32,7 @@ external-dns:
     - --google-project=custodes
   env:
     - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /etc/secrets/service-account/credentials.json
+      value: /etc/secrets/service-account/credential.json
   extraVolumeMounts:
     - name: google-service-account
       mountPath: /etc/secrets/service-account/

@@ -29,7 +29,7 @@ external-dns:
   provider:
     name: google
   extraArgs:
-    - --google-project=custodes
+    - --google-project=symm-custodes
   env:
     - name: GOOGLE_APPLICATION_CREDENTIALS
       value: /etc/secrets/service-account/credential.json

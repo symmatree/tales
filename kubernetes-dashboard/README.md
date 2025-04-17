@@ -25,3 +25,7 @@ are a) when I turned on cert-manager it tried to generate a lot of internal cert
 it generates a lot of CRDs that I don't care about. But maybe those are addressable and I can
 leave kong alone in this namespace and pretend it's not there, if I give the service an
 external ip and get cilium to advertise it directly, then hang an external-dns name on it?
+
+## Current status
+
+Exhaustion. 

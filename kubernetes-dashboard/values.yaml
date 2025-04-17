@@ -78,12 +78,12 @@ kubernetes-dashboard:
       annotations:
         "external-dns.alpha.kubernetes.io/hostname": "tales.local.symmatree.com,dashboard.local.symmatree.com"
     certificates:
-      enabled: false
+      enabled: true
       clusterIssuer: real-cert
       proxy:
         # You aren't supposed to use a DNS name as commonName, but the chart
         # insists on it. It also merges it into dnsNames.
-        commonName: "tales.local.symmatree.com"
+        commonName: tales.local.symmatree.com
         dnsNames:
           - dashboard.local.symmatree.com
 

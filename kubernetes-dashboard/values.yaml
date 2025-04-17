@@ -97,6 +97,13 @@ kubernetes-dashboard:
     certificates:
       enabled: true
       clusterIssuer: real-cert
+      # We aren't even deploying these but the chart tries to get certs anyway.
+      admin:
+        enabled: false
+      portal:
+        enabled: false
+      cluster:
+        enabled: false
 
   # We have our own, thank you.
   cert-manager:

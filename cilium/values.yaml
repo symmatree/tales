@@ -220,7 +220,7 @@ cilium:
         enabled: true
     relay:
       # -- Enable Hubble Relay (requires hubble.enabled=true)
-      enabled: false
+      enabled: true
       # -- Roll out Hubble Relay pods automatically when configmap is updated.
       rollOutPods: true
 
@@ -244,7 +244,7 @@ cilium:
           enabled: true
     ui:
       # -- Whether to enable the Hubble UI.
-      enabled: false
+      enabled: true
       # -- Roll out Hubble-ui pods automatically when configmap is updated.
       rollOutPods: true
       backend:
@@ -264,14 +264,13 @@ cilium:
         kubernetes.io/os: linux
         node-role.kubernetes.io/control-plane: ""
 
-      # ingress:
-      #   enabled: false
-      #   annotations: {}
-      #   # kubernetes.io/ingress.class: nginx
-      #   # kubernetes.io/tls-acme: "true"
-      #   className: ""
-      #   hosts:
-      #     - chart-example.local
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: real-cert
+        className: "cilium"
+        hosts:
+          - hubble.local.symmatree.com
 
   ipam:
     # -- Configure IP Address Management mode.

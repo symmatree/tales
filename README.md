@@ -2,6 +2,16 @@
 
 Self-contained description of a Kubernetes cluster on Talos Linux within a Synology device
 
+## Links
+
+This is my project so I'm putting convenience links here for myself, sorry!
+
+* [Morpheus (unifi controller) `https://morpheus.local.symmatree.com`](https://morpheus.local.symmatree.com)
+* [Kubernetes Dashboard `https://dashboard.local.symmatree.com`](https://dashboard.local.symmatree.com)
+* [ArgoCD `https://argocd.local.symmatree.com`](https://argocd.local.symmatree.com)
+* [Google Cloud DNS `local.symmatree.com`](https://console.cloud.google.com/net-services/dns/zones/local-symmatree-com/details?project=symm-custodes)
+
+
 ## Caveats
 
 This is a personal project. I have attempted to isolate "all" the configuration and setup

@@ -13,7 +13,8 @@ connect:
     # from Kubernetes to access 1Password Connect pods.
     # In order to expose the service, use the route section below
     ingress:
-      enabled: true
+      # Until we have a use case, reduce surface area.
+      enabled: false
       annotations:
         cert-manager.io/issuer: "real-cert"
       ingressClassName: "cilium"

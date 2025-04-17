@@ -1,7 +1,8 @@
 baseDomain: local.symmatree.com
 clusterIssuer: real-cert
+namespace: static-certs
 staticCerts:
-- name: raconteur
-  subdomain: .ad
-- name: morpheus
-- name: homeassistant
+  - name: raconteur
+    subdomain: .ad
+  - name: morpheus
+  - name: homeassistant

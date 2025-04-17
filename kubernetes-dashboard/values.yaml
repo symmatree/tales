@@ -83,6 +83,9 @@ kubernetes-dashboard:
   ## for our all containers.
   kong:
     enabled: true
+    certificates:
+      enabled: true
+      clusterIssuer: real-cert
 
   cert-manager:
     enabled: false

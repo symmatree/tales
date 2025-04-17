@@ -179,7 +179,8 @@ argo-cd:
     # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-2-multiple-ingress-objects-and-hosts
     ingressGrpc:
       # -- Enable an ingress resource for the Argo CD server for dedicated [gRPC-ingress]
-      enabled: true
+      # Disabled until needed; argocd command line seems to work without this.
+      enabled: false
       annotations:
         cert-manager.io/cluster-issuer: real-cert
       ingressClassName: "cilium"

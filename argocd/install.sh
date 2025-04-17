@@ -13,5 +13,8 @@ if  ! kubectl get namespace argocd ; then
 fi
 # eval $(op signin)
 
-helm upgrade --install --namespace argocd argocd "${SAVE_DIR}"
+# helm upgrade --install --namespace argocd argocd "${SAVE_DIR}"
 # kubectl apply -f "${SAVE_DIR}/issuers.yaml"
+
+helm template argocd ${SAVE_DIR} --namespace argocd > ${SAVE_DIR}/manifest.yaml
+# kubectl apply -f ${SAVE_DIR}/manifest.yaml --server-side 

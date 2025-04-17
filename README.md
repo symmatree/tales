@@ -150,3 +150,20 @@ instead trigger a reset interactively at the GRUB menu - you have to trigger a r
 menu and startup and choose to reset. 
 
 Note: Once the reset is complete, the drives will be wiped and you'll need to change back to boot once from CD-ROM ISO image again.
+
+### Bootstrapping Notes
+
+I keep iterating on the best way to bring things up from scratch.
+
+```graphviz
+argocd -> ingress_builtin;
+argocd -> cert_manager;
+argocd -> service_monitor;
+cert_manager -> service_monitor;
+cert_manager -> onepassword;
+cilium -> service_monitor;
+cilium -> ingress_builtin;
+
+```
+
+argocd should have a dependency on a secret for a github secret but that's manual right now.

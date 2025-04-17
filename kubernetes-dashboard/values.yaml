@@ -81,9 +81,10 @@ kubernetes-dashboard:
       enabled: true
       clusterIssuer: real-cert
       proxy:
-        commonName: ~
+        # You aren't supposed to use a DNS name as commonName, but the chart
+        # insists on it. It also merges it into dnsNames.
+        commonName: "tales.local.symmatree.com"
         dnsNames:
-          - tales.local.symmatree.com
           - dashboard.local.symmatree.com
 
       # We aren't even deploying these but the chart tries to get certs anyway.

@@ -155,6 +155,8 @@ cilium:
     # -- Set cilium ingress controller to be the default ingress controller
     # This will let cilium ingress controller route entries without ingress class set
     default: true
+    service:
+      allocateLoadBalancerNodePorts: false
   gatewayAPI:
     # -- Enable support for Gateway API in cilium
     # This will automatically set enable-envoy-config as well.

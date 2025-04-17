@@ -1,9 +1,9 @@
 # Following https://docs.cilium.io/en/v1.16/installation/k8s-install-helm/
 cluster:
+  clusterName: tales
   network:
-    # Using a real TLD means I could create public certs if useful.
-    dnsDomain: tales.symmatree.com
-
+    # Not worth the trouble to change, too many tools expect this.
+    dnsDomain: cluster.local
     # cilium will become our CNI.
     cni:
       name: none
@@ -32,3 +32,7 @@ machine:
     extraKernelArgs:
       # 1280x1024 for the dashboard:
       - vga=795
+  network:
+    searchDomains:
+      - ad.local.symmatree.com
+      - local.symmatree.com

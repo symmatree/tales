@@ -180,25 +180,6 @@ cilium:
     # See https://docs.cilium.io/en/stable/observability/metrics/#hubble-metrics
     # for more comprehensive documentation about Hubble metrics.
     metrics:
-      # @schema
-      # type: [null, array]
-      # @schema
-      # -- Configures the list of metrics to collect. If empty or null, metrics
-      # are disabled.
-      # Example:
-      #
-      #   enabled:
-      #   - dns:query;ignoreAAAA
-      #   - drop
-      #   - tcp
-      #   - flow
-      #   - icmp
-      #   - http
-      #
-      # You can specify the list of metrics from the helm CLI:
-      #
-      #   --set hubble.metrics.enabled="{dns:query;ignoreAAAA,drop,tcp,flow,icmp,http}"
-      #
       enabled:
         - dns:query;ignoreAAAA
         - drop

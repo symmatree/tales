@@ -10,7 +10,8 @@ This is my project so I'm putting convenience links here for myself, sorry!
 * [Kubernetes Dashboard `https://dashboard.local.symmatree.com`](https://dashboard.local.symmatree.com)
 * [ArgoCD `https://argocd.local.symmatree.com`](https://argocd.local.symmatree.com)
 * [Google Cloud DNS `local.symmatree.com`](https://console.cloud.google.com/net-services/dns/zones/local-symmatree-com/details?project=symm-custodes)
-
+* [`talos-control-1` Talos serial console](https://raconteur.ad.local.symmatree.com:5001/webman/3rdparty/Virtualization/noVNC/vnc.html?autoconnect=true&reconnect=true&path=synovirtualization/ws/967c994c-c0b0-46db-a5d9-5efe7fe97d6d&title=talos-control-1)
+* [`talos-worker-1` Talos serial console](https://raconteur.ad.local.symmatree.com:5001/webman/3rdparty/Virtualization/noVNC/vnc.html?autoconnect=true&reconnect=true&path=synovirtualization/ws/b23b2210-0da4-42a4-b6c9-1ba32fa4013e&title=talos-worker-1)
 
 ## Caveats
 

@@ -92,9 +92,17 @@ kubernetes-dashboard:
   ## for our all containers.
   kong:
     enabled: true
+    ingressController:
+      enabled: false
     # certificates:
     #   enabled: true
     #   clusterIssuer: real-cert
+    manager:
+      enabled: false
+    portal:
+      enabled: false
+    portalapi:
+      enabled: false
 
   cert-manager:
     enabled: false

@@ -28,4 +28,5 @@ external ip and get cilium to advertise it directly, then hang an external-dns n
 
 ## Current status
 
-Exhaustion. 
+Exhaustion. I left it with the cert-manager integration turned on, because at least then
+the login screen at 

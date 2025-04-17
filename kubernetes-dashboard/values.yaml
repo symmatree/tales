@@ -34,14 +34,23 @@ kubernetes-dashboard:
         namespaceFallbackList:
           - kube-system
       ## Pinned resources that will be displayed in dashboard's menu
-      pinnedResources: []
-      # - kind: customresourcedefinition
-      #  #  Fully qualified name of a CRD
-      #  name: prometheus.monitoring.coreos.com
-      #  #  Display name
-      #  displayName: Prometheus
-      #  #  Is this CRD namespaced?
-      #  namespaced: true
+      pinnedResources:
+        - kind: customresourcedefinition
+          name: certificaterequests.cert-manager.io
+          displayName: CertificateRequest
+          namespaced: true
+        - kind: customresourcedefinition
+          name: onepassworditems.onepassword.com
+          displayName: OnePasswordItem
+          namespaced: true
+        - kind: customresourcedefinition
+          name: servicemonitors.monitoring.coreos.com
+          displayName: ServiceMonitor
+          namespaced: true
+        - kind: customresourcedefinition
+          name: podmonitors.monitoring.coreos.com
+          displayName: PodMonitor
+          namespaced: true
     ingress:
       enabled: false
       hosts:

@@ -92,17 +92,15 @@ kubernetes-dashboard:
   ## for our all containers.
   kong:
     enabled: true
+    proxy:
+      type: LoadBalancer
     # certificates:
     #   enabled: true
     #   clusterIssuer: real-cert
-    portal:
-      enabled: false
-    portalapi:
-      enabled: false
 
+  # We have our own, thank you.
   cert-manager:
     enabled: false
-
   nginx:
     enabled: false
 

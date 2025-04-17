@@ -1,0 +1,118 @@
+# From
+# https://raw.githubusercontent.com/kubernetes/dashboard/refs/heads/release/7.11.1/charts/kubernetes-dashboard/values.yaml
+# then removed settings I'm not changing.
+
+kubernetes-dashboard:
+  # Copyright 2017 The Kubernetes Authors.
+  #
+  # Licensed under the Apache License, Version 2.0 (the "License");
+  # you may not use this file except in compliance with the License.
+  # You may obtain a copy of the License at
+  #
+  # http://www.apache.org/licenses/LICENSE-2.0
+  #
+  # Unless required by applicable law or agreed to in writing, software
+  # distributed under the License is distributed on an "AS IS" BASIS,
+  # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  # See the License for the specific language governing permissions and
+  # limitations under the License.
+
+  # General configuration shared across resources
+  app:
+    settings:
+      ## Global dashboard settings
+      global:
+        #  # Cluster name that appears in the browser window title if it is set
+        clusterName: "tales"
+        # Max number of items that can be displayed on each list page
+        itemsPerPage: 40
+        # Max number of labels that are displayed by default on most views.
+        labelsLimit: 5
+        # Namespace that should be selected by default after logging in.
+        defaultNamespace: kube-system
+        # List of namespaces that should be presented to user without namespace list privileges.
+        namespaceFallbackList:
+          - kube-system
+      ## Pinned resources that will be displayed in dashboard's menu
+      pinnedResources:
+        - kind: customresourcedefinition
+          name: certificaterequests.cert-manager.io
+          displayName: CertificateRequest
+          namespaced: true
+        - kind: customresourcedefinition
+          name: onepassworditems.onepassword.com
+          displayName: OnePasswordItem
+          namespaced: true
+        - kind: customresourcedefinition
+          name: servicemonitors.monitoring.coreos.com
+          displayName: ServiceMonitor
+          namespaced: true
+        - kind: customresourcedefinition
+          name: podmonitors.monitoring.coreos.com
+          displayName: PodMonitor
+          namespaced: true
+    ingress:
+      enabled: false
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+    affinity: {}
+
+  ### Metrics Scraper
+  ### Container to scrape, store, and retrieve a window of time from the Metrics Server.
+  ### refs: https://github.com/kubernetes/dashboard/tree/master/modules/metrics-scraper
+  metricsScraper:
+    # TODO: Figure out how to get Prometheus instead.
+    enabled: false
+
+  metrics-server:
+    enabled: false
+
+  ## Required Kong sub-chart with DBless configuration to act as a gateway
+  ## for our all containers.
+  kong:
+    enabled: true
+    proxy:
+      type: LoadBalancer
+      annotations:
+        "external-dns.alpha.kubernetes.io/hostname": "dashboard.local.symmatree.com"
+    certificates:
+      enabled: true
+      clusterIssuer: real-cert
+      proxy:
+        # You aren't supposed to use a DNS name as commonName, but the chart
+        # insists on it. It also merges it into dnsNames.
+        commonName: dashboard.local.symmatree.com
+        # dnsNames:
+        #   - dashboard.local.symmatree.com
+
+      # We aren't even deploying these but the chart tries to get certs anyway.
+      admin:
+        enabled: false
+      portal:
+        enabled: false
+      cluster:
+        enabled: false
+
+  # We have our own, thank you.
+  cert-manager:
+    enabled: false
+  nginx:
+    enabled: false
+
+  extras:
+    serviceMonitor:
+      # Whether to create a Prometheus Operator service monitor.
+      enabled: true
+      # Here labels can be added to the serviceMonitor
+      labels: {}
+      # Here annotations can be added to the serviceMonitor
+      annotations: {}
+      # metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
+      # ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      metricRelabelings: []
+      # metrics.serviceMonitor.relabelings [array] Prometheus relabeling rules
+      relabelings: []
+      # ServiceMonitor connection scheme. Defaults to HTTPS.
+      scheme: https

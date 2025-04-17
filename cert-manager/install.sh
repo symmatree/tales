@@ -17,8 +17,7 @@ eval $(op signin)
 
 if ! kubectl get secret clouddns-sa --namespace cert-manager ; then
   kubectl create secret generic clouddns-sa --namespace cert-manager \
-    --from-literal=key.json="$(op read  op://tales-secrets/cert-manager-clouddns-sa/notesPlain)"
+    --from-literal=credential.json="$(op read  op://tales-secrets/cert-manager-clouddns-sa/credential.json)"
 fi
 
 helm upgrade --install --namespace cert-manager cert-manager "${SAVE_DIR}"
-kubectl apply -f "${SAVE_DIR}/issuers.yaml"

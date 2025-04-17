@@ -2,6 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: staging-cert
+  namespace: {{ .Release.Namespace }}
 spec:
   acme:
     email: symmetry@pobox.com
@@ -17,12 +18,13 @@ spec:
             project: symm-custodes
             serviceAccountSecretRef:
               name: clouddns-sa
-              key: key.json
+              key: credential.json
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: real-cert
+  namespace: {{ .Release.Namespace }}
 spec:
   acme:
     email: symmetry@pobox.com
@@ -38,4 +40,4 @@ spec:
             project: symm-custodes
             serviceAccountSecretRef:
               name: clouddns-sa
-              key: key.json
+              key: credential.json

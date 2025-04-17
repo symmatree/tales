@@ -94,9 +94,9 @@ kubernetes-dashboard:
     enabled: true
     proxy:
       type: LoadBalancer
-    # certificates:
-    #   enabled: true
-    #   clusterIssuer: real-cert
+    certificates:
+      enabled: true
+      clusterIssuer: real-cert
 
   # We have our own, thank you.
   cert-manager:

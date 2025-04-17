@@ -53,25 +53,6 @@ kubernetes-dashboard:
           namespaced: true
     ingress:
       enabled: false
-      hosts:
-        - tales.local.symmatree.com
-        - dashboard.local.symmatree.com
-      ingressClassName: cilium
-      # This will append our Ingress with annotations required by our default configuration.
-      #    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      #    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      #    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      useDefaultAnnotations: false
-      pathType: ImplementationSpecific
-      # If path is not the default (/), rewrite-target annotation will be added to the Ingress.
-      # It allows serving Kubernetes Dashboard on a sub-path. Make sure that the configured path
-      # does not conflict with gateway route configuration.
-      path: /
-      issuer:
-        name: real-cert
-        scope: cluster
-      annotations:
-        "ingress.cilium.io/tls-passthrough": enabled
     tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/control-plane
@@ -94,9 +75,17 @@ kubernetes-dashboard:
     enabled: true
     proxy:
       type: LoadBalancer
+      annotations:
+        "external-dns.alpha.kubernetes.io/hostname": "tales.local.symmatree.com,dashboard.local.symmatree.com"
     certificates:
       enabled: true
       clusterIssuer: real-cert
+      proxy:
+        commonName: ~
+        dnsNames:
+          - tales.local.symmatree.com
+          - dashboard.local.symmatree.com
+
       # We aren't even deploying these but the chart tries to get certs anyway.
       admin:
         enabled: false

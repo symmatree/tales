@@ -43,7 +43,7 @@ kubernetes-dashboard:
       #  #  Is this CRD namespaced?
       #  namespaced: true
     ingress:
-      enabled: true
+      enabled: false
       hosts:
         - tales.local.symmatree.com
         - dashboard.local.symmatree.com

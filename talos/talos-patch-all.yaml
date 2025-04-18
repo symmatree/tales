@@ -24,9 +24,14 @@ cluster:
     disabled: true
 machine:
   features:
+    rbac: true
+    diskQuotaSupport: true
     hostDNS:
-      # Enabling this conflicts with Cilium.
+      enabled: true
+      resolveMemberNames: true
       forwardKubeDNSToHost: false
+    imageCache:
+      localEnabled: true
   install:
     wipe: true
     extraKernelArgs:

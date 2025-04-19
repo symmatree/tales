@@ -41,11 +41,6 @@ cilium:
     id: 1
   serviceAccounts:
     nodeinit:
-      # -- Enabled is temporary until https://github.com/cilium/cilium-cli/issues/1396 is implemented.
-      # Cilium CLI doesn't create the SAs for node-init, thus the workaround. Helm is not affected by
-      # this issue. Name and automount can be configured, if enabled is set to true.
-      # Otherwise, they are ignored. Enabled can be removed once the issue is fixed.
-      # Cilium-nodeinit DS must also be fixed.
       enabled: true
 
   # -- Roll out cilium agent pods automatically when configmap is updated.
@@ -118,6 +113,17 @@ cilium:
   # -- Enable skipping of PodCIDR routes between worker
   # nodes if the worker nodes are in a different L2 network segment.
   directRoutingSkipUnreachable: true
+
+  # -- Enable bandwidth manager to optimize TCP and UDP workloads and allow
+  # for rate-limiting traffic from individual Pods with EDT (Earliest Departure
+  # Time) through the "kubernetes.io/egress-bandwidth" Pod annotation.
+  # https://cilium.io/blog/2020/11/10/cilium-19/#bwmanager
+  bandwidthManager:
+    # -- Enable bandwidth manager infrastructure (also prerequirement for BBR)
+    enabled: true
+    # -- Activate BBR TCP congestion control for Pods
+    bbr: true
+
   # -- Configure L2 announcements
   l2announcements:
     # -- Enable L2 announcements
@@ -131,7 +137,8 @@ cilium:
   # -- Configure L2 pod announcements
   l2podAnnouncements:
     # -- Enable L2 pod announcements
-    enabled: false
+    # Not so we can talk to them but to help routing.
+    enabled: true
     # -- Interface used for sending Gratuitous ARP pod announcements
     interface: "enp3s0"
   pmtuDiscovery:
@@ -139,10 +146,19 @@ cilium:
     # the client.
     enabled: true
   bpf:
-    # -- (bool) Allow cluster external access to ClusterIP services.
-    # @default -- `false`
-    lbExternalClusterIP: true
+    # -- (bool) Configure whether direct routing mode should route traffic via
+    # host stack (true) or directly and more efficiently out of BPF (false) if
+    # the kernel supports it. The latter has the implication that it will also
+    # bypass netfilter in the host namespace.
     hostLegacyRouting: false
+    # -- (bool) Enable native IP masquerade support in eBPF
+    masquerade: true
+    
+    # -- (string) Mode for Pod devices for the core datapath (veth, netkit, netkit-l2)
+    # @default -- `veth`
+    datapathMode: netkit
+  # -- Enable BPF clock source probing for more efficient tick retrieval.
+  bpfClockProbe: true
 
   envoyConfig:
     # -- Enable CiliumEnvoyConfig CRD
@@ -160,7 +176,8 @@ cilium:
   gatewayAPI:
     # -- Enable support for Gateway API in cilium
     # This will automatically set enable-envoy-config as well.
-    enabled: true
+    # TODO: Enable Gateway when I grow out of Ingress.
+    enabled: false
     # -- Enable Backend Protocol selection support (GEP-1911) for Gateway API via appProtocol.
     enableAppProtocol: true
     # -- Enable ALPN for all listeners configured with Gateway API. ALPN will attempt HTTP/2, then HTTP 1.1.

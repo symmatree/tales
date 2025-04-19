@@ -167,3 +167,9 @@ cilium -> ingress_builtin;
 ```
 
 argocd should have a dependency on a secret for a github secret but that's manual right now.
+
+
+### Troubleshooting
+
+* https://isovalent.com/blog/post/its-dns/ has a nice writeup of hubble for DNS
+* 

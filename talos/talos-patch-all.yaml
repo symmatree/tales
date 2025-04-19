@@ -37,7 +37,3 @@ machine:
     extraKernelArgs:
       # 1280x1024 for the dashboard:
       - vga=795
-  network:
-    searchDomains:
-      - ad.local.symmatree.com
-      - local.symmatree.com

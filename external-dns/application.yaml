@@ -1,22 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
-  namespace: argocd
+  name: external-dns
+  namespace: external-dns
   labels:
-    name: argocd
+    name: external-dns
 spec:
   project: default
   source:
     repoURL: https://github.com/symmatree/tales.git
     targetRevision: main
-    path: argocd
+    path: external-dns
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: external-dns
   syncPolicy:
     # automated:
     #   prune: true

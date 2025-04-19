@@ -153,7 +153,7 @@ cilium:
     hostLegacyRouting: false
     # -- (bool) Enable native IP masquerade support in eBPF
     masquerade: true
-    
+
     # -- (string) Mode for Pod devices for the core datapath (veth, netkit, netkit-l2)
     # @default -- `veth`
     datapathMode: netkit
@@ -308,7 +308,8 @@ cilium:
   # direct routing and the Kubernetes CIDR is included in the native routing CIDR,
   # the user must configure the routes to reach pods, either manually or by
   # setting the auto-direct-node-routes flag.
-  ipv4NativeRoutingCIDR: "10.0.0.0/16"
+  # Without
+  # ipv4NativeRoutingCIDR: "10.0.0.0/16"
 
   # -- Configure service load balancing
   loadBalancer:

@@ -8,8 +8,12 @@ helm dep update
 
 popd
 
+"${SAVE_DIR}/../prometheus-operator-crd/install.sh"
+echo "Wait for Prom CRDs to become available"
+sleep 60
+
 # Need the gateway CRDs for Cilium to fully install.
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
 
 # Talos installs a strict pod security policy, which we can override with namespace labels.
 # `enforce` is what it actually allows you to do, but `warn` will log a warning that looks awfully fatal (at least to me) and send you off on

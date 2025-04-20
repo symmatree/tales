@@ -1,5 +1,6 @@
 # Following https://docs.cilium.io/en/v1.16/installation/k8s-install-helm/
 cluster:
+  clusterName: tales
   network:
     # cilium will become our CNI.
     cni:
@@ -7,27 +8,28 @@ cluster:
     # These two CIDRs are inside my router's 10.0.0.0/16 so they can
     # just ARP appropriately and things will work.
     # 10.0.8.0/24 is the "external" IP range in cilium/additional-manifests.yaml
-    # podSubnets:
-    #   - 10.0.4.0/23
-    # serviceSubnets:
-    #   - 10.0.6.0/23
-  # controllerManager:
-  #   extraArgs:
-  #     # With /23 allocated total, /25-per-node allows max of 4 nodes
-  #     "node-cidr-mask-size": 25
+    podSubnets:
+      - 10.0.4.0/23
+    serviceSubnets:
+      - 10.0.6.0/23
+  controllerManager:
+    extraArgs:
+      # With /23 allocated total, /25-per-node allows max of 4 nodes
+      "node-cidr-mask-size": 25
+
   proxy:
     # Cilium will replace the proxy
     disabled: true
 machine:
   features:
+    rbac: true
+    diskQuotaSupport: true
     hostDNS:
-      # Stop rewriting resolv.conf as a test
-      enabled: false
-      # Enabling this conflicts with Cilium.
+      enabled: true
+      resolveMemberNames: true
       forwardKubeDNSToHost: false
-    kubePrism:
-      # Reduce variables troubleshooting cilium.
-      enabled: false
+    imageCache:
+      localEnabled: true
   install:
     wipe: true
     extraKernelArgs:

@@ -1,9 +1,6 @@
 # Following https://docs.cilium.io/en/v1.16/installation/k8s-install-helm/
 cluster:
-  clusterName: tales
   network:
-    # Not worth the trouble to change, too many tools expect this.
-    dnsDomain: cluster.local
     # cilium will become our CNI.
     cni:
       name: none
@@ -24,14 +21,9 @@ cluster:
     disabled: true
 machine:
   features:
-    rbac: true
-    diskQuotaSupport: true
     hostDNS:
-      enabled: true
-      resolveMemberNames: true
+      # Enabling this conflicts with Cilium.
       forwardKubeDNSToHost: false
-    imageCache:
-      localEnabled: true
   install:
     wipe: true
     extraKernelArgs:

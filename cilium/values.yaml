@@ -41,6 +41,11 @@ cilium:
     id: 1
   serviceAccounts:
     nodeinit:
+      # -- Enabled is temporary until https://github.com/cilium/cilium-cli/issues/1396 is implemented.
+      # Cilium CLI doesn't create the SAs for node-init, thus the workaround. Helm is not affected by
+      # this issue. Name and automount can be configured, if enabled is set to true.
+      # Otherwise, they are ignored. Enabled can be removed once the issue is fixed.
+      # Cilium-nodeinit DS must also be fixed.
       enabled: true
 
   # -- Roll out cilium agent pods automatically when configmap is updated.
@@ -113,17 +118,6 @@ cilium:
   # -- Enable skipping of PodCIDR routes between worker
   # nodes if the worker nodes are in a different L2 network segment.
   directRoutingSkipUnreachable: true
-
-  # -- Enable bandwidth manager to optimize TCP and UDP workloads and allow
-  # for rate-limiting traffic from individual Pods with EDT (Earliest Departure
-  # Time) through the "kubernetes.io/egress-bandwidth" Pod annotation.
-  # https://cilium.io/blog/2020/11/10/cilium-19/#bwmanager
-  bandwidthManager:
-    # -- Enable bandwidth manager infrastructure (also prerequirement for BBR)
-    enabled: true
-    # -- Activate BBR TCP congestion control for Pods
-    bbr: true
-
   # -- Configure L2 announcements
   l2announcements:
     # -- Enable L2 announcements
@@ -137,7 +131,6 @@ cilium:
   # -- Configure L2 pod announcements
   l2podAnnouncements:
     # -- Enable L2 pod announcements
-    # Not so we can talk to them but to help routing.
     enabled: true
     # -- Interface used for sending Gratuitous ARP pod announcements
     interface: "enp3s0"
@@ -146,19 +139,10 @@ cilium:
     # the client.
     enabled: true
   bpf:
-    # -- (bool) Configure whether direct routing mode should route traffic via
-    # host stack (true) or directly and more efficiently out of BPF (false) if
-    # the kernel supports it. The latter has the implication that it will also
-    # bypass netfilter in the host namespace.
+    # -- (bool) Allow cluster external access to ClusterIP services.
+    # @default -- `false`
+    lbExternalClusterIP: true
     hostLegacyRouting: false
-    # -- (bool) Enable native IP masquerade support in eBPF
-    masquerade: true
-
-    # -- (string) Mode for Pod devices for the core datapath (veth, netkit, netkit-l2)
-    # @default -- `veth`
-    datapathMode: netkit
-  # -- Enable BPF clock source probing for more efficient tick retrieval.
-  bpfClockProbe: true
 
   envoyConfig:
     # -- Enable CiliumEnvoyConfig CRD
@@ -171,13 +155,10 @@ cilium:
     # -- Set cilium ingress controller to be the default ingress controller
     # This will let cilium ingress controller route entries without ingress class set
     default: true
-    service:
-      allocateLoadBalancerNodePorts: false
   gatewayAPI:
     # -- Enable support for Gateway API in cilium
     # This will automatically set enable-envoy-config as well.
-    # TODO: Enable Gateway when I grow out of Ingress.
-    enabled: false
+    enabled: true
     # -- Enable Backend Protocol selection support (GEP-1911) for Gateway API via appProtocol.
     enableAppProtocol: true
     # -- Enable ALPN for all listeners configured with Gateway API. ALPN will attempt HTTP/2, then HTTP 1.1.
@@ -197,6 +178,25 @@ cilium:
     # See https://docs.cilium.io/en/stable/observability/metrics/#hubble-metrics
     # for more comprehensive documentation about Hubble metrics.
     metrics:
+      # @schema
+      # type: [null, array]
+      # @schema
+      # -- Configures the list of metrics to collect. If empty or null, metrics
+      # are disabled.
+      # Example:
+      #
+      #   enabled:
+      #   - dns:query;ignoreAAAA
+      #   - drop
+      #   - tcp
+      #   - flow
+      #   - icmp
+      #   - http
+      #
+      # You can specify the list of metrics from the helm CLI:
+      #
+      #   --set hubble.metrics.enabled="{dns:query;ignoreAAAA,drop,tcp,flow,icmp,http}"
+      #
       enabled:
         - dns:query;ignoreAAAA
         - drop
@@ -218,7 +218,7 @@ cilium:
         enabled: true
     relay:
       # -- Enable Hubble Relay (requires hubble.enabled=true)
-      enabled: true
+      enabled: false
       # -- Roll out Hubble Relay pods automatically when configmap is updated.
       rollOutPods: true
 
@@ -242,7 +242,7 @@ cilium:
           enabled: true
     ui:
       # -- Whether to enable the Hubble UI.
-      enabled: true
+      enabled: false
       # -- Roll out Hubble-ui pods automatically when configmap is updated.
       rollOutPods: true
       backend:
@@ -262,13 +262,14 @@ cilium:
         kubernetes.io/os: linux
         node-role.kubernetes.io/control-plane: ""
 
-      ingress:
-        enabled: true
-        annotations:
-          cert-manager.io/cluster-issuer: real-cert
-        className: "cilium"
-        hosts:
-          - hubble.local.symmatree.com
+      # ingress:
+      #   enabled: false
+      #   annotations: {}
+      #   # kubernetes.io/ingress.class: nginx
+      #   # kubernetes.io/tls-acme: "true"
+      #   className: ""
+      #   hosts:
+      #     - chart-example.local
 
   ipam:
     # -- Configure IP Address Management mode.
@@ -308,8 +309,7 @@ cilium:
   # direct routing and the Kubernetes CIDR is included in the native routing CIDR,
   # the user must configure the routes to reach pods, either manually or by
   # setting the auto-direct-node-routes flag.
-  # Without
-  # ipv4NativeRoutingCIDR: "10.0.0.0/16"
+  ipv4NativeRoutingCIDR: "10.0.0.0/16"
 
   # -- Configure service load balancing
   loadBalancer:

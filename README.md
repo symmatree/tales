@@ -172,4 +172,30 @@ argocd should have a dependency on a secret for a github secret but that's manua
 ### Troubleshooting
 
 * https://isovalent.com/blog/post/its-dns/ has a nice writeup of hubble for DNS
-* 
+
+
+FREAKING DNS.
+
+Failing (10.0.4.122 is `dnsutils` test client with no overrides, `10.0.99.1` is external DNS server,
+10.0.4.25 and 10.0.4.118 are coredns pods).
+
+```
+# Failing kubectl exec -ti dnsutils -- nslookup morpheus.local.symmatree.com. 10.0.99.1
+# grep for 4.1422
+-> stack flow 0x0 , identity 72931->world state new ifindex 0 orig-ip 0.0.0.0: 10.0.4.122:44064 -> 10.0.99.1:53 udp
+-> stack flow 0x0 , identity 72931->world state established ifindex 0 orig-ip 0.0.0.0: 10.0.4.122:44064 -> 10.0.99.1:53 udp
+# Failing kubectl exec -ti dnsutils -- nslookup morpheus.local.symmatree.com.
+# grep for 4.122
+-> endpoint 734 flow 0x0 , identity 72931->71695 state new ifindex lxccc67e93f96bd orig-ip 10.0.4.122: 10.0.4.122:41434 -> 10.0.4.118:53 udp
+-> endpoint 3344 flow 0x0 , identity 71695->72931 state reply ifindex lxc9f767d54f2f1 orig-ip 10.0.4.118: 10.0.4.118:53 -> 10.0.4.122:41434 udp
+# Succeeding with host networking: kubectl exec -ti dnsutils-2 -- nslookup morpheus.local.symmatree.com.
+# grep for 10.0.1.50
+-> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:54591 -> 10.0.99.1:53 udp
+-> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:34588 -> 10.0.99.1:53 udp
+# Succeeding with host networking: kubectl exec -ti dnsutils-2 -- nslookup morpheus.local.symmatree.com. 10.0.99.1
+# grep for 10.0.1.50
+-> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:57773 -> 10.0.99.1:53 udp
+-> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:41597 -> 10.0.99.1:53 udp
+
+
+```

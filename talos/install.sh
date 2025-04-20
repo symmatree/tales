@@ -6,6 +6,7 @@ SAVE_DIR=`pwd`
 
 op read op://tales-secrets/talos-secrets.yaml/notesPlain > ./secrets.yaml
 echo "talosctl gen config"
+# endpoint seems to be mandatory but 
 talosctl gen config \
   --with-secrets ./secrets.yaml \
   --config-patch "@${SAVE_DIR}/talos-patch-all.yaml" \

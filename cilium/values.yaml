@@ -2,13 +2,15 @@
 # https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.yaml
 # Deleted all values I'm not changing.
 cilium:
+  # localhost:7445 if kubeprism is running.
+  k8sServiceHost: "auto"
   # -- (string) Kubernetes service host - use "auto" for automatic lookup from the cluster-info ConfigMap
-  k8sServiceHost: "localhost"
+  # k8sServiceHost: "localhost"
   # @schema
   # type: [string, integer]
   # @schema
   # -- (string) Kubernetes service port
-  k8sServicePort: 7445
+  # k8sServicePort: 7445
 
   # If the amount of requests to the Kubernetes API server exceeds the configured
   # rate limit, the agent will start to throttle requests by delaying

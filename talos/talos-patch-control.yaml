@@ -4,5 +4,6 @@ machine:
     # rather than only accepting IP addresses.
     hostname: talos-control-1.local.symmatree.com
   certSANs:
-    # Non-kubernetes name, the endpoint provided to `talosctl gen config`
+    # CNAME to `talos-control-1` in the GCP DNS.
+    # Also the endpoint provided to `talosctl gen config`
     - talos-control.local.symmatree.com

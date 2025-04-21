@@ -313,6 +313,8 @@ cilium:
 
   # -- Configure service load balancing
   loadBalancer:
+    # https://github.com/cilium/cilium/discussions/36829
+    acceleration: best-effort
     # -- L7 LoadBalancer
     l7:
       # -- Enable L7 service load balancing via envoy proxy.

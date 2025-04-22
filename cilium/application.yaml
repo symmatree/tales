@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: cilium
-  namespace: cilium
+  namespace: argocd
   labels:
     name: cilium
 spec:
@@ -18,11 +18,12 @@ spec:
     server: https://kubernetes.default.svc
     namespace: cilium
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    # automated:
+    #   prune: true
+    #   selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
     managedNamespaceMetadata:
       annotations:
         "pod-security.kubernetes.io/enforce": privileged

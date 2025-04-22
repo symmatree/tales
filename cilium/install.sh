@@ -23,7 +23,12 @@ kubectl create namespace cilium \
   && kubectl label namespace cilium pod-security.kubernetes.io/enforce=privileged \
   && kubectl label namespace cilium pod-security.kubernetes.io/warn=privileged
 
-helm upgrade --install --namespace cilium cilium "${SAVE_DIR}"
+# helm upgrade --install --namespace cilium cilium "${SAVE_DIR}"
+helm template cilium ${SAVE_DIR} --namespace cilium > ${SAVE_DIR}/manifest.yaml
+# Close to what argo itself will do.
+kubectl apply -f ${SAVE_DIR}/manifest.yaml -n cilium --server-side 
+rm ${SAVE_DIR}/manifest.yaml
+
 echo "Wait for CRDs to become available"
 sleep 60
 kubectl apply -f "${SAVE_DIR}/additional-manifests.yaml"

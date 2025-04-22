@@ -3,13 +3,18 @@
 # keeping only values we override (or want to).
 
 cert-manager:
-  # Default values for cert-manager.
-  # This is a YAML-formatted file.
-  # Declare variables to be passed into your templates.
   global:
     # The number of old ReplicaSets to retain to allow rollback (if not set, the default Kubernetes value is set to 10).
     # +docs:property
     revisionHistoryLimit: 1
+
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+  nodeSelector:
+    kubernetes.io/os: linux
+    node-role.kubernetes.io/control-plane: ""
 
   crds:
     # This option decides if the CRDs should be installed

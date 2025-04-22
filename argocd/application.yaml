@@ -25,5 +25,5 @@ spec:
       - CreateNamespace=true
       - ServerSideApply=true
     managedNamespaceMetadata:
-      annotations:
+      labels:
         "pod-security.kubernetes.io/warn": baseline

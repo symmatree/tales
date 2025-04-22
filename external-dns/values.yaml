@@ -6,25 +6,33 @@ external-dns:
     # -- If `true`, create a `ServiceMonitor` resource to support the _Prometheus Operator_.
     enabled: true
 
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+  nodeSelector:
+    kubernetes.io/os: linux
+    node-role.kubernetes.io/control-plane: ""
+
   # -- Log format.
-  logFormat: text  # @schema enum:["text", "json"]; type:string; default: "text"
+  logFormat: text # @schema enum:["text", "json"]; type:string; default: "text"
 
   # -- Interval for DNS updates.
   interval: 1m
 
   # -- How DNS records are synchronized between sources and providers; available values are `sync` & `upsert-only`.
-  policy: upsert-only  # @schema enum:[sync, upsert-only]; type:string; default: "upsert-only"
+  policy: upsert-only # @schema enum:[sync, upsert-only]; type:string; default: "upsert-only"
 
   # -- Specify the registry for storing ownership and labels.
   # Valid values are `txt`, `aws-sd`, `dynamodb` & `noop`.
-  registry: txt  # @schema enum:[txt, aws-sd, dynamodb, noop]; default: "txt"
+  registry: txt # @schema enum:[txt, aws-sd, dynamodb, noop]; default: "txt"
   # -- (string) Specify an identifier for this instance of _ExternalDNS_ wWhen using a registry other than `noop`.
-  txtOwnerId:  tales
+  txtOwnerId: tales
 
   # -- Limit possible target zones by domain suffixes.
   domainFilters:
-  - local.symmatree.com
-  - 0.10.in-addr.arpa
+    - local.symmatree.com
+    - 0.10.in-addr.arpa
 
   provider:
     name: google

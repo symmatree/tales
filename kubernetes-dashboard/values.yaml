@@ -73,6 +73,13 @@ kubernetes-dashboard:
   ## for our all containers.
   kong:
     enabled: true
+    nodeSelector:
+      kubernetes.io/os: linux
+      node-role.kubernetes.io/control-plane: ""
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
     proxy:
       type: LoadBalancer
       annotations:

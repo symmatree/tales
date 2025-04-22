@@ -17,5 +17,6 @@ fi
 # kubectl apply -f "${SAVE_DIR}/issuers.yaml"
 
 helm template argocd ${SAVE_DIR} --namespace argocd > ${SAVE_DIR}/manifest.yaml
+# Close to what argo itself will do.
 kubectl apply -f ${SAVE_DIR}/manifest.yaml -n argocd --server-side 
 rm ${SAVE_DIR}/manifest.yaml

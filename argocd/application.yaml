@@ -18,11 +18,12 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
-    # automated:
-    #   prune: true
-    #   selfHeal: true
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
     managedNamespaceMetadata:
       annotations:
         "pod-security.kubernetes.io/warn": baseline

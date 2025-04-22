@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: connect
+  namespace: argocd
+  labels:
+    name: connect
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/symmatree/tales.git
+    targetRevision: main
+    path: connect
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: connect
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    managedNamespaceMetadata:
+      annotations:
+        "pod-security.kubernetes.io/warn": baseline

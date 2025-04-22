@@ -8,6 +8,13 @@ connect:
     api:
       serviceMonitor:
         enabled: true
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+    nodeSelector:
+      kubernetes.io/os: linux
+      node-role.kubernetes.io/control-plane: ""
 
     # Ingress allows ingress services to be created to allow external access
     # from Kubernetes to access 1Password Connect pods.
@@ -28,3 +35,10 @@ connect:
   operator:
     # Denotes whether the 1Password Operator will be deployed
     create: true
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+    nodeSelector:
+      kubernetes.io/os: linux
+      node-role.kubernetes.io/control-plane: ""

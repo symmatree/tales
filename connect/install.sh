@@ -7,12 +7,13 @@ SAVE_DIR=`pwd`
 helm dep update
 popd
 
+# We have to create ourselves for the initial secrets.
 if  ! kubectl get namespace connect ; then
     kubectl create namespace connect \
     && kubectl label namespace connect pod-security.kubernetes.io/warn=baseline
 fi
 
-eval $(op signin)
+# eval $(op signin)
 
 if ! kubectl get secret onepassword-token -n connect ; then
     kubectl create secret generic -n connect \
@@ -28,5 +29,5 @@ if ! kubectl get secret op-credentials -n connect ; then
         op-credentials \
         "--from-literal=1password-credentials.json=$(op read op://tales-secrets/tales-secrets-1password-credentials.json/1password-credentials.json | base64)"
 fi
-
-helm upgrade --install --namespace connect connect "${SAVE_DIR}"
+kubectl apply -n argocd -f ${SAVE_DIR}/application.yaml
+# helm upgrade --install --namespace connect connect "${SAVE_DIR}"

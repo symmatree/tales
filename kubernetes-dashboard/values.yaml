@@ -111,7 +111,7 @@ kubernetes-dashboard:
   extras:
     serviceMonitor:
       # Whether to create a Prometheus Operator service monitor.
-      enabled: true
+      enabled: false
       # Here labels can be added to the serviceMonitor
       labels: {}
       # Here annotations can be added to the serviceMonitor

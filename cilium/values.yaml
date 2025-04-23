@@ -170,7 +170,8 @@ cilium:
       backend:
         livenessProbe:
           # -- Enable liveness probe for Hubble-ui backend (requires Hubble-ui 0.12+)
-          enabled: true
+          # Fails and prevents any error message from showing up.
+          enabled: false
         readinessProbe:
           # -- Enable readiness probe for Hubble-ui backend (requires Hubble-ui 0.12+)
           enabled: true

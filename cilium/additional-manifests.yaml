@@ -14,9 +14,10 @@ metadata:
   name: announce-everything
 spec:
   # No serviceSelector, apply to all.
-  nodeSelector:
-    matchExpressions:
-      - key: node-role.kubernetes.io/control-plane
-        operator: DoesNotExist
+  # No nodeSelector, many of these run on the control plane anyway.
+  # nodeSelector:
+  #   matchExpressions:
+  #     - key: node-role.kubernetes.io/control-plane
+  #       operator: DoesNotExist
   externalIPs: true
   loadBalancerIPs: true

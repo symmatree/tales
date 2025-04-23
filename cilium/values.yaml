@@ -174,7 +174,7 @@ cilium:
           enabled: false
         readinessProbe:
           # -- Enable readiness probe for Hubble-ui backend (requires Hubble-ui 0.12+)
-          enabled: true
+          enabled: false
 
       # Keep more core infra on the control plane.
       tolerations:

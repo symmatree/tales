@@ -132,12 +132,29 @@ cilium:
       # -- Enables exporting hubble metrics in OpenMetrics format.
       enableOpenMetrics: true
       serviceMonitor:
-        enabled: true
+        enabled: false
       # -- Grafana dashboards for hubble
       # grafana can import dashboards based on the label and value
       # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
       dashboards:
+        enabled: false
+
+    # -- TLS configuration for Hubble
+    tls:
+      # -- Enable mutual TLS for listenAddress. Setting this value to false is
+      # highly discouraged as the Hubble API provides access to potentially
+      # sensitive network flow metadata and is exposed on the host network.
+      enabled: true
+      # -- Configure automatic TLS certificates generation.
+      auto:
         enabled: true
+        method: certmanager
+        certValidityDuration: 365
+        certManagerIssuerRef:
+          group: cert-manager.io
+          kind: ClusterIssuer
+          name: tales-ca-issuer
+
     relay:
       # -- Enable Hubble Relay (requires hubble.enabled=true)
       enabled: true
@@ -160,8 +177,7 @@ cilium:
         port: 9966
         serviceMonitor:
           # -- Enable service monitors.
-          # This requires the prometheus CRDs to be available (see https://github.com/prometheus-operator/prometheus-operator/blob/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml)
-          enabled: true
+          enabled: false
     ui:
       # -- Whether to enable the Hubble UI.
       enabled: true
@@ -192,6 +208,10 @@ cilium:
         className: "cilium"
         hosts:
           - hubble.local.symmatree.com
+        tls:
+          - secretName: hubble-ui-tls
+            hosts:
+              - hubble.local.symmatree.com
 
   ipam:
     # -- Configure IP Address Management mode.
@@ -238,9 +258,9 @@ cilium:
     metricsService: true
     enabled: true
     serviceMonitor:
-      enabled: true
+      enabled: false
   dashboards:
-    enabled: true
+    enabled: false
   # Configure Cilium Envoy options.
   envoy:
     enabled: true
@@ -253,7 +273,7 @@ cilium:
       # -- Enable prometheus metrics for cilium-envoy
       enabled: true
       serviceMonitor:
-        enabled: true
+        enabled: false
 
   # -- Configure TLS configuration in the agent.
   tls:
@@ -268,9 +288,9 @@ cilium:
       metricsService: true
       enabled: true
       serviceMonitor:
-        enabled: true
+        enabled: false
     dashboards:
-      enabled: true
+      enabled: false
   # -- Configure cgroup related configuration
   cgroup:
     # Talos provides this mount.

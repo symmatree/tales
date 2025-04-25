@@ -7,10 +7,10 @@ Self-contained description of a Kubernetes cluster on Talos Linux within a Synol
 This is my project so I'm putting convenience links here for myself, sorry!
 
 * [Morpheus (unifi controller) `https://morpheus.local.symmatree.com`](https://morpheus.local.symmatree.com)
-* [Kubernetes Dashboard `https://dashboard.local.symmatree.com`](https://dashboard.local.symmatree.com)
+* [Kubernetes Dashboard `https://dashboard.local.symmatree.com`](https://dashboard.local.symmatree.com/#/workloads?namespace=_all)
 * [ArgoCD `https://argocd.local.symmatree.com`](https://argocd.local.symmatree.com)
 * [Google Cloud DNS `local.symmatree.com`](https://console.cloud.google.com/net-services/dns/zones/local-symmatree-com/details?project=symm-custodes)
-* [`talos-control-1` Talos serial console](https://raconteur.ad.local.symmatree.com:5001/webman/3rdparty/Virtualization/noVNC/vnc.html?autoconnect=true&reconnect=true&path=synovirtualization/ws/967c994c-c0b0-46db-a5d9-5efe7fe97d6d&title=talos-control-1)
+* [`talos-control-1` Talos serial console](https://raconteur.ad.local.symmatree.com:5001/webman/3rdparty/Virtualization/noVNC/vnc.html?autoconnect=true&reconnect=true&path=synovirtualization/ws/967c994c-c0b0-46db-a5d9-5efe7fe97d6d&title=talos-control-1&app_id=02356b89-847c-469b-b105-3a88664f5eb4&kb_layout=en-us&v=2.7.0-12229&app_alias=)
 * [`talos-worker-1` Talos serial console](https://raconteur.ad.local.symmatree.com:5001/webman/3rdparty/Virtualization/noVNC/vnc.html?autoconnect=true&reconnect=true&path=synovirtualization/ws/b23b2210-0da4-42a4-b6c9-1ba32fa4013e&title=talos-worker-1)
 
 ## Caveats
@@ -156,18 +156,36 @@ Note: Once the reset is complete, the drives will be wiped and you'll need to ch
 I keep iterating on the best way to bring things up from scratch.
 
 ```graphviz
-argocd -> ingress_builtin;
-argocd -> cert_manager;
-argocd -> service_monitor;
-cert_manager -> service_monitor;
+argocd -> cert_manager_annotation;
+argocd -> cilium;
 cert_manager -> onepassword;
-cilium -> service_monitor;
-cilium -> ingress_builtin;
+cilium -> cert_manager_annotation;
+external_dns -> onepassword;
+kube_dashboard -> external_dns_annotation;
+kube_dashboard -> cert_manager;
 
 ```
 
 argocd should have a dependency on a secret for a github secret but that's manual right now.
 
+onepassword currently doesn't use an ingest. It would have cert_manager and cilium deps for that.
+
+Newest deploy plan:
+
+* Talos control plane
+* Install cilium via helm templating
+* Install Argocd via helm templating
+* If needed, talk to argocd via command line -> ui (but not yet ingress)
+* Install auto-sync Applications for cilium and Argocd, replacing the manual installs.
+* Connect (onepassword) via install.sh which is just some scripted bootstrap secrets then an application.yaml
+* Cert-manager via application.yaml
+* external-dns via application.yaml
+* Redeploy Hubble UI, anyone else who needed secrets
+* kubernetes-dashboard via application.yaml
+* static-certs via application.yaml
+* Reboot
+* Add worker
+* Reboot worker
 
 ### Troubleshooting
 
@@ -176,26 +194,7 @@ argocd should have a dependency on a secret for a github secret but that's manua
 
 FREAKING DNS.
 
-Failing (10.0.4.122 is `dnsutils` test client with no overrides, `10.0.99.1` is external DNS server,
-10.0.4.25 and 10.0.4.118 are coredns pods).
-
-```
-# Failing kubectl exec -ti dnsutils -- nslookup morpheus.local.symmatree.com. 10.0.99.1
-# grep for 4.1422
--> stack flow 0x0 , identity 72931->world state new ifindex 0 orig-ip 0.0.0.0: 10.0.4.122:44064 -> 10.0.99.1:53 udp
--> stack flow 0x0 , identity 72931->world state established ifindex 0 orig-ip 0.0.0.0: 10.0.4.122:44064 -> 10.0.99.1:53 udp
-# Failing kubectl exec -ti dnsutils -- nslookup morpheus.local.symmatree.com.
-# grep for 4.122
--> endpoint 734 flow 0x0 , identity 72931->71695 state new ifindex lxccc67e93f96bd orig-ip 10.0.4.122: 10.0.4.122:41434 -> 10.0.4.118:53 udp
--> endpoint 3344 flow 0x0 , identity 71695->72931 state reply ifindex lxc9f767d54f2f1 orig-ip 10.0.4.118: 10.0.4.118:53 -> 10.0.4.122:41434 udp
-# Succeeding with host networking: kubectl exec -ti dnsutils-2 -- nslookup morpheus.local.symmatree.com.
-# grep for 10.0.1.50
--> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:54591 -> 10.0.99.1:53 udp
--> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:34588 -> 10.0.99.1:53 udp
-# Succeeding with host networking: kubectl exec -ti dnsutils-2 -- nslookup morpheus.local.symmatree.com. 10.0.99.1
-# grep for 10.0.1.50
--> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:57773 -> 10.0.99.1:53 udp
--> network flow 0x0 , identity unknown->unknown state new ifindex enp3s0 orig-ip 10.0.1.50: 10.0.1.50:41597 -> 10.0.99.1:53 udp
-
-
-```
+Okay to be fair it turned out not to be DNS per se, but rather that we were
+not successfully ARPing for pod addresses so they could send but not receive
+anything (except for outside 10.x, since that was where IP Masquerading kicked
+in and it all started working again.)

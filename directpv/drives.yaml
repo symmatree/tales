@@ -1,0 +1,20 @@
+version: v1
+nodes:
+  - name: talos-worker-1
+    drives:
+      - id: 8:3$GKoH90KUaplfpnP0PxbqSEMckukC67nffhxkEr7zej4=
+        name: sda3
+        size: 1048576000
+        make: SYNOLOGY Storage (Part 3)
+        fs: xfs
+        select: "no"
+      - id: 8:32$Js90+QReS3IC8my7JXg1ncvQusaS2ADNAWOFH09XqEo=
+        name: sdc
+        size: 2199023255552
+        make: SYNOLOGY Storage
+        select: "yes"
+      - id: 8:16$3Y4PH9K2yjNSDsd/gf2+t1N93nK+3trWZPSb8JG9zTI=
+        name: sdb
+        size: 1099511627776
+        make: SYNOLOGY Storage
+        select: "no"

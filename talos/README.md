@@ -1,5 +1,21 @@
 # Talos Linux Setup and Config
 
+## Installation ISO
+
+Image schematic `ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515` which
+corresponds to:
+
+```
+customization:
+    systemExtensions:
+        officialExtensions:
+            - siderolabs/qemu-guest-agent
+```
+
+[download link for v1.9.5](https://factory.talos.dev/image/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515/v1.9.5/metal-amd64.iso)
+
+Download the ISO and add to the Synology.
+
 ## Installation from scratch (new secrets)
 
 First generate a secrets file. This seems to encapsulate all the generated randomness

@@ -97,7 +97,7 @@ Common settings:
 * Machine type: `Q35` which I think is a kind of Lexus. I have no context on this one but a newer abstraction seems useful.
 * Storage: 100 GB disk, without space reclamation, attached as Virtual Disk 1 to be the OS install disk. VirtIO Scsi Controller selected.
 * Network: "Default VM Network" 
-* ISO for bootup: `talos-1.9.4-metal-amd64` (which I previously downloaded and then registered in the Images tab)
+* ISO for bootup: SEE [talos/README.md](talos/README.md)
 * Autostart: Last State
 * Boot from: For first boot, DVD/CDROM. You will have to change this to Virtual Hard Drive after Talos is installed. (Once installed to the OS, Talos will refuse to boot from the ISO, to avoid killing a live install.)
 * Firmware: Legacy BIOS. Both work. Only concrete difference observed is [as documented](https://www.synology.com/en-global/dsm/7.2/software_spec/vmm), "When the virtual machine firmware is UEFI, the maximum resolution is 800x600". Whereas the Legacy BIOS setting, combined with the hokey `vga=` kernel parameter, is the only way I succeeded in getting reasonably high resolution text on the "dashboard" shown on the "physical console" (which is what you when you click "Connect" from the Synology view of the VMs)

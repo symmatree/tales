@@ -16,6 +16,7 @@ talosctl gen config \
 rm secrets.yaml
 
 TALOSCONFIG=./talosconfig talosctl config endpoint talos-control.local.symmatree.com
+TALOSCONFIG=./talosconfig talosctl config node talos-control.local.symmatree.com
 
 echo "Writing generated files to 1password"
 op item edit --vault tales-secrets "talos-worker.yaml" "notesPlain=$(cat worker.yaml)" > /dev/null

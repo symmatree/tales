@@ -23,8 +23,9 @@ argo-cd:
 
   ## Custom resource configuration
   crds:
-    # -- Keep CRDs on chart uninstall
-    keep: false
+    keep: true
+    annotations:
+      "prevent-trivial-diff": "please"
 
   ## Globally shared configuration
   global:

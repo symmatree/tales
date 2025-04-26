@@ -174,7 +174,9 @@ Newest deploy plan:
 
 * Talos control plane
 * Install cilium via helm templating
+  * Will complain about Certificate being unknown CRD but it will install the basic CNI
 * Install Argocd via helm templating
+  * References various uninstalled stuff but via annotations; this is why the ingress won't work yet
 * If needed, talk to argocd via command line -> ui (but not yet ingress)
 * Install auto-sync Applications for cilium and Argocd, replacing the manual installs.
 * Connect (onepassword) via install.sh which is just some scripted bootstrap secrets then an application.yaml

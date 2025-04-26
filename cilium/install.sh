@@ -11,8 +11,8 @@ popd
 # This needs to agree with what we install later to read them.
 export VERSION=v0.81.0
 kubectl apply --server-side -f "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/${VERSION}/example/prometheus-operator-crd-full/monitoring.coreos.com_servicemonitors.yaml"
-kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
-
+kubectl apply --server-side -f "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml"
+# kubectl apply --server-side -f "https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.crds.yaml"
 echo "Wait for CRDs to become available"
 sleep 60
 

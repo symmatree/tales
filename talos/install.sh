@@ -12,6 +12,7 @@ talosctl gen config \
   --config-patch "@${SAVE_DIR}/talos-patch-all.yaml" \
   --config-patch-control-plane "@${SAVE_DIR}/talos-patch-control.yaml" \
   --config-patch-worker "@${SAVE_DIR}/talos-patch-worker.yaml" \
+  --with-docs=false --with-examples=false \
   tales https://talos-control.local.symmatree.com:6443
 rm secrets.yaml
 

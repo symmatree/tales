@@ -6,4 +6,6 @@ operator:
     env:
       # https://github.com/minio/operator/blob/master/docs/cert-manager.md#install-operator-with-auto-tls-disabled-for-sts
       - name: OPERATOR_STS_AUTO_TLS_ENABLED
-        value: "off"
+        value: "on"
+      - name: OPERATOR_STS_ENABLED
+        value: "on"

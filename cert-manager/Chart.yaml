@@ -17,3 +17,5 @@ dependencies:
   - name: cert-manager
     version: ~1.17
     repository: https://charts.jetstack.io
+  - name: trust-manager
+    repository: https://charts.jetstack.io

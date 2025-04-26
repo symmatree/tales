@@ -1,6 +1,6 @@
 # https://raw.githubusercontent.com/minio/operator/refs/tags/v7.1.1/helm/operator/values.yaml
 
-minio-operator:
+operator:
   operator:
     replicaCount: 1
     env:

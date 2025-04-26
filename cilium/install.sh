@@ -12,7 +12,7 @@ popd
 export VERSION=v0.81.0
 kubectl apply --server-side -f "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/${VERSION}/example/prometheus-operator-crd-full/monitoring.coreos.com_servicemonitors.yaml"
 kubectl apply --server-side -f "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml"
-# kubectl apply --server-side -f "https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.crds.yaml"
+kubectl apply --server-side -f "https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.crds.yaml"
 echo "Wait for CRDs to become available"
 sleep 60
 
@@ -30,7 +30,3 @@ helm template cilium ${SAVE_DIR} --namespace cilium > ${SAVE_DIR}/manifest.yaml
 kubens cilium
 kubectl apply -f ${SAVE_DIR}/manifest.yaml --server-side 
 rm ${SAVE_DIR}/manifest.yaml
-
-echo "Wait for CRDs to become available"
-sleep 60
-kubectl apply -f "${SAVE_DIR}/additional-manifests.yaml"

@@ -1118,9 +1118,8 @@ spec:
       serviceAccountName: directpv-min-io
       tolerations:
         - effect: NoSchedule
-          key: key
-          operator: Equal
-          value: value
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
       volumes:
         - hostPath:
             path: /var/lib/kubelet/plugins/directpv-min-io

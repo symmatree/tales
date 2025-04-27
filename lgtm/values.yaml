@@ -48,6 +48,11 @@ loki:
   deploymentMode: SingleBinary
   singleBinary:
     replicas: 1
+    persistence:
+      enableStatefulSetAutoDeletePVC: true
+      storageClass: "directpv-min-io"
+      size: "10Gi"
+
   # Zero out replica counts of other deployment modes
   backend:
     replicas: 0

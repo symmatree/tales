@@ -1,0 +1,55 @@
+# https://raw.githubusercontent.com/minio/operator/refs/tags/v7.1.1/helm/operator/values.yaml
+
+tenant:
+  tenant:
+    name: tales-tenant
+    configSecret:
+      # Populated from onepassword
+      name: tales-tenant-secret
+      existingSecret: true
+    # certificate:
+    #   ###
+    #   # Specify an array of Kubernetes TLS secrets, where each entry corresponds to a secret the TLS private key and public certificate pair.
+    #   #
+    #   # This is used by MinIO to verify TLS connections from clients using those CAs
+    #   # If you omit this and have clients using TLS certificates minted by an external CA, those connections may fail with warnings around certificate verification.
+    #   # See `Operator CRD: TenantSpec <https://min.io/docs/minio/kubernetes/upstream/reference/operator-crd.html#tenantspec>`__.
+    #   externalCaCertSecret: []
+    #   externalCertSecret:
+    #     - name: tales-tenant-tls
+    #       type: cert-manager.io/v1
+
+    # requestAutoCert: false
+
+    pools:
+      - servers: 1
+        name: pool-0
+        volumesPerServer: 1
+        storageClassName: directpv-min-io
+        size: 2.0TiB
+
+  ingress:
+    api:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: real-cert
+      ingressClassName: "cilium"
+      tls:
+        - secretName: minio-console-tls
+          hosts:
+            - minio.local.symmatree.com
+      host: minio.local.symmatree.com
+      path: /
+      pathType: Prefix
+    console:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: real-cert
+      ingressClassName: "cilium"
+      tls:
+        - secretName: minio-console-tls
+          hosts:
+            - minio-console.local.symmatree.com
+      host: minio-console.local.symmatree.com
+      path: /
+      pathType: Prefix

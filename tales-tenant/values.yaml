@@ -26,9 +26,9 @@ tenant:
         name: pool-0
         volumesPerServer: 4
         storageClassName: directpv-min-io
-        # = (2TiB / 4) - 1, because directpv won't provision
+        # = (2TiB / 4) rounded down, because directpv won't provision
         # every byte (despite "give minio full control" memes)
-        size: 549755813887
+        size: 549755813880
 
   ingress:
     api:

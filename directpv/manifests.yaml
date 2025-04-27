@@ -1171,7 +1171,7 @@ metadata:
   name: controller
   namespace: directpv
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       selector.directpv.min.io: controller-rcthf

@@ -44,6 +44,11 @@ loki:
   # We have minio at home.
   minio:
     enabled: false
+  resultsCache:
+    allocatedMemory: 128
+  chunksCache:
+    # in MB
+    allocatedMemory: 512
 
   deploymentMode: SingleBinary
   singleBinary:

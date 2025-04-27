@@ -182,12 +182,15 @@ Newest deploy plan:
 * Connect (onepassword) via install.sh which is just some scripted bootstrap secrets then an application.yaml
 * Cert-manager via application.yaml
 * external-dns via application.yaml
-* Redeploy Hubble UI, anyone else who needed secrets
-* kubernetes-dashboard via application.yaml
-* static-certs via application.yaml
+* Redeploy Hubble UI, anyone else who needed secrets. Usually a couple of "Replace" rounds in here.
 * Reboot
 * Add worker
 * Reboot worker
+* kubernetes-dashboard via application.yaml
+* static-certs via application.yaml
+* directpv to deploy to worker
+* minio-operator via application.yaml
+* tales-tenant via application.yaml
 
 ### Troubleshooting
 

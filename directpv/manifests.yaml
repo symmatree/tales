@@ -14,6 +14,7 @@ metadata:
     pod-security.kubernetes.io/enforce: privileged
   name: directpv
 spec: {}
+status: {}
 
 ---
 apiVersion: v1
@@ -945,14 +946,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      selector.directpv.min.io: directpv-min-io-ghtlx
+      selector.directpv.min.io: directpv-min-io-n7xoq
   template:
     metadata:
       annotations:
         created-by: kubectl-directpv
       creationTimestamp: null
       labels:
-        selector.directpv.min.io: directpv-min-io-ghtlx
+        selector.directpv.min.io: directpv-min-io-n7xoq
         selector.directpv.min.io.service: enabled
       name: node-server
       namespace: directpv
@@ -1115,6 +1116,11 @@ spec:
               name: socket-dir
       hostPID: true
       serviceAccountName: directpv-min-io
+      tolerations:
+        - effect: NoSchedule
+          key: key
+          operator: Equal
+          value: value
       volumes:
         - hostPath:
             path: /var/lib/kubelet/plugins/directpv-min-io
@@ -1174,7 +1180,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      selector.directpv.min.io: controller-rcthf
+      selector.directpv.min.io: controller-glswt
   strategy:
     type: Recreate
   template:
@@ -1183,7 +1189,7 @@ spec:
         created-by: kubectl-directpv
       creationTimestamp: null
       labels:
-        selector.directpv.min.io: controller-rcthf
+        selector.directpv.min.io: controller-glswt
       name: controller
       namespace: directpv
     spec:

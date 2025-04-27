@@ -946,14 +946,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      selector.directpv.min.io: directpv-min-io-n7xoq
+      selector.directpv.min.io: directpv-min-io-ghtlx
   template:
     metadata:
       annotations:
         created-by: kubectl-directpv
       creationTimestamp: null
       labels:
-        selector.directpv.min.io: directpv-min-io-n7xoq
+        selector.directpv.min.io: directpv-min-io-ghtlx
         selector.directpv.min.io.service: enabled
       name: node-server
       namespace: directpv
@@ -1180,7 +1180,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      selector.directpv.min.io: controller-glswt
+      selector.directpv.min.io: controller-rcthf
   strategy:
     type: Recreate
   template:
@@ -1189,7 +1189,7 @@ spec:
         created-by: kubectl-directpv
       creationTimestamp: null
       labels:
-        selector.directpv.min.io: controller-glswt
+        selector.directpv.min.io: controller-rcthf
       name: controller
       namespace: directpv
     spec:

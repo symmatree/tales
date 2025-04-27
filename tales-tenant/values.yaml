@@ -8,7 +8,7 @@ tenant:
       name: tales-tenant-secret
       existingSecret: true
     # certificate:
-    #   ###
+    #   ###k desl
     #   # Specify an array of Kubernetes TLS secrets, where each entry corresponds to a secret the TLS private key and public certificate pair.
     #   #
     #   # This is used by MinIO to verify TLS connections from clients using those CAs
@@ -26,7 +26,9 @@ tenant:
         name: pool-0
         volumesPerServer: 4
         storageClassName: directpv-min-io
-        size: 549755813888
+        # = (2TiB / 4) - 1, because directpv won't provision
+        # every byte (despite "give minio full control" memes)
+        size: 549755813887
 
   ingress:
     api:

@@ -26,9 +26,12 @@ tenant:
         name: pool-0
         volumesPerServer: 4
         storageClassName: directpv-min-io
+        # Provisioning 3x drives @ 549,755,813,880=(2Ti / 4) - 8
+        # leaves 548,681,941,016 remaining; this is 1,073,872,872 bytes
+        # (about 1G) less than expected.
         # = (2TiB / 4) rounded down, because directpv won't provision
         # every byte (despite "give minio full control" memes)
-        size: 549755813880
+        size: 511Gi
 
   ingress:
     api:

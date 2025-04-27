@@ -26,7 +26,7 @@ tenant:
         name: pool-0
         volumesPerServer: 1
         storageClassName: directpv-min-io
-        size: 1.5T
+        size: 2199023255552
 
   ingress:
     api:

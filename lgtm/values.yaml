@@ -7,7 +7,38 @@ grafana:
     ingressClassName: cilium
     annotations:
       cert-manager.io/cluster-issuer: real-cert
+    hosts:
+      - borgmon.local.symmatree.com
+    tlsConfig:
+      - secretName: grafana-tls
+        hosts:
+          - borgmon.local.symmatree.com
+  persistence:
+    enabled: true
+    storageClassName: "directpv-min-io"
 
+  admin:
+    existingSecret: "grafana-admin-user"
+    userKey: username
+    passwordKey: password
+
+  plugins:
+    - grafana-github-datasource
+    - grafana-lokiexplore-app
+    # - grafana-metricsdrilldown-app
+    # - grafana-mqtt-datasource
+
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+      # Let's see the default behavior first.
+      # folderAnnotation: "grafana_dashboard_folder"
+      provider:
+        allowUiUpdates: true
+    datasources:
+      enabled: true
+      searchNamespace: ALL
 loki:
   loki:
     global:

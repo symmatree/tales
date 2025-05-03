@@ -1,0 +1,8 @@
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: grafana-admin-user
+  namespace: lgtm
+type: Opaque
+spec:
+  itemPath: "vaults/tales-secrets/items/grafana-admin-user"

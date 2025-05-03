@@ -15,7 +15,6 @@ grafana:
           - borgmon.local.symmatree.com
   persistence:
     enabled: true
-    storageClassName: "directpv-min-io"
 
   admin:
     existingSecret: "grafana-admin-user"
@@ -96,7 +95,6 @@ loki:
     replicas: 1
     persistence:
       enableStatefulSetAutoDeletePVC: true
-      storageClass: "directpv-min-io"
       size: "10Gi"
 
   # Zero out replica counts of other deployment modes

@@ -154,13 +154,15 @@ mimir-distributed:
     enabled: false
   ingester:
     replicas: 1
-    zoneAwareReplication: false
+    zoneAwareReplication:
+      enabled: false
   querier:
     replicas: 1
   query_scheduler:
     replicas: 1
   store_gateway:
-    zoneAwareReplication: false
+    zoneAwareReplication:
+      enabled: false
   mimir:
     structuredConfig:
       common:

@@ -2,6 +2,17 @@ global:
   extraEnvFrom:
     - secretRef:
         name: lgtm-s3-creds
+  extraEnv:
+    - name: SSL_CERT_FILE
+      value: /etc/ssl/certs/ca-certificates.crt
+  extraVolumes:
+    - name: ca-certificates
+      configMap:
+        name: trust-bundle
+  extraVolumeMounts:
+    - name: ca-certificates
+      mountPath: /etc/ssl/certs
+      readOnly: true
 
 grafana:
   # https://github.com/grafana/helm-charts/blob/grafana-8.13.1/charts/grafana/values.yaml

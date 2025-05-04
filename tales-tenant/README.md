@@ -44,3 +44,8 @@ mc alias set tales https://minio.local.symmatree.com \
 
 mc admin info tales
 ```
+
+## Stuck Progressing
+
+Check the logs on the minio operator pod, likely it doesn't trust the
+root CA and it can't get the health endpoint as a result.

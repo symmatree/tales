@@ -39,11 +39,11 @@ grafana:
       enabled: true
       searchNamespace: ALL
 loki:
+  global:
+    extraEnvFrom:
+      - secretRef:
+          name: loki-s3-creds
   loki:
-    global:
-      extraEnvFrom:
-        - secretRef:
-            name: loki-s3-creds
     # loki:
     # https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/
     commonConfig:

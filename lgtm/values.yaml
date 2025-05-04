@@ -69,6 +69,8 @@ loki:
           index:
             prefix: loki_index_
             period: 24h
+    extraMemberlistConfig:
+      cluster_label: loki
     pattern_ingester:
       enabled: true
     limits_config:
@@ -177,6 +179,8 @@ mimir-distributed:
   mimir:
     structuredConfig:
       multitenancy_enabled: false
+      memberlist:
+        cluster_label: mimir
       common:
         storage:
           backend: s3

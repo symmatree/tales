@@ -9,7 +9,7 @@ grafana:
       cert-manager.io/cluster-issuer: real-cert
     hosts:
       - borgmon.local.symmatree.com
-    tlsConfig:
+    tls:
       - secretName: grafana-tls
         hosts:
           - borgmon.local.symmatree.com

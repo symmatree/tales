@@ -27,11 +27,19 @@ k annotate svc/minio \
 k annotate svc/tales-tenant-console \
   "external-dns.alpha.kubernetes.io/hostname=minio-console.local.symmatree.com"
 
+# Trust the cert ourselves
 kubectl get secret tales-tenant-ca-tls -n tales-tenant \
   -o jsonpath="{.data.tls\.crt}" \
   | base64 -d \
   | sudo tee /usr/local/share/ca-certificates/tales-tenant-ca-tls.crt
 sudo update-ca-certificates
+
+# Make minio-operator trust the cert
+kubectl get secret tales-tenant-ca-tls -n tales-tenant \
+  -o jsonpath="{.data.tls\.crt}" \
+  | base64 -d > ca.crt
+kubectl create secret generic operator-ca-tls-tales-tenant --from-file=ca.crt -n minio-operator
+rm ca.crt
 
 mc alias set tales https://minio.local.symmatree.com \
     "$(op read op://tales-secrets/minio-admin/username)" \

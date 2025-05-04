@@ -1,8 +1,8 @@
 apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
-  name: loki-s3-creds
+  name: lgtm-s3-creds
   namespace: lgtm
 type: Opaque
 spec:
-  itemPath: "vaults/tales-secrets/items/loki-s3-creds"
+  itemPath: "vaults/tales-secrets/items/lgtm-s3-creds"

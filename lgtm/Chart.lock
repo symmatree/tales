@@ -5,5 +5,8 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 8.14.2
-digest: sha256:bf9535bc0da0bd8b710de9ecef8bdf77b0201e1ee0667411d9a4ad689e55f2fc
-generated: "2025-05-03T13:12:47.97117798-04:00"
+- name: mimir-distributed
+  repository: https://grafana.github.io/helm-charts
+  version: 5.7.0
+digest: sha256:f7fee1b6e628137d1c8cdcaa0237952a7db37ce00b459a95f6b7455c824a109b
+generated: "2025-05-04T14:16:57.920406132-04:00"

@@ -1,3 +1,8 @@
+global:
+  extraEnvFrom:
+    - secretRef:
+        name: lgtm-s3-creds
+
 grafana:
   # https://github.com/grafana/helm-charts/blob/grafana-8.13.1/charts/grafana/values.yaml
   configMapAnnotations:
@@ -39,10 +44,6 @@ grafana:
       enabled: true
       searchNamespace: ALL
 loki:
-  global:
-    extraEnvFrom:
-      - secretRef:
-          name: loki-s3-creds
   loki:
     # Despite name this is actually multi-tenancy support.
     auth_enabled: false
@@ -77,8 +78,8 @@ loki:
         endpoint: https://minio.tales-tenant.svc
         # For unclear reasons the Kubernetes dollar-paren syntax is not
         # expanded but this is Loki's native expansion syntax with config.expand-env=true
-        secretAccessKey: "${LOKI_SECRET_ACCESS_KEY}"
-        accessKeyId: "${LOKI_ACCESS_KEY_ID}"
+        secretAccessKey: "${SECRET_ACCESS_KEY}"
+        accessKeyId: "${ACCESS_KEY_ID}"
         s3ForcePathStyle: true
 
   # We have minio at home.
@@ -104,7 +105,7 @@ loki:
         value: /etc/ssl/certs/ca-certificates.crt
     extraEnvFrom:
       - secretRef:
-          name: loki-s3-creds
+          name: lgtm-s3-creds
     extraVolumes:
       - name: ca-certificates
         configMap:
@@ -141,6 +142,26 @@ loki:
   bloomGateway:
     replicas: 0
 
-mimir:
-  nginx:
-    enabled: false
+# k8s-monitoring:
+#   cluster:
+#     name: tales
+#   clusterMetrics:
+#     enabled: true
+
+mimir-distributed:
+  ingester:
+    replicas: 1
+  querier:
+    replicas: 1
+  query_scheduler:
+    replicas: 1
+  mimir:
+    structuredConfig:
+      common:
+        storage:
+          backend: s3
+          s3:
+            bucket_name: mimir
+            endpoint: https://minio.tales-tenant.svc
+            access_key_id: "${ACCESS_KEY_ID}"
+            secret_access_key: "${SECRET_ACCESS_KEY}"

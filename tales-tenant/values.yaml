@@ -27,11 +27,12 @@ tenant:
         # (about 1G) less than expected.
         # = (2TiB / 4) rounded down, because directpv won't provision
         # every byte (despite "give minio full control" memes)
+        # Note 05-03: Maybe this is XFS overhead?
         size: 511Gi
 
   ingress:
     api:
-      enabled: true
+      enabled: false
       annotations:
         cert-manager.io/cluster-issuer: real-cert
       ingressClassName: "cilium"
@@ -43,7 +44,7 @@ tenant:
       path: /
       pathType: Prefix
     console:
-      enabled: true
+      enabled: false
       annotations:
         cert-manager.io/cluster-issuer: real-cert
       ingressClassName: "cilium"

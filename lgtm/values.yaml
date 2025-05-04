@@ -44,8 +44,8 @@ loki:
       - secretRef:
           name: loki-s3-creds
   loki:
-    # loki:
-    # https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/
+    # Despite name this is actually multi-tenancy support.
+    auth_enabled: false
     commonConfig:
       replication_factor: 1
     schemaConfig:

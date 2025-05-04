@@ -149,6 +149,9 @@ loki:
 #     enabled: true
 
 mimir-distributed:
+  # We have minio at home.
+  minio:
+    enabled: false
   ingester:
     replicas: 1
   querier:

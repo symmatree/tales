@@ -155,11 +155,58 @@ loki:
   bloomGateway:
     replicas: 0
 
-# k8s-monitoring:
-#   cluster:
-#     name: tales
-#   clusterMetrics:
-#     enabled: true
+k8s-monitoring:
+  cluster:
+    name: tales
+  clusterMetrics:
+    enabled: true
+  clusterEvents:
+    enabled: true
+  nodeLogs:
+    enabled: true
+  podLogs:
+    enabled: true
+  prometheusOperatorObjects:
+    enabled: true
+  alloy-metrics:
+    enabled: true
+  alloy-singleton:
+    enabled: true
+  alloy-logs:
+    enabled: true
+  alloy-receiver:
+    enabled: true
+  integrations:
+    alloy:
+      instances:
+        - name: alloy
+          namespace: lgtm
+          labelSelectors:
+            app.kubernetes.io/name: [alloy-metrics, alloy-singleton, alloy-logs]
+    cert-manager:
+      instances:
+        - name: cert-manager
+          namespace: cert-manager
+          labelSelectors:
+            app.kubernetes.io/name: cert-manager
+    grafana:
+      instances:
+        - name: lgtm-grafana
+          namespace: lgtm
+          labelSelectors:
+            app.kubernetes.io/name: grafana
+    loki:
+      instances:
+        - name: lgtm-loki
+          namespace: lgtm
+          labelSelectors:
+            app.kubernetes.io/name: loki
+    mimir:
+      instances:
+        - name: lgtm-mimir
+          namespace: lgtm
+          labelSelectors:
+            app.kubernetes.io/name: mimir
 
 mimir-distributed:
   # We have minio at home.

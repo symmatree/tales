@@ -43,6 +43,9 @@ loki:
     extraEnvFrom:
       - secretRef:
           name: loki-s3-creds
+    extraArgs:
+      - -log-config-reverse-order
+      - -config.expand-env=true
   loki:
     # loki:
     # https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/
@@ -75,8 +78,10 @@ loki:
         # https://github.com/grafana/loki/blob/main/production/helm/loki/templates/_helpers.tpl#L213C2-L218C17
         # We cannot directly use them but it is a good reference.
         endpoint: https://minio.tales-tenant.svc
-        secretAccessKey: "$(LOKI_SECRET_ACCESS_KEY)"
-        accessKeyId: "$(LOKI_ACCESS_KEY_ID)"
+        # For unclear reasons the Kubernetes dollar-paren syntax is not
+        # expanded but this is Loki's native expansion syntax with config.expand-env=true
+        secretAccessKey: "${LOKI_SECRET_ACCESS_KEY}"
+        accessKeyId: "${LOKI_ACCESS_KEY_ID}"
         s3ForcePathStyle: true
 
   # We have minio at home.

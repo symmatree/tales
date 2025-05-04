@@ -93,6 +93,17 @@ loki:
     persistence:
       enableStatefulSetAutoDeletePVC: true
       size: "10Gi"
+    extraEnv:
+      - name: SSL_CERT_FILE
+        value: /etc/ssl/certs/ca-certificates.crt
+    extraVolumes:
+      - name: ca-certificates
+        configMap:
+          name: trust-bundle
+    extraVolumeMounts:
+      - name: ca-certificates
+        mountPath: /etc/ssl/certs
+        readOnly: true
 
   # Zero out replica counts of other deployment modes
   backend:

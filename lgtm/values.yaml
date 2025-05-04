@@ -73,13 +73,10 @@ loki:
       s3:
         # Values if minio was enabled:
         # https://github.com/grafana/loki/blob/main/production/helm/loki/templates/_helpers.tpl#L213C2-L218C17
-        endpoint: tales-tenant-hl.tales-tenant.svc:9000
-        bucketnames: chunks
+        endpoint: https://minio.tales-tenant.svc
         secretAccessKey: "$(LOKI_SECRET_ACCESS_KEY)"
         accessKeyId: "$(LOKI_ACCESS_KEY_ID)"
         s3ForcePathStyle: true
-        # Obviously not the best but hey.
-        insecure: true
 
   # We have minio at home.
   minio:

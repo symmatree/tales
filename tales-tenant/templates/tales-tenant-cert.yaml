@@ -24,7 +24,7 @@ spec:
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: tales-tenant-tls
+  name: tales-tenant-ca-tls
 spec:
   sources:
   - secret:

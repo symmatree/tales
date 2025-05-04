@@ -13,4 +13,4 @@ spec:
       key: "ca.crt"
     namespaceSelector:
       matchLabels:
-        name: minio-operator
+        "kubernetes.io/metadata.name": minio-operator

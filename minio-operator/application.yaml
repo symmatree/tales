@@ -27,4 +27,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         "pod-security.kubernetes.io/warn": baseline
-        name: minio-operator
+        "kubernetes.io/metadata.name": minio-operator

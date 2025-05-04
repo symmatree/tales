@@ -35,4 +35,4 @@ spec:
       key: "ca.crt"
     namespaceSelector:
       matchLabels:
-        name: tales-tenant
+        "kubernetes.io/metadata.name": tales-tenant

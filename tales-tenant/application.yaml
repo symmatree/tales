@@ -27,4 +27,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         "pod-security.kubernetes.io/warn": baseline
-        name: tales-tenant
+        "kubernetes.io/metadata.name": tales-tenant

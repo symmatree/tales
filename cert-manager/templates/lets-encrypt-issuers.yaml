@@ -12,6 +12,7 @@ spec:
     solvers:
       - selector:
           dnsZones:
+            - ad.local.symmatree.com
             - local.symmatree.com
         dns01:
           cloudDNS:
@@ -34,6 +35,7 @@ spec:
     solvers:
       - selector:
           dnsZones:
+            - ad.local.symmatree.com
             - local.symmatree.com
         dns01:
           cloudDNS:

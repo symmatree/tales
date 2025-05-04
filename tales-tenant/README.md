@@ -8,11 +8,14 @@ It has a TLS backend and tbh that seems good for core storage, but that means ci
 front for it because it can only do an http backhaul for some bizarre reason. So either I need to
 finally buckle and install an nginx-ingress to support that, or we just expose the services directly.
 
-Current state is to expose services directly instead, with a TLS that we don't recognize until we install it directly, below.
+Current strategy is using the self-signed cluster-wide tales CA as an issuer for both the operator
+and the tenant, rather than the many many certs in the [docs](https://min.io/docs/minio/kubernetes/upstream/operations/cert-manager/cert-manager-tenants.html)
 
-The same `.crt` file can be installed on Windows using the `Certificates`
-`mmc.exe` snap-in to install to trusted roots for both the user and
-the local computer.
+Thanks to enabling trust-manager to inject secrets, both minio-tenant and minio-operator
+can have the self-signed root CA injected in a way they'll pick up (name-sensitive in both cases);
+those are in their respective deployments. So we don't need to do the manual glue
+described in the docs. Instead, `tales-tenant-cert` is just a normal cert request,
+and just the public key of the CA is injected.
 
 ## mc command line setup
 
@@ -27,19 +30,13 @@ k annotate svc/minio \
 k annotate svc/tales-tenant-console \
   "external-dns.alpha.kubernetes.io/hostname=minio-console.local.symmatree.com"
 
-# Trust the cert ourselves
-kubectl get secret tales-tenant-ca-tls -n tales-tenant \
-  -o jsonpath="{.data.tls\.crt}" \
-  | base64 -d \
-  | sudo tee /usr/local/share/ca-certificates/tales-tenant-ca-tls.crt
-sudo update-ca-certificates
-
+# NO LONGER REQUIRED, YAY
 # Make minio-operator trust the cert
-kubectl get secret tales-tenant-ca-tls -n tales-tenant \
-  -o jsonpath="{.data.tls\.crt}" \
-  | base64 -d > ca.crt
-kubectl create secret generic operator-ca-tls-tales-tenant --from-file=ca.crt -n minio-operator
-rm ca.crt
+# kubectl get secret tales-tenant-ca-tls -n tales-tenant \
+#   -o jsonpath="{.data.tls\.crt}" \
+#   | base64 -d > ca.crt
+# kubectl create secret generic operator-ca-tls-tales-tenant --from-file=ca.crt -n minio-operator
+# rm ca.crt
 
 mc alias set tales https://minio.local.symmatree.com \
     "$(op read op://tales-secrets/minio-admin/username)" \

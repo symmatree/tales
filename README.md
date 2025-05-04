@@ -12,6 +12,8 @@ This is my project so I'm putting convenience links here for myself, sorry!
 * [Google Cloud DNS `local.symmatree.com`](https://console.cloud.google.com/net-services/dns/zones/local-symmatree-com/details?project=symm-custodes)
 * [`talos-control-1` Talos serial console](https://raconteur.ad.local.symmatree.com:5001/webman/3rdparty/Virtualization/noVNC/vnc.html?autoconnect=true&reconnect=true&path=synovirtualization/ws/967c994c-c0b0-46db-a5d9-5efe7fe97d6d&title=talos-control-1&app_id=02356b89-847c-469b-b105-3a88664f5eb4&kb_layout=en-us&v=2.7.0-12229&app_alias=)
 * [`talos-worker-1` Talos serial console](https://raconteur.ad.local.symmatree.com:5001/webman/3rdparty/Virtualization/noVNC/vnc.html?autoconnect=true&reconnect=true&path=synovirtualization/ws/b23b2210-0da4-42a4-b6c9-1ba32fa4013e&title=talos-worker-1)
+* [Hubble UI](https://hubble.local.symmatree.com/?namespace=argocd)
+* [minio `tales-tenant` console](https://minio-console.local.symmatree.com:9443/)
 
 ## Caveats
 

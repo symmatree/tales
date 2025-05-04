@@ -6,7 +6,7 @@ spec:
   sources:
   - useDefaultCAs: true
   - secret:
-      name: tales-ca-secret
+      name: tales-ca-tls
       key: "ca.crt"
   target:
     configMap:

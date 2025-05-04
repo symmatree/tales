@@ -20,7 +20,7 @@ spec:
     group: cert-manager.io
 
 ---
-
+# Use trust-manager to inject just the public key.
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
@@ -28,7 +28,7 @@ metadata:
 spec:
   sources:
   - secret:
-      name: tales-ca-secret
+      name: tales-ca-tls
       key: "ca.crt"
   target:
     secret:

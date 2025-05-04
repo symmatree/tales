@@ -20,7 +20,7 @@ spec:
       - Porter Farms
     organizationalUnits:
       - TalesCluster
-  secretName: tales-ca-secret
+  secretName: tales-ca-tls
   privateKey:
     algorithm: ECDSA
     size: 256
@@ -37,4 +37,4 @@ metadata:
   name: tales-ca-issuer
 spec:
   ca:
-    secretName: tales-ca-secret
+    secretName: tales-ca-tls

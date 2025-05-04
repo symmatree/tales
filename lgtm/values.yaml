@@ -71,8 +71,9 @@ loki:
         ruler: loki-ruler
         admin: loki-admin
       s3:
-        # Values if minio was enabled:
+        # The output values if minio was enabled are found here:
         # https://github.com/grafana/loki/blob/main/production/helm/loki/templates/_helpers.tpl#L213C2-L218C17
+        # We cannot directly use them but it is a good reference.
         endpoint: https://minio.tales-tenant.svc
         secretAccessKey: "$(LOKI_SECRET_ACCESS_KEY)"
         accessKeyId: "$(LOKI_ACCESS_KEY_ID)"

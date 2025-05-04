@@ -158,6 +158,14 @@ loki:
 k8s-monitoring:
   cluster:
     name: tales
+  destinations:
+    - name: localMimir
+      type: prometheus
+      url: http://lgtm-mimir-nginx
+    - name: localLoki
+      type: loki
+      url: http://lgtm-loki-gateway
+
   clusterMetrics:
     enabled: true
   clusterEvents:

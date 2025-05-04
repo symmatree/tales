@@ -18,3 +18,21 @@ spec:
     name: tales-ca-issuer
     kind: ClusterIssuer
     group: cert-manager.io
+
+---
+
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: tales-tenant-tls
+spec:
+  sources:
+  - secret:
+      name: tales-ca-secret
+      key: "ca.crt"
+  target:
+    secret:
+      key: "ca.crt"
+    namespaceSelector:
+      matchLabels:
+        name: tales-tenant

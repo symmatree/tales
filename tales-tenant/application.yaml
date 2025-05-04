@@ -27,4 +27,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         "pod-security.kubernetes.io/warn": baseline
-        "trust-bundle": enabled
+        name: tales-tenant

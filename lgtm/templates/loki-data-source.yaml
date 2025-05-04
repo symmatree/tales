@@ -9,7 +9,7 @@ data:
     datasource.yaml: |-
         apiVersion: 1
         datasources:
-            - name: Loki
+          - name: Loki
             uid: loki
             type: loki
             url: http://lgtm-loki-gateway

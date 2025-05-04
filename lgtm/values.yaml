@@ -43,9 +43,6 @@ loki:
     extraEnvFrom:
       - secretRef:
           name: loki-s3-creds
-    extraArgs:
-      - -log-config-reverse-order
-      - -config.expand-env=true
   loki:
     # loki:
     # https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/
@@ -99,6 +96,9 @@ loki:
     persistence:
       enableStatefulSetAutoDeletePVC: true
       size: "10Gi"
+    extraArgs:
+      - -log-config-reverse-order
+      - -config.expand-env=true
     extraEnv:
       - name: SSL_CERT_FILE
         value: /etc/ssl/certs/ca-certificates.crt

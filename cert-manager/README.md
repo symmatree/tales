@@ -32,6 +32,12 @@ access them without need to be able to read all secrets globally. (Though I thin
 have to grant that privilege in order to *write* to secrets, which isn't needed - public keys
 aren't secret!!! - but is what a lot of clients expect, such as minio.)
 
+## Trusting the cert
+
+This has to be redone whenever you delete the cert-manager namespace or the ca secret,
+otherwise whatever the update cycle is. In May it appears to be an August expiry
+but that might be an intermediate cert.
+
 ## Trust the cert on Ubuntu (e.g. WSL)
 
 ```
@@ -61,3 +67,29 @@ mount in a particular place, point at it with env var.
 The same `.crt` file can be installed on Windows using the `Certificates`
 `mmc.exe` snap-in to install to trusted roots for both the user and
 the local computer.
+
+Easiest is to get the file (it's not a secret after all!) on a linux box
+
+```
+kubectl get secret tales-ca-tls -n cert-manager \
+  -o jsonpath="{.data.tls\.crt}" \
+  | base64 -d > ca.crt
+```
+
+and then copy-and-paste into a text file on the Windows side.
+
+### Manually / locally
+
+* Windows-r `mmc.exe`
+* File / Add Remove Snap-in
+* Select Certificates, click Add, select My User Account, and hit Finish
+* Select Certificates, click Add, select Computer Account, Local Computer, and hit Finish
+* Import the certificate into your user Trusted Root Certificates, then drag it into Computer Account
+
+### With a GPO
+
+[microsoft docs](https://learn.microsoft.com/en-us/windows-server/identity/ad-fs/deployment/distribute-certificates-to-client-computers-by-using-group-policy)
+create a new GPO object under Domains / `ad.local.symmatree.com` / Group Policy Objects, Edit and then import the cert as described in that doc,
+then create a link from the domain to it. Either a reboot or an Administrator command shell running `gpupdate /Force` will sync it, and you can
+confirm the cert is now present in the same Certificates snap-in as you would have used manually. (But should also be trusted by everyone
+else going forward, which is nice.)

@@ -41,4 +41,6 @@ k annotate svc/tales-tenant-console \
 mc alias set tales https://minio.local.symmatree.com \
     "$(op read op://tales-secrets/minio-admin/username)" \
     "$(op read op://tales-secrets/minio-admin/password)"
+
+mc admin info tales
 ```

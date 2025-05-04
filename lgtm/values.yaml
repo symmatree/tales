@@ -154,6 +154,7 @@ mimir-distributed:
     enabled: false
   ingester:
     replicas: 1
+    zoneAwareReplication: false
   querier:
     replicas: 1
   query_scheduler:

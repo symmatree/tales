@@ -17,6 +17,10 @@ tenant:
           type: cert-manager.io/v1
       requestAutoCert: false
 
+    exposeServices:
+      minio: true
+      console: true
+
     pools:
       - servers: 1
         name: pool-0

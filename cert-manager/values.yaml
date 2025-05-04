@@ -56,3 +56,10 @@ cert-manager:
     nodeSelector:
       kubernetes.io/os: linux
       node-role.kubernetes.io/control-plane: ""
+trust-manager:
+  secretTargets:
+    enabled: true
+    authorizedSecrets:
+      - tales-ca-tls
+      # For minio tenant:
+      - tales-tenant-ca-tls

@@ -165,11 +165,22 @@ mimir-distributed:
       enabled: false
   mimir:
     structuredConfig:
+      multitenancy_enabled: false
       common:
         storage:
           backend: s3
           s3:
-            bucket_name: mimir
-            endpoint: https://minio.tales-tenant.svc
+            endpoint: minio.tales-tenant.svc
             access_key_id: "${ACCESS_KEY_ID}"
             secret_access_key: "${SECRET_ACCESS_KEY}"
+      blocks_storage:
+        s3:
+          bucket_name: mimir-blocks
+
+      alertmanager_storage:
+        s3:
+          bucket_name: mimir-alertmanager
+
+      ruler_storage:
+        s3:
+          bucket_name: mimir-ruler

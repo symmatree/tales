@@ -158,6 +158,8 @@ mimir-distributed:
     replicas: 1
   query_scheduler:
     replicas: 1
+  store_gateway:
+    zoneAwareReplication: false
   mimir:
     structuredConfig:
       common:

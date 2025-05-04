@@ -97,6 +97,9 @@ loki:
     extraEnv:
       - name: SSL_CERT_FILE
         value: /etc/ssl/certs/ca-certificates.crt
+    extraEnvFrom:
+      - secretRef:
+          name: loki-s3-creds
     extraVolumes:
       - name: ca-certificates
         configMap:

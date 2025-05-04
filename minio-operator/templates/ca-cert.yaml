@@ -1,0 +1,16 @@
+
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: operator-ca-tls-tales-tenant
+spec:
+  sources:
+  - secret:
+      name: tales-ca-secret
+      key: "ca.crt"
+  target:
+    secret:
+      key: "ca.crt"
+    namespaceSelector:
+      matchLabels:
+        name: minio-operator

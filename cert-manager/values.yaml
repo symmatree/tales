@@ -61,5 +61,7 @@ trust-manager:
     enabled: true
     authorizedSecrets:
       - tales-ca-tls
+      # For minio operator:
+      - operator-ca-tls-tales-tenant
       # For minio tenant:
       - tales-tenant-ca-tls

@@ -60,9 +60,6 @@ loki:
     auth_enabled: false
     test:
       enabled: false
-    # Cool but very chatty.
-    lokiCanary:
-      enabled: false
     commonConfig:
       replication_factor: 1
     schemaConfig:
@@ -166,7 +163,7 @@ k8s-monitoring:
   destinations:
     - name: localMimir
       type: prometheus
-      url: http://lgtm-mimir-nginx/api/prom/push
+      url: http://lgtm-mimir-distributor-headless.svc:8080/api/v1/push
     - name: localLoki
       type: loki
       url: http://lgtm-loki-gateway/loki/api/v1/push

@@ -226,24 +226,24 @@ k8s-monitoring:
           namespace: cert-manager
           labelSelectors:
             app.kubernetes.io/name: cert-manager
-    grafana:
-      instances:
-        - name: lgtm-grafana
-          namespace: lgtm
-          labelSelectors:
-            app.kubernetes.io/name: grafana
-    loki:
-      instances:
-        - name: lgtm-loki
-          namespace: lgtm
-          labelSelectors:
-            app.kubernetes.io/name: loki
-    mimir:
-      instances:
-        - name: lgtm-mimir
-          namespace: lgtm
-          labelSelectors:
-            app.kubernetes.io/name: mimir
+    # grafana:
+    #   instances:
+    #     - name: lgtm-grafana
+    #       namespace: lgtm
+    #       labelSelectors:
+    #         app.kubernetes.io/name: grafana
+    # loki:
+    #   instances:
+    #     - name: lgtm-loki
+    #       namespace: lgtm
+    #       labelSelectors:
+    #         app.kubernetes.io/name: loki
+    # mimir:
+    #   instances:
+    #     - name: lgtm-mimir
+    #       namespace: lgtm
+    #       labelSelectors:
+    #         app.kubernetes.io/name: mimir
 
 mimir-distributed:
   # We have minio at home.

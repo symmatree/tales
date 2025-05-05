@@ -187,6 +187,11 @@ k8s-monitoring:
       enabled: false
   clusterEvents:
     enabled: true
+    # logfmt version does NO escaping:
+    # https://github.com/grafana/alloy/blob/main/internal/component/loki/source/kubernetes_events/event_controller.go#L303
+    # to
+    # https://github.com/grafana/alloy/blob/main/internal/component/loki/source/kubernetes_events/event_controller.go#L324
+    logFormat: json
   nodeLogs:
     # Talos doesn't surface these through the filesystem.
     enabled: false

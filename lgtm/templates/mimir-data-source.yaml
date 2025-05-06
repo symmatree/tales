@@ -15,4 +15,4 @@ data:
             url: http://lgtm-mimir-nginx/prometheus
             isDefault: true
             jsonData:
-              prometheusType: mimir
+              prometheusType: Mimir

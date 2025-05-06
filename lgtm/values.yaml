@@ -47,10 +47,12 @@ grafana:
     dashboards:
       enabled: true
       searchNamespace: ALL
-      # Let's see the default behavior first.
-      # folderAnnotation: "grafana_dashboard_folder"
+      folderAnnotation: "k8s-sidecar-target-directory"
       provider:
+        folderUid: "sidecar"
+        folder: "Sidecar"
         allowUiUpdates: true
+        foldersFromFilesStructure: true
     datasources:
       enabled: true
       searchNamespace: ALL
@@ -254,8 +256,21 @@ mimir-distributed:
     replicas: 1
   query_scheduler:
     replicas: 1
+  admin_api:
+    enabled: false
   store_gateway:
     zoneAwareReplication:
+      enabled: false
+  metaMonitoring:
+    dashboards:
+      enabled: true
+    serviceMonitor:
+      enabled: true
+    prometheusRule:
+      enabled: true
+      mimirAlerts: true
+      mimirRules: true
+    grafanaAgent:
       enabled: false
   mimir:
     structuredConfig:

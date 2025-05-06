@@ -29,3 +29,9 @@ a debug UI:
 ```
 k port-forward lgtm-loki-0 3100:3100
 ```
+
+Mimir ingestion including its ring status:
+
+```
+k port-forward lgtm-mimir-ingester-0 8080:8080
+```

@@ -254,8 +254,14 @@ mimir-distributed:
       enabled: false
   querier:
     replicas: 1
+  # query_frontend distributes among (1) querier.
+  query_frontend:
+    enabled: false
   query_scheduler:
-    replicas: 1
+    enabled: false
+  # This is for multi-tenant stuff.
+  overrides_exporter:
+    enabled: false
   admin_api:
     enabled: false
   store_gateway:
@@ -277,6 +283,7 @@ mimir-distributed:
       multitenancy_enabled: false
       memberlist:
         cluster_label: mimir
+        cluster_label_verification_disabled: false
       common:
         storage:
           backend: s3

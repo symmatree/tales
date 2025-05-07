@@ -5,11 +5,8 @@ dependencies:
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 8.14.2
-- name: mimir-distributed
-  repository: https://grafana.github.io/helm-charts
-  version: 5.7.0
 - name: k8s-monitoring
   repository: https://grafana.github.io/helm-charts
-  version: 2.0.26
-digest: sha256:395769fc1af11879d122d9d683485f469b3ded58006eb2abfe1801544a30a532
-generated: "2025-05-04T15:33:21.924369821-04:00"
+  version: 2.0.27
+digest: sha256:7b4300ad4d6f5cf7a09a32788c4623a8c0a46a285b9d197257b884a3d158891b
+generated: "2025-05-06T20:20:36.870947613-04:00"

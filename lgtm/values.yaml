@@ -255,8 +255,8 @@ mimir-distributed:
   querier:
     replicas: 1
   # query_frontend distributes among (1) querier.
-  query_frontend:
-    enabled: false
+  # query_frontend:
+  #   enabled: false
   query_scheduler:
     enabled: false
   # This is for multi-tenant stuff.

@@ -284,6 +284,11 @@ mimir-distributed:
       memberlist:
         cluster_label: mimir
         cluster_label_verification_disabled: false
+        gossip_to_dead_nodes_time: 30s
+        dead_node_reclaim_time: 1m
+        abort_if_cluster_join_fails: true
+        rejoin_interval: 5m
+        message_history_buffer_bytes: 1048576
       common:
         storage:
           backend: s3

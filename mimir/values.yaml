@@ -23,14 +23,14 @@ mimir-distributed:
     strategy:
       type: Recreate
       rollingUpdate: null
-  compactor:
-    strategy:
-      type: Recreate
-      rollingUpdate: null
-  distributor:
-    strategy:
-      type: Recreate
-      rollingUpdate: null
+  # compactor:
+  #   strategy:
+  #     type: Recreate
+  #     rollingUpdate: null
+  # distributor:
+  #   strategy:
+  #     type: Recreate
+  #     rollingUpdate: null
   ingester:
     replicas: 1
     zoneAwareReplication:
@@ -53,9 +53,9 @@ mimir-distributed:
   store_gateway:
     zoneAwareReplication:
       enabled: false
-    strategy:
-      type: Recreate
-      rollingUpdate: null
+    # strategy:
+    #   type: Recreate
+    #   rollingUpdate: null
   metaMonitoring:
     dashboards:
       enabled: true

@@ -22,22 +22,22 @@ mimir-distributed:
   alertmanager:
     strategy:
       type: Recreate
-      rollingUpdate: ~
+      rollingUpdate: null
   compactor:
     strategy:
       type: Recreate
-      rollingUpdate: ~
+      rollingUpdate: null
   distributor:
     strategy:
       type: Recreate
-      rollingUpdate: ~
+      rollingUpdate: null
   ingester:
     replicas: 1
     zoneAwareReplication:
       enabled: false
     strategy:
       type: Recreate
-      rollingUpdate: ~
+      rollingUpdate: null
   querier:
     replicas: 1
   # query_frontend distributes among (1) querier.
@@ -55,6 +55,7 @@ mimir-distributed:
       enabled: false
     strategy:
       type: Recreate
+      rollingUpdate: null
   metaMonitoring:
     dashboards:
       enabled: true

@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+  labels:
+    name: grafana
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/symmatree/tales.git
+    targetRevision: main
+    path: grafana
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: grafana
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    managedNamespaceMetadata:
+      labels:
+        "pod-security.kubernetes.io/warn": baseline
+        "trust-bundle": "enabled"

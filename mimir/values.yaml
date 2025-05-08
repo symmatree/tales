@@ -40,22 +40,18 @@ mimir-distributed:
       rollingUpdate: null
   querier:
     replicas: 1
-  # query_frontend distributes among (1) querier.
-  # query_frontend:
-  #   enabled: false
+  query_frontend:
+    replicas: 1
+  ruler:
+    replicas: 1
   query_scheduler:
-    enabled: false
+    replicas: 1
   # This is for multi-tenant stuff.
   overrides_exporter:
-    enabled: false
-  admin_api:
     enabled: false
   store_gateway:
     zoneAwareReplication:
       enabled: false
-    # strategy:
-    #   type: Recreate
-    #   rollingUpdate: null
   metaMonitoring:
     dashboards:
       enabled: true

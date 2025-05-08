@@ -22,26 +22,22 @@ mimir-distributed:
   alertmanager:
     strategy:
       type: Recreate
-      rollingUpdate: {}
+      rollingUpdate: ~
   compactor:
     strategy:
       type: Recreate
-      rollingUpdate: {}
+      rollingUpdate: ~
   distributor:
     strategy:
       type: Recreate
-      rollingUpdate: {}
+      rollingUpdate: ~
   ingester:
     replicas: 1
     zoneAwareReplication:
       enabled: false
     strategy:
       type: Recreate
-      rollingUpdate: {}
-  ruler:
-    strategy:
-      type: Recreate
-      rollingUpdate: {}
+      rollingUpdate: ~
   querier:
     replicas: 1
   # query_frontend distributes among (1) querier.

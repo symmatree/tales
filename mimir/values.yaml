@@ -18,10 +18,27 @@ mimir-distributed:
   # We have minio at home.
   minio:
     enabled: false
+  # Make everyone Recreate to reduce pod overlaps that spoil the rings.
+  alertmanager:
+    strategy:
+      type: Recreate
+    statefulStrategy:
+      type: Recreate
+  compactor:
+    strategy:
+      type: Recreate
+  distributor:
+    strategy:
+      type: Recreate
   ingester:
     replicas: 1
     zoneAwareReplication:
       enabled: false
+    strategy:
+      type: Recreate
+  ruler:
+    strategy:
+      type: Recreate
   querier:
     replicas: 1
   # query_frontend distributes among (1) querier.
@@ -37,6 +54,8 @@ mimir-distributed:
   store_gateway:
     zoneAwareReplication:
       enabled: false
+    strategy:
+      type: Recreate
   metaMonitoring:
     dashboards:
       enabled: true

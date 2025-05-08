@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mimir
+  namespace: argocd
+  labels:
+    name: mimir
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/symmatree/tales.git
+    targetRevision: main
+    path: mimir
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mimir
+  syncPolicy:
+    # Mimir rings don't handle auto-sync well.
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    managedNamespaceMetadata:
+      labels:
+        "pod-security.kubernetes.io/warn": baseline
+        "trust-bundle": "enabled"

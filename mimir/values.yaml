@@ -32,7 +32,7 @@ mimir-distributed:
   #     type: Recreate
   #     rollingUpdate: null
   ingester:
-    replicas: 1
+    replicas: 2
     zoneAwareReplication:
       enabled: false
     strategy:

@@ -53,10 +53,16 @@ k8s-monitoring:
     enabled: true
   alloy-metrics:
     enabled: true
+    serviceMonitor:
+      enabled: true
   alloy-singleton:
     enabled: true
+    serviceMonitor:
+      enabled: true
   alloy-logs:
     enabled: true
+    serviceMonitor:
+      enabled: true
     alloy:
       mounts:
         # /var/log/pods and /var/log/containers exist. (Also audit.)
@@ -65,6 +71,8 @@ k8s-monitoring:
 
   alloy-receiver:
     enabled: false
+    serviceMonitor:
+      enabled: true
   integrations:
     alloy:
       instances:
@@ -96,67 +104,3 @@ k8s-monitoring:
     #       namespace: lgtm
     #       labelSelectors:
     #         app.kubernetes.io/name: mimir
-
-mimir-distributed:
-  # We have minio at home.
-  minio:
-    enabled: false
-  ingester:
-    replicas: 1
-    zoneAwareReplication:
-      enabled: false
-  querier:
-    replicas: 1
-  # query_frontend distributes among (1) querier.
-  # query_frontend:
-  #   enabled: false
-  query_scheduler:
-    enabled: false
-  # This is for multi-tenant stuff.
-  overrides_exporter:
-    enabled: false
-  admin_api:
-    enabled: false
-  store_gateway:
-    zoneAwareReplication:
-      enabled: false
-  metaMonitoring:
-    dashboards:
-      enabled: true
-    serviceMonitor:
-      enabled: true
-    prometheusRule:
-      enabled: true
-      mimirAlerts: true
-      mimirRules: true
-    grafanaAgent:
-      enabled: false
-  mimir:
-    structuredConfig:
-      multitenancy_enabled: false
-      memberlist:
-        cluster_label: mimir
-        cluster_label_verification_disabled: false
-        gossip_to_dead_nodes_time: 30s
-        dead_node_reclaim_time: 1m
-        abort_if_cluster_join_fails: true
-        rejoin_interval: 5m
-        message_history_buffer_bytes: 1048576
-      common:
-        storage:
-          backend: s3
-          s3:
-            endpoint: minio.tales-tenant.svc
-            access_key_id: "${ACCESS_KEY_ID}"
-            secret_access_key: "${SECRET_ACCESS_KEY}"
-      blocks_storage:
-        s3:
-          bucket_name: mimir-blocks
-
-      alertmanager_storage:
-        s3:
-          bucket_name: mimir-alertmanager
-
-      ruler_storage:
-        s3:
-          bucket_name: mimir-ruler

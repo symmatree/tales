@@ -66,6 +66,18 @@ loki:
     # in MB
     allocatedMemory: 512
 
+  monitoring:
+    dashboards:
+      enabled: true
+      annotations:
+        k8s-sidecar-target-directory: /tmp/dashboards/Loki
+    serviceMonitor:
+      enabled: true
+    rules:
+      enabled: true
+    selfMonitoring:
+      enabled: false
+
   deploymentMode: SingleBinary
   singleBinary:
     replicas: 1

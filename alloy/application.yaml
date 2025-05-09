@@ -1,22 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: lgtm
+  name: alloy
   namespace: argocd
   labels:
-    name: lgtm
+    name: alloy
 spec:
   project: default
   source:
     repoURL: https://github.com/symmatree/tales.git
     targetRevision: main
-    path: lgtm
+    path: alloy
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: lgtm
+    namespace: alloy
   syncPolicy:
     automated:
       prune: true

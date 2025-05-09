@@ -30,7 +30,7 @@ k8s-monitoring:
     kubeProxy:
       # there isn't one, cilium replaces it.
       enabled: false
-    windowsExporter:
+    windows-exporter:
       enabled: false
     kepler:
       enabled: false

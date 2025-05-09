@@ -132,12 +132,12 @@ cilium:
       # -- Enables exporting hubble metrics in OpenMetrics format.
       enableOpenMetrics: true
       serviceMonitor:
-        enabled: false
+        enabled: true
       # -- Grafana dashboards for hubble
       # grafana can import dashboards based on the label and value
       # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
       dashboards:
-        enabled: false
+        enabled: true
 
     # -- TLS configuration for Hubble
     tls:
@@ -177,7 +177,7 @@ cilium:
         port: 9966
         serviceMonitor:
           # -- Enable service monitors.
-          enabled: false
+          enabled: true
     ui:
       # -- Whether to enable the Hubble UI.
       enabled: true
@@ -258,9 +258,9 @@ cilium:
     metricsService: true
     enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
   dashboards:
-    enabled: false
+    enabled: true
   # Configure Cilium Envoy options.
   envoy:
     enabled: true
@@ -273,7 +273,7 @@ cilium:
       # -- Enable prometheus metrics for cilium-envoy
       enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
 
   # -- Configure TLS configuration in the agent.
   tls:
@@ -288,9 +288,9 @@ cilium:
       metricsService: true
       enabled: true
       serviceMonitor:
-        enabled: false
+        enabled: true
     dashboards:
-      enabled: false
+      enabled: true
   # -- Configure cgroup related configuration
   cgroup:
     # Talos provides this mount.

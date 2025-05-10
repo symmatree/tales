@@ -15,10 +15,10 @@ global:
       readOnly: true
 
 loki:
+  # Ugh this is only because the chart will not let us avoid
+  # setting this, which would otherwise be injected just fine by alloy.
+  clusterLabelOverride: tales
   loki:
-    # Ugh this is only because the chart will not let us avoid
-    # setting this, which would otherwise be injected just fine by alloy.
-    clusterLabel: tales
     # Despite name this is actually multi-tenancy support.
     auth_enabled: false
     test:

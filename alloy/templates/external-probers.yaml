@@ -3,7 +3,6 @@ kind: Probe
 metadata:
   name: hubitat-http
 spec:
-  # jobName: blackbox
   interval: 30s
   module: http_2xx
   prober:
@@ -13,3 +12,33 @@ spec:
     staticConfig:
       static:
         - http://hubitat.local.symmatree.com
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: raconteur-syno-ui
+spec:
+  interval: 30s
+  module: http_2xx
+  prober:
+    url: alloy-alloy-metrics-cluster.alloy.svc:12345
+    path: /api/v0/component/prometheus.exporter.blackbox.blackbox_exporter/probe
+  targets:
+    staticConfig:
+      static:
+        - https://raconteur.ad.local.symmatree.com:5001/
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: morpheus-ui
+spec:
+  interval: 30s
+  module: http_2xx
+  prober:
+    url: alloy-alloy-metrics-cluster.alloy.svc:12345
+    path: /api/v0/component/prometheus.exporter.blackbox.blackbox_exporter/probe
+  targets:
+    staticConfig:
+      static:
+        - https://morpheus.local.symmatree.com/

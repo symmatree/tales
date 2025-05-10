@@ -1,10 +1,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
 metadata:
-  name: blackbox-exporter-core
-  namespace: testns
+  name: hubitat-http
 spec:
-  jobName: blackbox
+  # jobName: blackbox
   interval: 30s
   module: http_2xx
   prober:

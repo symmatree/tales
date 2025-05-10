@@ -57,6 +57,8 @@ mimir-distributed:
       enabled: true
     serviceMonitor:
       enabled: true
+      # Alloy sets this correctly, leave it alone.
+      clusterLabel: null
     prometheusRule:
       enabled: true
       mimirAlerts: true

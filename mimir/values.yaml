@@ -58,6 +58,9 @@ mimir-distributed:
     serviceMonitor:
       enabled: true
       # Alloy sets this correctly, leave it alone.
+      # The literal null and ~ both fail here, but the actual test is
+      # `if kindIs "string" .clusterLabel`
+      # so making it a number is enough to make that false.
       clusterLabel: 0
     prometheusRule:
       enabled: true

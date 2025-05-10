@@ -6,5 +6,5 @@ staticCerts:
   #   subdomain: .ad
   - name: morpheus
   - name: homeassistant
-  - name: laserjet
+  # - name: laserjet -- requires special care.
   - name: hubitat

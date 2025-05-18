@@ -1,14 +1,17 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ConfigManagementPlugin
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: tanka
-  namespace: argocd
-
-spec:
-  version: v0.25.0
-  init:
-    command: [ "sh", "-c", "/home/argocd/cmp-server/plugins/jb install" ]
-  generate:
-    command: [ "sh", "-c", "/home/argocd/cmp-server/plugins/tk show environments/${ARGOCD_ENV_TK_ENV} --dangerous-allow-redirect" ]
-  discover:
-    fileName: "./environments/*/main.jsonnet"
+  name: cmp-tanka
+data:
+  tanka.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: tanka
+    spec:
+      init:
+        command: [ "sh", "-c", "/home/argocd/cmp-server/plugins/jb install" ]
+      generate:
+        command: [ "sh", "-c", "/home/argocd/cmp-server/plugins/tk show environments/${ARGOCD_ENV_TK_ENV} --dangerous-allow-redirect" ]
+      discover:
+        fileName: "./environments/*/main.jsonnet"

@@ -69,39 +69,20 @@ argo-cd:
       annotations: {}
 
       # -- Plugin yaml files to be added to argocd-cmp-cm
+      # Following https://raynix.info/archives/4565
       plugins:
-        {}
-        # --- First plugin
-        # my-plugin:
-        #   init:
-        #     command: [sh]
-        #     args: [-c, 'echo "Initializing..."']
-        #   generate:
-        #     command: [sh, -c]
-        #     args:
-        #       - |
-        #         echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"$ARGOCD_APP_NAME\", \"namespace\": \"$ARGOCD_APP_NAMESPACE\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"$KUBE_VERSION\", \"KubeApiVersion\": \"$KUBE_API_VERSIONS\",\"Bar\": \"baz\"}}}"
-        #   discover:
-        #     fileName: "./subdir/s*.yaml"
-        #     find:
-        #       glob: "**/Chart.yaml"
-        #       command: [sh, -c, find . -name env.yaml]
-
-        # --- Second plugin
-        # my-plugin2:
-        #   init:
-        #     command: [sh]
-        #     args: [-c, 'echo "Initializing..."']
-        #   generate:
-        #     command: [sh, -c]
-        #     args:
-        #       - |
-        #         echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"$ARGOCD_APP_NAME\", \"namespace\": \"$ARGOCD_APP_NAMESPACE\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"$KUBE_VERSION\", \"KubeApiVersion\": \"$KUBE_API_VERSIONS\",\"Bar\": \"baz\"}}}"
-        #   discover:
-        #     fileName: "./subdir/s*.yaml"
-        #     find:
-        #       glob: "**/Chart.yaml"
-        #       command: [sh, -c, find . -name env.yaml]
+        name: tanka
+        init:
+          command: ["sh", "-c", "/home/argocd/cmp-server/plugins/jb install"]
+        generate:
+          command: [
+              "sh",
+              "-c",
+              # This env var is set in the Application resource
+              "/home/argocd/cmp-server/plugins/tk show environments/${ARGOCD_ENV_TK_ENV} --dangerous-allow-redirect",
+            ]
+        discover:
+          fileName: "./environments/*/main.jsonnet"
 
     # -- Repositories list to be used by applications
     ## Creates a secret for each key/value specified below to create repositories
@@ -187,6 +168,35 @@ argo-cd:
 
   ## Server
   server:
+    # Following https://raynix.info/archives/4565
+    extraContainers:
+      - name: tanka
+        image: curlimages/curl:latest
+        # install jb and tk then start the argocd-cmp-server
+        command:
+          - sh
+          - -c
+          - |
+            cd /home/argocd/cmp-server/plugins && \
+            curl -Lo jb "https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/v0.6.0/jb-linux-amd64" && \
+            curl -Lo tk "https://github.com/grafana/tanka/releases/download/v0.32.0/tk-linux-amd64" && \
+            chmod +x jb tk && \
+            /var/run/argocd/argocd-cmp-server
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+          - mountPath: /var/run/argocd
+            name: var-files
+          - mountPath: /home/argocd/cmp-server/plugins
+            name: plugins
+          - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+            subPath: plugin.yaml
+            name: cmp-tanka
+    volumes:
+      - name: cmp-tanka
+        configMap:
+          name: cmp-tanka
     ## Server metrics service configuration
     metrics:
       # -- Deploy metrics service

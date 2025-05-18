@@ -168,35 +168,6 @@ argo-cd:
 
   ## Server
   server:
-    # Following https://raynix.info/archives/4565
-    extraContainers:
-      - name: tanka
-        image: curlimages/curl:latest
-        # install jb and tk then start the argocd-cmp-server
-        command:
-          - sh
-          - -c
-          - |
-            cd /home/argocd/cmp-server/plugins && \
-            curl -Lo jb "https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/v0.6.0/jb-linux-amd64" && \
-            curl -Lo tk "https://github.com/grafana/tanka/releases/download/v0.32.0/tk-linux-amd64" && \
-            chmod +x jb tk && \
-            /var/run/argocd/argocd-cmp-server
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 999
-        volumeMounts:
-          - mountPath: /var/run/argocd
-            name: var-files
-          - mountPath: /home/argocd/cmp-server/plugins
-            name: plugins
-          - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-            subPath: plugin.yaml
-            name: cmp-tanka
-    volumes:
-      - name: cmp-tanka
-        configMap:
-          name: cmp-tanka
     ## Server metrics service configuration
     metrics:
       # -- Deploy metrics service
@@ -257,3 +228,34 @@ argo-cd:
         # email-username:
         # email-password:
         # For more information: https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/services/email/
+
+  repoServer:
+    # Following https://raynix.info/archives/4565
+    extraContainers:
+      - name: tanka
+        image: curlimages/curl:latest
+        # install jb and tk then start the argocd-cmp-server
+        command:
+          - sh
+          - -c
+          - |
+            cd /home/argocd/cmp-server/plugins && \
+            curl -Lo jb "https://github.com/jsonnet-bundler/jsonnet-bundler/releases/download/v0.6.0/jb-linux-amd64" && \
+            curl -Lo tk "https://github.com/grafana/tanka/releases/download/v0.32.0/tk-linux-amd64" && \
+            chmod +x jb tk && \
+            /var/run/argocd/argocd-cmp-server
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+          - mountPath: /var/run/argocd
+            name: var-files
+          - mountPath: /home/argocd/cmp-server/plugins
+            name: plugins
+          - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+            subPath: plugin.yaml
+            name: cmp-tanka
+    volumes:
+      - name: cmp-tanka
+        configMap:
+          name: cmp-tanka

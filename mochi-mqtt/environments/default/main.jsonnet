@@ -29,7 +29,7 @@ local mochi = {
         // It ignores filename and sniffs first byte for { to detect json.
         'config.yaml': {
           listeners: [
-            { type: 'healthcheck', id: 'http-healthcheck', address: ':8080' },
+            { type: 'healthcheck', id: 'http-health', address: ':8080' },
             { type: 'sysinfo', id: 'http-sysinfo', address: ':8081' },
             { type: 'ws', id: 'websocket', address: ':1882' },
             { type: 'tcp', id: 'mqtt', address: ':1883' },
@@ -63,7 +63,7 @@ local mochi = {
         local readinessProbe = kContainer.readinessProbe;
         kContainer.new(config.name, config.image + ':' + config.version)
         + kContainer.withPorts([
-          kPort.new('http-healthcheck', 8080),  // /healthcheck
+          kPort.new('http-health', 8080),  // /healthcheck
           kPort.new('http-sysinfo', 8081),  // /
           kPort.new('websocket', 1882),
           kPort.new('mqtt', 1883),

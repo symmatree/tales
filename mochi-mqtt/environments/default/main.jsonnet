@@ -27,7 +27,7 @@ local mochi = {
       kConfigMap.new('mochi-config')
       + kConfigMap.withData({
         // It ignores filename and sniffs first byte for { to detect json.
-        'config.yaml': {
+        'config.yaml': std.manifestYamlDoc({
           listeners: [
             { type: 'healthcheck', id: 'http-health', address: ':8080' },
             { type: 'sysinfo', id: 'http-sysinfo', address: ':8081' },
@@ -48,7 +48,7 @@ local mochi = {
           // https://github.com/mochi-mqtt/server/blob/main/server.go
           options: {},
           logging: {},
-        },
+        }),
       }),
     deployment:
       kDeployment.new(config.name, replicas=1, containers=[

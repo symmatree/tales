@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: cmp-tanka
 data:
-  tanka.yaml: |
+  plugin.yaml: |
     apiVersion: argoproj.io/v1alpha1
     kind: ConfigManagementPlugin
     metadata:

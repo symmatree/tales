@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mochi-mqtt
+  namespace: argocd
+  labels:
+    name: mochi-mqtt
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/symmatree/tales.git
+    targetRevision: main
+    path: mochi-mqtt
+    plugin:
+      env:
+        - name: TK_ENV
+          value: "default"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mochi-mqtt
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

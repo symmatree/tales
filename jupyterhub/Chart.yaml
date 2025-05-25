@@ -1,0 +1,12 @@
+apiVersion: v2
+name: jupyterhub
+description: jupyterhub
+type: application
+
+version: 0.1.0
+appVersion: "0.1.0"
+
+dependencies:
+  - name: jupyterhub
+    version: ~4.2
+    repository: https://hub.jupyter.org/helm-chart

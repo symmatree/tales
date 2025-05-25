@@ -5,8 +5,35 @@ jupyterhub:
   hub:
     networkPolicy:
       enabled: false
-    # config: {}
+    extraEnv:
+      OAUTH_CLIENT_ID:
+        valueFrom:
+          secretKeyRef:
+            name: google-oauth-secret
+            key: OAUTH_CLIENT_ID
+      OAUTH_CLIENT_SECRET:
+        valueFrom:
+          secretKeyRef:
+            name: google-oauth-secret
+            key: OAUTH_CLIENT_SECRET
+
+    # c.JupyterHub.authenticator_class = "google"
+    # c.OAuthenticator.oauth_callback_url = "https://jupyterhub.local.symmatree.com/hub/oauth_callback"
+    # c.OAuthenticator.client_id = "[your oauth2 application id]"
+    # c.OAuthenticator.client_secret = "[your oauth2 application secret]"
+    config:
+      JupyterHub:
+        authenticator_class: "google"
+      OAuthenticator:
+        oauth_callback_url: "https://notebook.local.symmatree.com/hub/oauth_callback"
+    # These env vars come from a 1Password-created secret.
+    extraConfig: |
+      c.OAuthenticator.client_id = os.environ["OAUTH_CLIENT_ID"]
+      c.OAuthenticator.client_secret = os.environ["OAUTH_CLIENT_SECRET"]
+
   singleuser:
+    cloudMetadata:
+      blockWithIptables: false
     networkPolicy:
       enabled: false
     image:

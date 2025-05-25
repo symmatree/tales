@@ -1,9 +1,11 @@
 # https://raw.githubusercontent.com/jupyterhub/zero-to-jupyterhub-k8s/refs/tags/4.2.0/jupyterhub/values.yaml
+global:
+  safeToShowValues: true
 jupyterhub:
   hub:
     networkPolicy:
       enabled: false
-    config: {}
+    # config: {}
   singleuser:
     networkPolicy:
       enabled: false
@@ -29,7 +31,7 @@ jupyterhub:
       annotations:
         "external-dns.alpha.kubernetes.io/hostname": "notebook.local.symmatree.com"
     https:
-      enabled: false
+      enabled: true
       type: secret
       # Provisioned in templates/jupyterhub-cert.yaml
       secret:

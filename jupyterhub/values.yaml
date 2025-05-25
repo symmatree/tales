@@ -1,7 +1,12 @@
 # https://raw.githubusercontent.com/jupyterhub/zero-to-jupyterhub-k8s/refs/tags/4.2.0/jupyterhub/values.yaml
-
 jupyterhub:
+  hub:
+    networkPolicy:
+      enabled: false
+    config: {}
   singleuser:
+    networkPolicy:
+      enabled: false
     image:
       name: quay.io/jupyter/datascience-notebook
       # https://quay.io/repository/jupyter/datascience-notebook?tab=tags&tag=latest
@@ -15,3 +20,20 @@ jupyterhub:
   prePuller:
     continuous:
       enabled: false
+  proxy:
+    chp:
+      networkPolicy:
+        enabled: false
+    service:
+      disableHttpPort: true
+      annotations:
+        "external-dns.alpha.kubernetes.io/hostname": "notebook.local.symmatree.com"
+    https:
+      enabled: false
+      type: secret
+      secret:
+        name: jupyterhub-tls
+        key: tls.key
+        crt: tls.crt
+      hosts:
+        - notebook.local.symmatree.com

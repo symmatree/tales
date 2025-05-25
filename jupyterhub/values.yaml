@@ -27,7 +27,6 @@ jupyterhub:
       networkPolicy:
         enabled: false
     service:
-      disableHttpPort: true
       annotations:
         "external-dns.alpha.kubernetes.io/hostname": "notebook.local.symmatree.com"
     https:

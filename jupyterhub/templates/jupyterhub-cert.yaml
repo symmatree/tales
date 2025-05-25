@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jupyterhub-cert
+spec:
+  dnsNames:
+    - notebook.local.symmatree.com
+  secretName: jupyterhub-tls
+  issuerRef:
+    name: real-cert
+    kind: ClusterIssuer
+    group: cert-manager.io

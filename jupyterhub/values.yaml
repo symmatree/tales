@@ -27,9 +27,11 @@ jupyterhub:
       OAuthenticator:
         oauth_callback_url: "https://notebook.local.symmatree.com/hub/oauth_callback"
     # These env vars come from a 1Password-created secret.
-    extraConfig: |
-      c.OAuthenticator.client_id = os.environ["OAUTH_CLIENT_ID"]
-      c.OAuthenticator.client_secret = os.environ["OAUTH_CLIENT_SECRET"]
+    extraConfig:
+      oauthConfig.py: |
+        import os
+        c.OAuthenticator.client_id = os.environ["OAUTH_CLIENT_ID"]
+        c.OAuthenticator.client_secret = os.environ["OAUTH_CLIENT_SECRET"]
 
   singleuser:
     cloudMetadata:

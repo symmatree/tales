@@ -49,6 +49,9 @@ jupyterhub:
       blockWithIptables: false
     networkPolicy:
       enabled: false
+    # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used
+    # which performs further customization on startup.
+    cmd: null
     image:
       name: ghcr.io/symmatree/internal/datascience-notebook-ssh
       tag: 2025-05-26-2
@@ -56,9 +59,18 @@ jupyterhub:
         - name: ghcr-pull-secret
       # Pull always until we're stable.
       pullPolicy: Always
-    # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used
-    # which performs further customization on startup.
-    cmd: null
+    storage:
+      extraVolumeMounts:
+        - name: keys
+          mountPath: /home/joyvan/.ssh/authorized_keys
+          subPath: authorized_keys
+      extraVolumes:
+        - name: keys
+          secret:
+            secretName: ssh-secret
+            items:
+              - key: "public_key"
+                path: "authorized_keys"
   scheduling:
     userScheduler:
       replicas: 1

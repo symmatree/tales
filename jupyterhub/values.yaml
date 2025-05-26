@@ -53,7 +53,7 @@ jupyterhub:
       name: ghcr.io/symmatree/internal/datascience-notebook-ssh
       tag: 2025-05-26
       pullSecrets:
-      - name: ghcr-pull-token
+        - name: ghcr-pull-token
     # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used
     # which performs further customization on startup.
     cmd: null
@@ -61,6 +61,8 @@ jupyterhub:
     userScheduler:
       replicas: 1
   prePuller:
+    # This hook runs before the secrets get created.
+    enabled: false
     continuous:
       enabled: false
   proxy:

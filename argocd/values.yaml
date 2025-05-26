@@ -51,7 +51,7 @@ argo-cd:
       ## Ref: https://argo-cd.readthedocs.io/en/stable/user-guide/status-badge/
       statusbadge.enabled: true
 
-      dex.config:
+      dex.config: |
         connectors:
           - type: oidc
             id: google

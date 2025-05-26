@@ -60,7 +60,7 @@ argo-cd:
               issuer: https://accounts.google.com
               # Connector config values starting with a "$" will read from the environment.
               clientID: $OAUTH_CLIENT_ID
-              clientSecret: $OATH_CLIENT_SECRET
+              clientSecret: $OAUTH_CLIENT_SECRET
     rbac:
       policy.default: role:admin
 

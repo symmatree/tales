@@ -69,7 +69,8 @@ jupyterhub:
           secret:
             secretName: ssh-secret
             items:
-              - key: "public key"
+              # It's a space in the UI but the operator translates to a dash.
+              - key: "public-key"
                 path: "authorized_keys"
   scheduling:
     userScheduler:

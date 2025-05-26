@@ -69,7 +69,7 @@ jupyterhub:
           secret:
             secretName: ssh-secret
             items:
-              - key: "public_key"
+              - key: "public key"
                 path: "authorized_keys"
   scheduling:
     userScheduler:

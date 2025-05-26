@@ -7,5 +7,5 @@ SCRIPT_DIR=`pwd`
 VAULT=tales-secrets
 ITEM=jupyterhub-github-token
 CURR_JSON=`op item get --vault $VAULT "$ITEM" --format json`
-SECRET=`echo $CURR_JSON | jq -r -f $SCRIPT_DIR/image-pull-secret.jq`
+SECRET=`echo $CURR_JSON | jq -f $SCRIPT_DIR/image-pull-secret.jq`
 op item edit --vault $VAULT "$ITEM" "\\.dockerconfigjson=$SECRET"

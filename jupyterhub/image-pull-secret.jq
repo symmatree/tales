@@ -4,4 +4,4 @@
             auth: "\(.username):\(.password)" | @base64
         }
     }
-} | @base64
+}

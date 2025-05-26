@@ -11,8 +11,9 @@ Assumes a single token with package read/write in GHCR, stored in
 1password as `jupyterhub-github-token`.
 
 This has fields `username` and `password` which were manually set
-by me. This pasted this
+by me.
 
-```
+## ssh keys
 
-```
+Created a key in 1password. DL with command line didn't work but
+export-as-openssh seemed to.

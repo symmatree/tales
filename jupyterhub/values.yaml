@@ -65,8 +65,9 @@ jupyterhub:
     storage:
       extraVolumeMounts:
         - name: keys
-          mountPath: /home/joyvan/.ssh/authorized_keys
-          subPath: authorized_keys
+          mountPath: /mnt/keys
+          # mountPath: /home/joyvan/.ssh/authorized_keys
+          # subPath: authorized_keys
       extraVolumes:
         - name: keys
           secret:

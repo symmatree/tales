@@ -24,7 +24,12 @@ jupyterhub:
     config:
       JupyterHub:
         authenticator_class: "google"
+        load_roles:
+          - name: "admin"
+            users:
+              - "seth.porter@gmail.com"
       OAuthenticator:
+        allow_all: true
         oauth_callback_url: "https://notebook.local.symmatree.com/hub/oauth_callback"
     # These env vars come from a 1Password-created secret.
     extraConfig:

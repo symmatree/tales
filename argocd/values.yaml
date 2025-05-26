@@ -53,14 +53,14 @@ argo-cd:
 
       dex.config:
         connectors:
-          - type: google
+          - type: oidc
             id: google
             name: Google
             config:
+              issuer: https://accounts.google.com
               # Connector config values starting with a "$" will read from the environment.
               clientID: $OAUTH_CLIENT_ID
               clientSecret: $OATH_CLIENT_SECRET
-              redirectURI: https://argocd.local.symmatree.com/callback
 
     # Argo CD configuration parameters
     ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml

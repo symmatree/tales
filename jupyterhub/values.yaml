@@ -54,6 +54,7 @@ jupyterhub:
       tag: 2025-05-26-2
       pullSecrets:
         - name: ghcr-pull-secret
+      pullStrategy: Always
     # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used
     # which performs further customization on startup.
     cmd: null

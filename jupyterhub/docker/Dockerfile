@@ -12,14 +12,14 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     sudo build-essential procps file git openssh-server \
     python3-pip python3-venv tree bsdmainutils \
     ubuntu-server aspell \
-    && rm -rf /var/lib/apt/lists/* \
-    && find /etc/systemd/system \
-    /lib/systemd/system \
-    -path '*.wants/*' \
-    -not -name '*journald*' \
-    -not -name '*systemd-tmpfiles*' \
-    -not -name '*systemd-user-sessions*' \
-    -print0 | xargs -0 rm -vf
+    && rm -rf /var/lib/apt/lists/*
+# && find /etc/systemd/system \
+# /lib/systemd/system \
+# -path '*.wants/*' \
+# -not -name '*journald*' \
+# -not -name '*systemd-tmpfiles*' \
+# -not -name '*systemd-user-sessions*' \
+# -print0 | xargs -0 rm -vf
 
 COPY systemctl3.py /usr/bin/systemctl
 # RUN test -L /bin/systemctl || ln -sf /usr/bin/systemctl /bin/systemctl

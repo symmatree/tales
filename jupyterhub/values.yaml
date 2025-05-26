@@ -38,6 +38,9 @@ jupyterhub:
         c.OAuthenticator.client_id = os.environ["OAUTH_CLIENT_ID"]
         c.OAuthenticator.client_secret = os.environ["OAUTH_CLIENT_SECRET"]
 
+  # The whole point is to NOT have my desktop fall asleep while I'm working over ssh!
+  cull:
+    enabled: false
   singleuser:
     # https://jupyter-docker-stacks.readthedocs.io/en/latest/using/recipes.html#using-sudo-within-a-container
     uid: 0

@@ -4,6 +4,8 @@ OUT_DIR=`pwd`
 pushd "$(dirname "$0")"
 SAVE_DIR=`pwd`
 
+# Make sure we're logged in.
+op whoami
 op read op://tales-secrets/talos-secrets.yaml/notesPlain > ./secrets.yaml
 echo "talosctl gen config"
 # endpoint seems to be mandatory but 

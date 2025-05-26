@@ -1,6 +1,6 @@
 .fields | map({ key: .label, value: .value }) | from_entries | {
     auths: {
-        "https://ghcr.io": {
+        "ghcr.io": {
             username: "\(.username)",
             password: "\(.password)",
             email: "\(.email)",

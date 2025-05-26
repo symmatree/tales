@@ -39,6 +39,12 @@ jupyterhub:
         c.OAuthenticator.client_secret = os.environ["OAUTH_CLIENT_SECRET"]
 
   singleuser:
+    # https://jupyter-docker-stacks.readthedocs.io/en/latest/using/recipes.html#using-sudo-within-a-container
+    uid: 0
+    extraEnv:
+      GRANT_SUDO:
+        value: "yes"
+    allowPrivilegeEscalation: true
     cloudMetadata:
       blockWithIptables: false
     networkPolicy:

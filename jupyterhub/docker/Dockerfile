@@ -21,10 +21,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     -not -name '*systemd-user-sessions*' \
     -print0 | xargs -0 rm -vf
 
-# Ref https://github.com/mike-matera/cloud-native-server/blob/main/containers/ubuntu-jammy/Dockerfile
-# RUN rm /etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online.service \
-#     && rm /etc/systemd/system/multi-user.target.wants/systemd-resolved.service \
-#     && rm /lib/systemd/system/systemd-resolved.service \
-#     && rm /etc/resolv.conf \
-#     && rm /etc/systemd/system/multi-user.target.wants/snapd.* \
-#     && rm /etc/systemd/system/multi-user.target.wants/networkd-dispatcher.service 
+COPY systemctl3.py /usr/bin/systemctl
+# RUN test -L /bin/systemctl || ln -sf /usr/bin/systemctl /bin/systemctl
+RUN rm -fv /etc/ssh/sshd_not_to_be_run
+RUN systemctl enable ssh

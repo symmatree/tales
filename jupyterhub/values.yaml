@@ -51,7 +51,7 @@ jupyterhub:
       enabled: false
     image:
       name: ghcr.io/symmatree/internal/datascience-notebook-ssh
-      tag: 2025-05-26
+      tag: 2025-05-26-2
       pullSecrets:
         - name: ghcr-pull-secret
     # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used

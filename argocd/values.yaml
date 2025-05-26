@@ -51,6 +51,17 @@ argo-cd:
       ## Ref: https://argo-cd.readthedocs.io/en/stable/user-guide/status-badge/
       statusbadge.enabled: true
 
+      dex.config:
+        connectors:
+          - type: google
+            id: google
+            name: Google
+            config:
+              # Connector config values starting with a "$" will read from the environment.
+              clientID: $OAUTH_CLIENT_ID
+              clientSecret: $OATH_CLIENT_SECRET
+              redirectURI: https://argocd.local.symmatree.com/callback
+
     # Argo CD configuration parameters
     ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml
     params:
@@ -149,18 +160,10 @@ argo-cd:
 
   ## Dex
   dex:
-    # -- Enable dex
     enabled: true
-    # -- Dex name
-    name: dex-server
-
-    # -- Additional command line arguments to pass to the Dex server
-    extraArgs: []
-
-    # -- Runtime class name for Dex
-    # @default -- `""` (defaults to global.runtimeClassName)
-    runtimeClassName: ""
-
+    envFrom:
+      - secretRef:
+          name: google-oauth-secret
     metrics:
       # -- Deploy metrics service
       enabled: true

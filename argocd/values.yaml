@@ -61,6 +61,8 @@ argo-cd:
               # Connector config values starting with a "$" will read from the environment.
               clientID: $OAUTH_CLIENT_ID
               clientSecret: $OATH_CLIENT_SECRET
+    rbac:
+      policy.default: role:admin
 
     # Argo CD configuration parameters
     ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml

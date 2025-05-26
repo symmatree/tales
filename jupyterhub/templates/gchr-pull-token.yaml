@@ -4,4 +4,4 @@ metadata:
     name: gchr-pull-token
 type: kubernetes.io/dockerconfigjson
 spec:
-    itemPath: "vaults/tales-secrets/items/jupyterhub-oauth-client"
+    itemPath: "vaults/tales-secrets/items/jupyterhub-github-token"

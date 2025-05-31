@@ -31,6 +31,8 @@ jupyterhub:
       OAuthenticator:
         allow_all: true
         oauth_callback_url: "https://notebook.local.symmatree.com/hub/oauth_callback"
+      KubeSpawner:
+        services_enabled: true
     # These env vars come from a 1Password-created secret.
     extraConfig:
       oauthConfig.py: |

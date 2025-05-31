@@ -16,4 +16,33 @@ by me.
 ## ssh keys
 
 Created a key in 1password. DL with command line didn't work but
-export-as-openssh seemed to.
+export-as-openssh did (eventually?).
+
+* Started the Jupyterhub session, started a terminal inside it
+* `sudo systemctl start ssh`
+* Copied authorized_keys to remote, increasingly manually and with a lot of manual permission changes.
+* with `k port-forward -n jupyterhub jupyter-seth-porter-gmail-com---39d0c2f0 8022:22`
+  I can then log in no-password after (on the client):
+
+```
+eval `ssh-agent`
+ssh-add ~/.ssh/id_jupyterhub
+ssh jovyan@localhost -p8022
+```
+
+On the host, in .ssh/config, added
+
+```
+Host jupyter
+  HostName localhost
+  IdentityFile ~/.ssh/id_jupyterhub
+  User jovyan
+  Port 8022
+```
+
+## Next Steps
+
+* Automate authorized_keys and permissions stuff. Just mounting it into the home dir didn't work,
+  probably because the home dir is generated on the fly? There's actual Jupyter Docker Stacks and
+  jupyterhub setup stuff for hooking into their dir setup instead, in the helm chart maybe, I think rc.local or something.
+* 

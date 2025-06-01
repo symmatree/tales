@@ -1,9 +1,0 @@
-PermitRootLogin no
-PasswordAuthentication no
-KbdInteractiveAuthentication no
-UsePAM no
-X11Forwarding yes
-PrintMotd no
-PermitUserEnvironment yes
-PermitTunnel yes
-AcceptEnv LANG LC_*

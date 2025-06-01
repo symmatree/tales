@@ -10,11 +10,7 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     --no-install-recommends \
     ansible \
-    apt-transport-https ca-certificates \
-    apt-utils dialog \
-    sudo procps file git openssh-server \
-    tree bsdmainutils \
-    ubuntu-server aspell \
+    openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
 COPY install-tools.yaml /tmp/install-tools.yaml

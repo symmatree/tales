@@ -68,16 +68,25 @@
       apt:
         name:
           - 1password-cli
+          - ansible
+          - apt-transport-https
+          - apt-utils
+          - aspell
+          - bsdmainutils
+          - ca-certificates
+          - dialog
+          - dnsutils
+          - file
           - gh
+          - git
           - google-cloud-cli
+          - htop
           - jq
           - kubectl
-          - libasound2t64
-          - libnspr4
-          - libnss3
-          - libxkbfile1
           - procps
           - stow
+          - sudo
+          - tree
           - xdg-utils
           - zsh
           - zsh-autosuggestions

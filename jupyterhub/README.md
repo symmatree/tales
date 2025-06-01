@@ -10,8 +10,7 @@ Runs as privileged container; it enables sudo and then drops down to NB_USER.
 Assumes a single token with package read/write in GHCR, stored in
 1password as `jupyterhub-github-token`.
 
-This has fields `username` and `password` which were manually set
-by me.
+This is created by `make-pull-token.sh` with the help of `image-pull-secret.jq`
 
 ## ssh keys
 
@@ -30,19 +29,21 @@ ssh-add ~/.ssh/id_jupyterhub
 ssh jovyan@localhost -p8022
 ```
 
-On the host, in .ssh/config, added
+## In-container setup
 
-```
-Host jupyter
-  HostName localhost
-  IdentityFile ~/.ssh/id_jupyterhub
-  User jovyan
-  Port 8022
-```
+Homedir actually persists unless explicitly wiped, so this is maybe not even per container.
+
+* gh auth login and then clone semipro
+* `sudo passwd jovyan` and set something easy (we disabled password auth in ssh)
+* `./semipro/dotfiles/install.sh` (may require moving .gitconfig). Will need your password for chsh
+
+Start the ssh server
+
+* `sudo systemctl start ssh`
+
 
 ## Next Steps
 
 * Automate authorized_keys and permissions stuff. Just mounting it into the home dir didn't work,
   probably because the home dir is generated on the fly? There's actual Jupyter Docker Stacks and
   jupyterhub setup stuff for hooking into their dir setup instead, in the helm chart maybe, I think rc.local or something.
-* 

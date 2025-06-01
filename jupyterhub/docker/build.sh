@@ -7,7 +7,7 @@ SAVE_DIR=`pwd`
 TOKEN=`op read op://tales-secrets/jupyterhub-github-token/password`
 REPOUSER=`op read op://tales-secrets/jupyterhub-github-token/username`
 IMAGE=ghcr.io/symmatree/internal/datascience-notebook-ssh
-TAG=$(date +%Y-%m-%d)-2
+TAG=$(date +%Y-%m-%d)
 
 BASE_IMAGE=quay.io/jupyter/datascience-notebook
 # https://quay.io/repository/jupyter/datascience-notebook?tab=tags&tag=latest

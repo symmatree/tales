@@ -13,9 +13,9 @@ RUN apt-get update \
     openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
-COPY install-tools.yaml /tmp/install-tools.yaml
+COPY install-tools.ansible.yaml /tmp/install-tools.ansible.yaml
 # Fix linuxbrew permissions because we're running as root.
-RUN ansible-playbook -v /tmp/install-tools.yaml -i localhost, --connection=local \
+RUN ansible-playbook -v /tmp/install-tools.ansible.yaml -i localhost, --connection=local \
     && rm -rf /var/lib/apt/lists/* \
     && chown -R 1000:100 /home/linuxbrew
 

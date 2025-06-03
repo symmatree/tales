@@ -60,7 +60,7 @@ jupyterhub:
     cmd: null
     image:
       name: ghcr.io/symmatree/internal/datascience-notebook-ssh
-      tag: 2025-05-31
+      tag: 2025-06-03
       pullSecrets:
         - name: ghcr-pull-secret
       # Pull always until we're stable.

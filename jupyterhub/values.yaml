@@ -28,6 +28,13 @@ jupyterhub:
           - name: "admin"
             users:
               - "seth.porter@gmail.com"
+      KubeSpawner:
+        privileged: true
+        container_security_context: |
+          capabilities:
+            add:
+              - SYS_ADMIN
+              - DAC_READ_SEARCH
       OAuthenticator:
         allow_all: true
         oauth_callback_url: "https://notebook.local.symmatree.com/hub/oauth_callback"

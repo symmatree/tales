@@ -1,3 +1,5 @@
 machine:
+  sysctls:
+    user.max_user_namespaces: "8192"
   network:
     hostname: talos-worker-1.local.symmatree.com

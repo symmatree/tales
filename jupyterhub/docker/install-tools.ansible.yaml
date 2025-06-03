@@ -73,6 +73,7 @@
           - apt-utils
           - aspell
           - bsdmainutils
+          - buildah
           - ca-certificates
           - dialog
           - dnsutils

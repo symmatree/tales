@@ -14,8 +14,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY install-tools.yaml /tmp/install-tools.yaml
+# Fix linuxbrew permissions because we're running as root.
 RUN ansible-playbook -v /tmp/install-tools.yaml -i localhost, --connection=local \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && chown -R 1000:100 /home/linuxbrew
 
 COPY systemctl3.py /usr/bin/systemctl
 COPY sshd_config /etc/ssh/sshd_config

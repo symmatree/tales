@@ -27,5 +27,6 @@ spec:
     managedNamespaceMetadata:
       labels:
         # I want sudo in the notebook runners. Also sshd!
+        "pod-security.kubernetes.io/enforce": privileged
         "pod-security.kubernetes.io/warn": privileged
         "trust-bundle": "enabled"

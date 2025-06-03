@@ -17,10 +17,6 @@ jupyterhub:
             name: google-oauth-secret
             key: OAUTH_CLIENT_SECRET
 
-    # c.JupyterHub.authenticator_class = "google"
-    # c.OAuthenticator.oauth_callback_url = "https://jupyterhub.local.symmatree.com/hub/oauth_callback"
-    # c.OAuthenticator.client_id = "[your oauth2 application id]"
-    # c.OAuthenticator.client_secret = "[your oauth2 application secret]"
     config:
       JupyterHub:
         authenticator_class: "google"
@@ -30,7 +26,7 @@ jupyterhub:
               - "seth.porter@gmail.com"
       KubeSpawner:
         privileged: true
-        container_security_context: |
+        container_security_context:
           capabilities:
             add:
               - SYS_ADMIN

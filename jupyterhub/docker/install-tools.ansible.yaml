@@ -84,6 +84,8 @@
           - htop
           - jq
           - kubectl
+          # vscode wants libasound2 but that is a virtual package.
+          - libasound2t64
           - procps
           - stow
           - sudo

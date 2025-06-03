@@ -38,6 +38,14 @@ Start the ssh server
 
 - `sudo systemctl start ssh`
 
+Activate 1password:
+
+`eval $(op account add --address my.1password.com --email symmetry@pobox.com --signin)`
+
+Launch VSCode tunnels (if you aren't using ssh to attach):
+
+`DONT_PROMPT_WSL_INSTALL=1 code tunnel`
+
 ## Next Steps
 
 - Automate authorized_keys and permissions stuff. Just mounting it into the home dir didn't work,

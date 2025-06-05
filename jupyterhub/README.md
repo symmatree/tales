@@ -16,6 +16,34 @@ This is created by `make-pull-token.sh` with the help of `image-pull-secret.jq`
 Created a key in 1password. DL with command line didn't work but
 export-as-openssh did (eventually?).
 
+Update: Because there's special magic for openssh. You can get a look at it with
+
+`op item get "jupyterhub-ssh-key"` which prompts you to (in this case)
+`op item get cxchjmcc52fzphfoyr6dyrqnye --reveal` which shows the OpenSSH
+format for the private key. Then `op item get cxchjmcc52fzphfoyr6dyrqnye --reveal --fields private\ key --format json` actually reveals the magic:
+
+```
+op item get cxchjmcc52fzphfoyr6dyrqnye --reveal --fields private\ key --format json
+{
+  "id": "private_key",
+  "type": "SSHKEY",
+  "label": "private key",
+  "value": "-----BEGIN PRIVATE KEY-----\r\n...snip...=\r\n-----END PRIVATE KEY-----\r\n",
+  "reference": "op://tales-secrets/jupyterhub-ssh-key/private key",
+  "ssh_formats": {
+    "openssh": {
+      "reference": "op://tales-secrets/jupyterhub-ssh-key/private key?ssh-format=openssh",
+      "value": "-----BEGIN OPENSSH PRIVATE KEY-----\n...snip...\n...snip...\n-----END OPENSSH PRIVATE KEY-----\n"
+    }
+  }
+}                   
+```
+
+Note that both key formats are present (with json-escaped newlines). We could use `jq` to crack it out but that
+reference format is what we need: `op read "op://tales-secrets/jupyterhub-ssh-key/private key?ssh-format=openssh" > ~/.ssh/id_jupyterhub`
+
+
+
 - Started the Jupyterhub session, started a terminal inside it
 - `sudo systemctl start ssh`
 - Copied authorized_keys from /mnt/keys and set permissions.

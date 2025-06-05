@@ -19,6 +19,9 @@ RUN ansible-playbook -v /tmp/install-tools.ansible.yaml -i localhost, --connecti
     && rm -rf /var/lib/apt/lists/* \
     && chown -R 1000:100 /home/linuxbrew
 
+COPY fix-permissions /usr/local/bin/fix-permissions
+RUN chmod a+rx /usr/local/bin/fix-permissions
+
 COPY systemctl3.py /usr/bin/systemctl
 COPY sshd_config /etc/ssh/sshd_config
 RUN rm -fv /etc/ssh/sshd_not_to_be_run

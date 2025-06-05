@@ -9,3 +9,4 @@ PrintMotd no
 PermitUserEnvironment yes
 PermitTunnel yes
 AcceptEnv LANG LC_*
+LogLevel VERBOSE

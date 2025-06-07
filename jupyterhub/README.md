@@ -118,6 +118,13 @@ and configure it to read from the Tales vault in addition to the others. (This i
 but I don't seem to have the .toml file the docs suggest I should, so TODO figure out how
 I configured that.)
 
+## Resetting Homedir
+
+If you need to start clean, first use the File > Hub link from
+`https://notebook.local.symmatree.com` to shut down your server,
+then `k delete pvc claim-seth-porter-gmail-com---39d0c2f0` (or
+equivalent for other users).
+
 ## Homedir keys and dotfile setup
 
 Run this once, followed by the per-server-startup, below. After this you can clone
@@ -126,9 +133,11 @@ whatever repos you actually want to work on; this is just one-time plumbing for 
 - Copy authorized_keys from /mnt/keys and set permissions:
 
 ```
-drwx--S---  2 jovyan users   29 Jun  5 01:28 .
-drwxrwsr-x 18 jovyan users 4096 Jun  7 15:16 ..
--r--------  1 jovyan users   80 Jun  5 01:28 authorized_keys   
+jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ mkdir -p ~/.ssh
+jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ chmod 0700 ~/.ssh
+jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ cp /mnt/keys/authorized_keys ~/.ssh
+jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ chmod 0600 ~/.ssh/authorized_keys 
+jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ sudo systemctl start ssh
 ```
 
 TODO: Automate authorized_keys and permissions stuff. https://github.com/symmatree/tales/issues/3
@@ -153,7 +162,9 @@ TODO: Automate authorized_keys and permissions stuff. https://github.com/symmatr
   run zsh manually in terminals in some cases. I don't usually bother, it's just in
   the install script so it works partially for a while until the first time I restart
   the server.
-- Launch VSCode tunnels (if you aren't using ssh to attach): `code tunnel`
+- Launch VSCode tunnels (if you aren't using ssh to attach): `code tunnel` - note this
+  cannot be run under a VSCode terminal since they hijack `code` with a redirect to
+  the ui. Simplest is to run it in a tmux session launched from the Notebook terminal.
 
 This has to be done every time the server is recreated. (The ssh startup script
 doesn't work right or something but this is sufficient to fix it.)

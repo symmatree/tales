@@ -16,13 +16,13 @@ jupyterhub:
           secretKeyRef:
             name: google-oauth-secret
             key: OAUTH_CLIENT_SECRET
-
     config:
       JupyterHub:
         authenticator_class: "google"
         load_roles:
           - name: "admin"
             users:
+              # TODO: https://github.com/symmatree/tales/issues/4
               - "seth.porter@gmail.com"
       KubeSpawner:
         privileged: true
@@ -69,6 +69,7 @@ jupyterhub:
       extraVolumeMounts:
         - name: keys
           mountPath: /mnt/keys
+          # TODO: https://github.com/symmatree/tales/issues/3
           # mountPath: /home/joyvan/.ssh/authorized_keys
           # subPath: authorized_keys
       extraVolumes:

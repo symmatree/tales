@@ -4,6 +4,8 @@ OUT_DIR=`pwd`
 pushd "$(dirname "$0")"
 SCRIPT_DIR=`pwd`
 
+# TODO: Refactor somewhere more general.
+
 VAULT=tales-secrets
 ITEM=jupyterhub-github-token
 CURR_JSON=`op item get --vault $VAULT "$ITEM" --format json`

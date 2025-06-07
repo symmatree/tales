@@ -66,6 +66,8 @@ jupyterhub:
       # Pull always until we're stable.
       pullPolicy: Always
     storage:
+      # Buildah requires a ton of space to work.
+      capacity: 100Gi
       extraVolumeMounts:
         - name: keys
           mountPath: /mnt/keys

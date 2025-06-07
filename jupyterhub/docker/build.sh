@@ -13,7 +13,10 @@ BASE_IMAGE=quay.io/jupyter/datascience-notebook
 # https://quay.io/repository/jupyter/datascience-notebook?tab=tags&tag=latest
 BASE_TAG=2025-05-24
 
-# Pull first to avoid collision on creds.
+# Pull first to avoid collision on creds (the base image is in a different
+# repo, which doesn't accept our creds of course).
+# Transient disk usage in the home dir is ~12Gi or higher, but it drops
+# with the cleanup steps.
 buildah pull $BASE_IMAGE:$BASE_TAG
 buildah build --network=host \
   --layers=true \

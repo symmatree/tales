@@ -42,8 +42,10 @@ jobs:
           for c in "${!tanka[@]}"; do
               tanka[c]="${tanka[c]}/vendor"
           done
-          # echo "CACHE_DIRS=${charts[*]} ${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
-          echo "CACHE_DIRS=${charts[*]}" | tee -a "$GITHUB_OUTPUT"
+          echo "CACHE_DIRS=${charts[*]} ${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
+          for dir in ${charts[*]} ${tanka[*]}; do
+            mkdir -p "$dir"
+          done
       - name: Kubeconform schema cache
         uses: actions/cache@v4
         with:

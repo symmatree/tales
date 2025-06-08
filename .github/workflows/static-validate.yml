@@ -70,7 +70,9 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
+          ${{ github.workspace }}/ci-tools/helm-add-repos.sh
           for chart in ${{ steps.modules.outputs.CHARTS }}; do
+            echo "Checking chart: $chart"
             pushd "$chart"
             helm dep build
             helm lint .

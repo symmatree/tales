@@ -42,7 +42,8 @@ jobs:
           for c in "${!tanka[@]}"; do
               tanka[c]="${tanka[c]}/vendor"
           done
-          echo "CACHE_DIRS=${charts[*]} ${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
+          # echo "CACHE_DIRS=${charts[*]} ${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
+          echo "CACHE_DIRS=${charts[*]}" | tee -a "$GITHUB_OUTPUT"
       - name: Kubeconform schema cache
         uses: actions/cache@v4
         with:
@@ -71,7 +72,7 @@ jobs:
           done
       - name: Check Helm charts
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           ${{ github.workspace }}/ci-tools/helm-add-repos.sh

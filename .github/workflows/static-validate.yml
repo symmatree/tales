@@ -77,8 +77,7 @@ jobs:
             pushd "$chart"
             helm dep build
             helm lint .
-            # --validate wants connection to the server
-            helm template --dry-run=client . \
+            ${{ github.workspace }}/ci-tools/helm-template.sh \
               | ${{ github.workspace }}/ci-tools/kubeconform.sh
             popd
           done

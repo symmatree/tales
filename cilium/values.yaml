@@ -165,7 +165,6 @@ cilium:
         enabled: true
         port: 9966
         serviceMonitor:
-          trustCRDsExist: true
           enabled: true
     ui:
       # -- Whether to enable the Hubble UI.
@@ -238,7 +237,6 @@ cilium:
     metricsService: true
     enabled: true
     serviceMonitor:
-      trustCRDsExist: true
       enabled: true
   dashboards:
     enabled: true
@@ -254,7 +252,6 @@ cilium:
       enabled: true
       serviceMonitor:
         enabled: true
-        trustCRDsExist: true
   # -- Configure TLS configuration in the agent.
   tls:
     readSecretsOnlyFromSecretsNamespace: true
@@ -269,7 +266,6 @@ cilium:
       enabled: true
       serviceMonitor:
         enabled: true
-        trustCRDsExist: true
     dashboards:
       enabled: true
   # -- Configure cgroup related configuration

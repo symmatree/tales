@@ -59,7 +59,7 @@ jobs:
           set -euxo pipefail
           for dir in ${{ steps.modules.outputs.TANKA }}; do
             pushd "$dir"
-            tk fmt -v -t
+            tk fmt -v -t .
             jb update
             #  -ignore-missing-schemas
             tk show environments/default \

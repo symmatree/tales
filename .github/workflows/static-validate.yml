@@ -26,6 +26,7 @@ jobs:
           eget --upgrade-only grafana/tanka
           mv tanka tk
           eget --upgrade-only jsonnet-bundler/jsonnet-bundler
+          mv jsonnet-bundler jb
           eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
           popd
       - name: Find modules

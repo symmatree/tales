@@ -58,6 +58,7 @@ jobs:
       - name: Check Tanka
         run: |
           set -euxo pipefail
+          mkdir -p "${{ runner.temp }}/cache/kubeconform"
           for dir in ${{ steps.modules.outputs.TANKA }}; do
             pushd "$dir"
             tk fmt -v -t .
@@ -70,6 +71,7 @@ jobs:
       - name: Check Helm charts
         run: |
           set -euxo pipefail
+          mkdir -p "${{ runner.temp }}/cache/kubeconform"
           for chart in ${{ steps.modules.outputs.CHARTS }}; do
             pushd "$chart"
             helm dep build

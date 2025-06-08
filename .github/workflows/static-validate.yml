@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install tools
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           pushd /usr/local/bin
           $GITHUB_WORKSPACE/ci-tools/eget.sh
           eget yannh/kubeconform
@@ -24,11 +24,11 @@ jobs:
       - name: Find modules
         id: modules
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           charts=($(find "${{ github.workspace }}" -name Chart.yaml -exec dirname {} \;))
-          echo "CHARTS=${charts}" | tee -a "$GITHUB_OUTPUT"
+          echo "CHARTS=${charts[*]}" | tee -a "$GITHUB_OUTPUT"
           tanka=($(find "${{ github.workspace }}" -name jsonnetfile.json -exec dirname {} \;))
-          echo "TANKA=${tanka}" | tee -a "$GITHUB_OUTPUT"
+          echo "TANKA=${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
           for c in "${!charts[@]}"; do
               charts[c]="${charts[c]}/charts"
           done
@@ -51,13 +51,12 @@ jobs:
         run: |
           set -euxo pipefail
           for dir in ${{ steps.modules.outputs.TANKA }}; do
-            pushd "${{ github.workspace }}/$dir"
-            jb update
+            pushd "$dir"
             tk fmt -v -t
-            tk export "${{ runner.temp }}/${dir}" environments/default
+            jb update
             #  -ignore-missing-schemas
-            kubeconform -cache "${{ runner.temp }}/cache/kubeconform" -strict -summary \
-              "${{ runner.temp }}/${dir}"
+            tk show environments/default \
+              | kubeconform -cache "${{ runner.temp }}/cache/kubeconform" -strict -summary
             popd
           done
       - name: Check Helm charts

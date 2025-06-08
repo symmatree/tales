@@ -54,6 +54,7 @@ jobs:
           path: ${{ steps.modules.outputs.CACHE_DIRS }}
           key: ${{ runner.os }}-deps
       - name: Check Tanka
+        if: ${{ steps.modules.outputs.TANKA == 'SKIP' }}
         run: |
           set -euxo pipefail
           mkdir -p "${{ runner.temp }}/cache/kubeconform"

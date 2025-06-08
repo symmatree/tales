@@ -25,19 +25,17 @@ jobs:
         id: modules
         run: |
           set -euxo pipefail
-          charts=$(find "${{ github.workspace }}" -name Chart.yaml -exec dirname {} \;)
+          charts=($(find "${{ github.workspace }}" -name Chart.yaml -exec dirname {} \;))
           echo "CHARTS=${charts}" | tee -a "$GITHUB_OUTPUT"
-          tanka=$(find "${{ github.workspace }}" -name jsonnetfile.json -exec dirname {} \;)
+          tanka=($(find "${{ github.workspace }}" -name jsonnetfile.json -exec dirname {} \;))
           echo "TANKA=${tanka}" | tee -a "$GITHUB_OUTPUT"
-          chartArr=(${charts})
-          for c in "${!chartArr[@]}"; do
-              chartArr[c]="${chartArr[c]}/charts"
+          for c in "${!charts[@]}"; do
+              charts[c]="${charts[c]}/charts"
           done
-          tankaArr=(${tanka})
-          for c in "${!tankaArr[@]}"; do
-              tankaArr[c]="${tankaArr[c]}/vendor"
+          for c in "${!tanka[@]}"; do
+              tanka[c]="${tanka[c]}/vendor"
           done
-          echo "CACHE_DIRS=${chartArr[*]}${tankaArr[*]}" | tee -a "$GITHUB_OUTPUT"
+          echo "CACHE_DIRS=${charts[*]} ${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
       - name: Kubeconform schema cache
         uses: actions/cache@v4
         with:

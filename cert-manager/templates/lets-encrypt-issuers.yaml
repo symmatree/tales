@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: staging-cert
-  namespace: {{ .Release.Namespace }}
 spec:
   acme:
     email: symmetry@pobox.com
@@ -25,7 +24,6 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: real-cert
-  namespace: {{ .Release.Namespace }}
 spec:
   acme:
     email: symmetry@pobox.com

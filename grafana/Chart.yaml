@@ -2,10 +2,8 @@ apiVersion: v2
 name: grafana
 description: grafana
 type: application
-
 version: 0.1.0
-appVersion: "0.1.0"
-
+appVersion: 0.1.0
 dependencies:
   - name: grafana
     version: ~8.14

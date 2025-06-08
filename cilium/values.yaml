@@ -2,9 +2,8 @@
 # https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.yaml
 # Deleted all values I'm not changing.
 cilium:
-  k8sServiceHost: "localhost"
+  k8sServiceHost: localhost
   k8sServicePort: 7445
-
   k8sClientRateLimit:
     qps: 30
     burst: 60
@@ -14,7 +13,6 @@ cilium:
   serviceAccounts:
     nodeinit:
       enabled: true
-
   # -- Roll out cilium agent pods automatically when configmap is updated.
   rollOutCiliumPods: true
   securityContext:
@@ -43,7 +41,6 @@ cilium:
         - SYS_RESOURCE
   autoDirectNodeRoutes: true
   directRoutingSkipUnreachable: true
-
   # -- Enable bandwidth manager to optimize TCP and UDP workloads and allow
   # for rate-limiting traffic from individual Pods with EDT (Earliest Departure
   # Time) through the "kubernetes.io/egress-bandwidth" Pod annotation.
@@ -53,7 +50,6 @@ cilium:
     enabled: true
     # -- Activate BBR TCP congestion control for Pods
     bbr: true
-
   # -- Configure L2 announcements
   l2announcements:
     # -- Enable L2 announcements
@@ -70,7 +66,7 @@ cilium:
     # Not so we can talk to them but to help routing.
     enabled: true
     # -- Interface used for sending Gratuitous ARP pod announcements
-    interface: "enp3s0"
+    interface: enp3s0
   pmtuDiscovery:
     # -- Enable path MTU discovery to send ICMP fragmentation-needed replies to
     # the client.
@@ -79,13 +75,11 @@ cilium:
     hostLegacyRouting: false
     # -- (bool) Enable native IP masquerade support in eBPF
     masquerade: true
-
     # -- (string) Mode for Pod devices for the core datapath (veth, netkit, netkit-l2)
     # @default -- `veth`
     datapathMode: netkit
   # -- Enable BPF clock source probing for more efficient tick retrieval.
   bpfClockProbe: true
-
   envoyConfig:
     # -- Enable CiliumEnvoyConfig CRD
     # CiliumEnvoyConfig CRD can also be implicitly enabled by other options.
@@ -116,7 +110,6 @@ cilium:
   externalIPs:
     # -- Enable ExternalIPs service support.
     enabled: true
-
   hubble:
     # -- Hubble metrics configuration.
     # See https://docs.cilium.io/en/stable/observability/metrics/#hubble-metrics
@@ -138,7 +131,6 @@ cilium:
       # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
       dashboards:
         enabled: true
-
     # -- TLS configuration for Hubble
     tls:
       # -- Enable mutual TLS for listenAddress. Setting this value to false is
@@ -154,13 +146,11 @@ cilium:
           group: cert-manager.io
           kind: ClusterIssuer
           name: tales-ca-issuer
-
     relay:
       # -- Enable Hubble Relay (requires hubble.enabled=true)
       enabled: true
       # -- Roll out Hubble Relay pods automatically when configmap is updated.
       rollOutPods: true
-
       # Keep more core infra on the control plane.
       tolerations:
         - effect: NoSchedule
@@ -169,7 +159,6 @@ cilium:
       nodeSelector:
         kubernetes.io/os: linux
         node-role.kubernetes.io/control-plane: ""
-
       # -- Enable prometheus metrics for hubble-relay on the configured port at
       # /metrics
       prometheus:
@@ -191,7 +180,6 @@ cilium:
         readinessProbe:
           # -- Enable readiness probe for Hubble-ui backend (requires Hubble-ui 0.12+)
           enabled: false
-
       # Keep more core infra on the control plane.
       tolerations:
         - effect: NoSchedule
@@ -200,47 +188,40 @@ cilium:
       nodeSelector:
         kubernetes.io/os: linux
         node-role.kubernetes.io/control-plane: ""
-
       ingress:
         enabled: true
         annotations:
           cert-manager.io/cluster-issuer: real-cert
-        className: "cilium"
+        className: cilium
         hosts:
           - hubble.local.symmatree.com
         tls:
           - secretName: hubble-ui-tls
             hosts:
               - hubble.local.symmatree.com
-
   ipam:
     # -- Configure IP Address Management mode.
     # ref: https://docs.cilium.io/en/stable/network/concepts/ipam/
-    mode: "kubernetes"
-
+    mode: kubernetes
   # -- Configure Kubernetes specific configuration
   k8s:
     # -- requireIPv4PodCIDR enables waiting for Kubernetes to provide the PodCIDR
     # range via the Kubernetes node resource
     requireIPv4PodCIDR: true
   kubeProxyReplacement: "true"
-
   # -- healthz server bind address for the kube-proxy replacement.
   # To enable set the value to '0.0.0.0:10256' for all ipv4
   # addresses and this '[::]:10256' for all ipv6 addresses.
   # By default it is disabled.
-  kubeProxyReplacementHealthzBindAddr: "0.0.0.0:10256"
+  kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
   # -- Enable Local Redirect Policy.
   localRedirectPolicy: false
-
   # -- Enables IPv4 BIG TCP support which increases maximum IPv4 GSO/GRO limits for nodes and pods
   # TODO(symmetry): Make this work. Fails with
   # "Could not modify IPv4 gro_max_size and gso_max_size, disabling BIG TCP"
   enableIPv4BIGTCP: false
-
   # setting the auto-direct-node-routes flag.
-  ipv4NativeRoutingCIDR: "10.0.4.0/24"
-
+  ipv4NativeRoutingCIDR: 10.0.4.0/24
   # -- Configure service load balancing
   loadBalancer:
     # https://github.com/cilium/cilium/discussions/36829
@@ -252,7 +233,6 @@ cilium:
   nodePort:
     # -- Enable the Cilium NodePort service implementation.
     enabled: true
-
   # -- Configure prometheus metrics on the configured port at /metrics
   prometheus:
     metricsService: true
@@ -266,7 +246,6 @@ cilium:
     enabled: true
     # -- Roll out cilium envoy pods automatically when configmap is updated.
     rollOutPods: true
-
     # -- Configure Cilium Envoy Prometheus options.
     # Note that some of these apply to either cilium-agent or cilium-envoy.
     prometheus:
@@ -274,11 +253,10 @@ cilium:
       enabled: true
       serviceMonitor:
         enabled: true
-
   # -- Configure TLS configuration in the agent.
   tls:
     readSecretsOnlyFromSecretsNamespace: true
-  routingMode: "native"
+  routingMode: native
   operator:
     # -- Roll out cilium-operator pods automatically when configmap is updated.
     rollOutPods: true

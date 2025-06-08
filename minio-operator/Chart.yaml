@@ -2,11 +2,8 @@ apiVersion: v2
 name: minio-operator
 description: minio-operator deployment
 type: application
-
 version: 0.1.1
-
 appVersion: "7.1"
-
 dependencies:
   - name: operator
     version: ~7.1

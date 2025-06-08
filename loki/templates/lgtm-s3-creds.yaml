@@ -4,4 +4,4 @@ metadata:
   name: lgtm-s3-creds
 type: Opaque
 spec:
-  itemPath: "vaults/tales-secrets/items/lgtm-s3-creds"
+  itemPath: vaults/tales-secrets/items/lgtm-s3-creds

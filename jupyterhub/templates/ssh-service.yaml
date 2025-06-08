@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: ssh-service
   annotations:
-    "external-dns.alpha.kubernetes.io/hostname": "notebook-ssh.local.symmatree.com"
+    external-dns.alpha.kubernetes.io/hostname: notebook-ssh.local.symmatree.com
 spec:
   type: LoadBalancer
   selector:
-    "hub.jupyter.org/username": "seth-porter-gmail-com---39d0c2f0"
+    hub.jupyter.org/username: seth-porter-gmail-com---39d0c2f0
   ports:
     - name: ssh
       port: 22

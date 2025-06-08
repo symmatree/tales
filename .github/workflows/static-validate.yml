@@ -76,8 +76,8 @@ jobs:
             echo "Checking chart: $chart"
             pushd "$chart"
             helm dep build
-            helm lint .
-            ${{ github.workspace }}/ci-tools/helm-template.sh \
+            ${{ github.workspace }}/ci-tools/helm.sh lint .
+            ${{ github.workspace }}/ci-tools/helm.sh template --dry-run=client . \
               | ${{ github.workspace }}/ci-tools/kubeconform.sh
             popd
           done

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # From Helm Capabilities.APIVersions.
-helm template --dry-run=client \
+helm \
 -a acme.cert-manager.io/v1 \
 -a acme.cert-manager.io/v1/Challenge \
 -a acme.cert-manager.io/v1/Order \
@@ -57,4 +57,4 @@ helm template --dry-run=client \
 -a onepassword.com/v1/OnePasswordItem \
 -a trust.cert-manager.io/v1alpha1 \
 -a trust.cert-manager.io/v1alpha1/Bundle \
-.
+"$@"

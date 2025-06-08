@@ -11,15 +11,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Tool cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /usr/local/bin
+          key: ${{ runner.os }}-usr-local-bin
       - name: Install tools
         run: |
           set -euo pipefail
           pushd /usr/local/bin
           $GITHUB_WORKSPACE/ci-tools/eget.sh
-          eget yannh/kubeconform
-          eget grafana/tanka
-          eget jsonnet-bundler/jsonnet-bundler
-          eget https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
+          eget --upgrade-only yannh/kubeconform
+          eget --upgrade-only grafana/tanka
+          mv tanka tk
+          eget --upgrade-only jsonnet-bundler/jsonnet-bundler
+          eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
           popd
       - name: Find modules
         id: modules

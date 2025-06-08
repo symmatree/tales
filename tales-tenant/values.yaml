@@ -7,7 +7,6 @@ tenant:
       # Populated from onepassword
       name: tales-tenant-secret
       existingSecret: true
-
     certificate:
       externalCaCertSecret:
         - name: tales-tenant-ca-tls
@@ -16,11 +15,9 @@ tenant:
         - name: tales-tenant-tls
           type: cert-manager.io/v1
       requestAutoCert: false
-
     exposeServices:
       minio: true
       console: true
-
     pools:
       - servers: 1
         name: pool-0
@@ -33,13 +30,12 @@ tenant:
         # every byte (despite "give minio full control" memes)
         # Note 05-03: Maybe this is XFS overhead?
         size: 511Gi
-
   ingress:
     api:
       enabled: false
       annotations:
         cert-manager.io/cluster-issuer: real-cert
-      ingressClassName: "cilium"
+      ingressClassName: cilium
       tls:
         - secretName: minio-console-tls
           hosts:
@@ -51,7 +47,7 @@ tenant:
       enabled: false
       annotations:
         cert-manager.io/cluster-issuer: real-cert
-      ingressClassName: "cilium"
+      ingressClassName: cilium
       tls:
         - secretName: minio-console-tls
           hosts:

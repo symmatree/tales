@@ -4,7 +4,7 @@ metadata:
   name: laserjet-cert-password
 type: Opaque
 spec:
-  itemPath: "vaults/tales-secrets/items/laserjet-cert-password"
+  itemPath: vaults/tales-secrets/items/laserjet-cert-password
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -12,7 +12,7 @@ metadata:
   name: laserjet
 spec:
   dnsNames:
-  - laserjet.local.symmatree.com
+    - laserjet.local.symmatree.com
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer

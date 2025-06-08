@@ -23,7 +23,7 @@ kubernetes-dashboard:
       ## Global dashboard settings
       global:
         #  # Cluster name that appears in the browser window title if it is set
-        clusterName: "tales"
+        clusterName: tales
         # Max number of items that can be displayed on each list page
         itemsPerPage: 40
         # Max number of labels that are displayed by default on most views.
@@ -58,17 +58,14 @@ kubernetes-dashboard:
         key: node-role.kubernetes.io/control-plane
         operator: Exists
     affinity: {}
-
   ### Metrics Scraper
   ### Container to scrape, store, and retrieve a window of time from the Metrics Server.
   ### refs: https://github.com/kubernetes/dashboard/tree/master/modules/metrics-scraper
   metricsScraper:
     # TODO: Figure out how to get Prometheus instead.
     enabled: false
-
   metrics-server:
     enabled: false
-
   ## Required Kong sub-chart with DBless configuration to act as a gateway
   ## for our all containers.
   kong:
@@ -83,7 +80,7 @@ kubernetes-dashboard:
     proxy:
       type: LoadBalancer
       annotations:
-        "external-dns.alpha.kubernetes.io/hostname": "dashboard.local.symmatree.com"
+        external-dns.alpha.kubernetes.io/hostname: dashboard.local.symmatree.com
     certificates:
       enabled: true
       clusterIssuer: real-cert
@@ -93,7 +90,6 @@ kubernetes-dashboard:
         commonName: dashboard.local.symmatree.com
         # dnsNames:
         #   - dashboard.local.symmatree.com
-
       # We aren't even deploying these but the chart tries to get certs anyway.
       admin:
         enabled: false
@@ -101,13 +97,11 @@ kubernetes-dashboard:
         enabled: false
       cluster:
         enabled: false
-
   # We have our own, thank you.
   cert-manager:
     enabled: false
   nginx:
     enabled: false
-
   extras:
     serviceMonitor:
       # Whether to create a Prometheus Operator service monitor.

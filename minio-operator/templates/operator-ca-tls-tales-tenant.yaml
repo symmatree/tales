@@ -5,12 +5,12 @@ metadata:
   name: operator-ca-tls-tales-tenant
 spec:
   sources:
-  - secret:
-      name: tales-ca-tls
-      key: "ca.crt"
+    - secret:
+        name: tales-ca-tls
+        key: ca.crt
   target:
     secret:
-      key: "ca.crt"
+      key: ca.crt
     namespaceSelector:
       matchLabels:
-        "kubernetes.io/metadata.name": minio-operator
+        kubernetes.io/metadata.name: minio-operator

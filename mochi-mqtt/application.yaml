@@ -14,7 +14,7 @@ spec:
     plugin:
       env:
         - name: TK_ENV
-          value: "default"
+          value: default
   destination:
     server: https://kubernetes.default.svc
     namespace: mochi-mqtt

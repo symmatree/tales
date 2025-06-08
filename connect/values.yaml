@@ -15,7 +15,6 @@ connect:
     nodeSelector:
       kubernetes.io/os: linux
       node-role.kubernetes.io/control-plane: ""
-
     # Ingress allows ingress services to be created to allow external access
     # from Kubernetes to access 1Password Connect pods.
     # In order to expose the service, use the route section below
@@ -23,15 +22,14 @@ connect:
       # Until we have a use case, reduce surface area.
       enabled: false
       annotations:
-        cert-manager.io/issuer: "real-cert"
-      ingressClassName: "cilium"
+        cert-manager.io/issuer: real-cert
+      ingressClassName: cilium
       hosts:
         - host: connect.local.symmatree.com
       tls:
         - secretName: op-connect-tls
           hosts:
             - connect.local.symmatree.com
-
   operator:
     # Denotes whether the 1Password Operator will be deployed
     create: true

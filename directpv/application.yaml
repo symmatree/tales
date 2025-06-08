@@ -23,4 +23,4 @@ spec:
       - ServerSideApply=true
     managedNamespaceMetadata:
       labels:
-        "pod-security.kubernetes.io/warn": baseline
+        pod-security.kubernetes.io/warn: baseline

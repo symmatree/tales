@@ -15,8 +15,7 @@ cluster:
   controllerManager:
     extraArgs:
       # With /23 allocated total, /25-per-node allows max of 4 nodes
-      "node-cidr-mask-size": 25
-
+      node-cidr-mask-size: 25
   proxy:
     # Cilium will replace the proxy
     disabled: true

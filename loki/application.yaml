@@ -26,5 +26,5 @@ spec:
       - ServerSideApply=true
     managedNamespaceMetadata:
       labels:
-        "pod-security.kubernetes.io/warn": baseline
-        "trust-bundle": "enabled"
+        pod-security.kubernetes.io/warn: baseline
+        trust-bundle: enabled

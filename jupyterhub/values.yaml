@@ -18,12 +18,12 @@ jupyterhub:
             key: OAUTH_CLIENT_SECRET
     config:
       JupyterHub:
-        authenticator_class: "google"
+        authenticator_class: google
         load_roles:
-          - name: "admin"
+          - name: admin
             users:
               # TODO: https://github.com/symmatree/tales/issues/4
-              - "seth.porter@gmail.com"
+              - seth.porter@gmail.com
       KubeSpawner:
         privileged: true
         container_security_context:
@@ -33,14 +33,13 @@ jupyterhub:
               - DAC_READ_SEARCH
       OAuthenticator:
         allow_all: true
-        oauth_callback_url: "https://notebook.local.symmatree.com/hub/oauth_callback"
+        oauth_callback_url: https://notebook.local.symmatree.com/hub/oauth_callback
     # These env vars come from a 1Password-created secret.
     extraConfig:
       oauthConfig.py: |
         import os
         c.OAuthenticator.client_id = os.environ["OAUTH_CLIENT_ID"]
         c.OAuthenticator.client_secret = os.environ["OAUTH_CLIENT_SECRET"]
-
   # The whole point is to NOT have my desktop fall asleep while I'm working over ssh!
   cull:
     enabled: false
@@ -80,8 +79,8 @@ jupyterhub:
             secretName: ssh-secret
             items:
               # It's a space in the UI but the operator translates to a dash.
-              - key: "public-key"
-                path: "authorized_keys"
+              - key: public-key
+                path: authorized_keys
   scheduling:
     userScheduler:
       replicas: 1
@@ -97,7 +96,7 @@ jupyterhub:
         enabled: false
     service:
       annotations:
-        "external-dns.alpha.kubernetes.io/hostname": "notebook.local.symmatree.com"
+        external-dns.alpha.kubernetes.io/hostname: notebook.local.symmatree.com
     https:
       enabled: true
       type: secret

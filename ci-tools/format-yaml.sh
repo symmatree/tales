@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Exclude "templates" because they are not valid YAML (or sometimes they are but get mangled!)
-# find . -type d -name templates -prune -o -name "*.helm.yaml" -prune -o -name "*.yaml" -exec yq -i -P "{}" ';'
-find . -name "*.helm.yaml" -prune -o -name "*.yaml" -exec yq -i -P "{}" ';'
-find . -name "*.yml" -exec yq -i -P "{}" ';'
+# Most templates are fine but any with structural templating will fail.
+# Use .helm.yaml naming to avoid them.
+# The charts/ dir is vendor helm and we don't want to do anything to it.
+time find . \( -name "*.helm.yaml" -o -type d -name charts \) -prune -o -name "*.yaml" -exec yq -i -P "{}" ';'
+time find . \( -type d -name charts \) -prune -o -name "*.yml" -exec yq -i -P "{}" ';'

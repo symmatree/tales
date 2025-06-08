@@ -62,7 +62,8 @@ jobs:
             tk fmt -v -t .
             jb update
             #  -ignore-missing-schemas
-            tk show environments/default \
+            tk show --dangerous-allow-redirect \
+              environments/default  \
               | kubeconform -cache "${{ runner.temp }}/cache/kubeconform" -strict -summary
             popd
           done

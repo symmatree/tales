@@ -13,19 +13,20 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            /usr/local/bin
+            ${{ runner.temp }}/bin
           key: ${{ runner.os }}-usr-local-bin
       - name: Install tools
         run: |
           set -euo pipefail
-          pushd /usr/local/bin
+          mkdir -p ${{ runner.temp }}/bin
+          pushd ${{ runner.temp }}/bin
           $GITHUB_WORKSPACE/ci-tools/eget.sh
-          eget --upgrade-only yannh/kubeconform
-          eget --upgrade-only grafana/tanka
+          ./eget --upgrade-only yannh/kubeconform
+          ./eget --upgrade-only grafana/tanka
           mv tanka tk
-          eget --upgrade-only jsonnet-bundler/jsonnet-bundler
+          ./eget --upgrade-only jsonnet-bundler/jsonnet-bundler
           mv jsonnet-bundler jb
-          eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
+          ./eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
           popd
       - name: Find modules
         id: modules
@@ -57,6 +58,7 @@ jobs:
         if: ${{ steps.modules.outputs.TANKA == 'SKIP' }}
         run: |
           set -euxo pipefail
+          export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           for dir in ${{ steps.modules.outputs.TANKA }}; do
             pushd "$dir"
@@ -70,6 +72,7 @@ jobs:
       - name: Check Helm charts
         run: |
           set -euxo pipefail
+          export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           ${{ github.workspace }}/ci-tools/helm-add-repos.sh
           for chart in ${{ steps.modules.outputs.CHARTS }}; do

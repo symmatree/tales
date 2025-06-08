@@ -62,10 +62,9 @@ jobs:
             pushd "$dir"
             tk fmt -v -t .
             jb update
-            #  -ignore-missing-schemas
             tk show --dangerous-allow-redirect \
               environments/default  \
-              | kubeconform -cache "${{ runner.temp }}/cache/kubeconform" -strict -summary
+              | ${{ github.workspace }}/ci-tools/kubeconform.sh
             popd
           done
       - name: Check Helm charts
@@ -80,6 +79,6 @@ jobs:
             helm lint .
             # --validate wants connection to the server
             helm template --dry-run=client . \
-              | kubeconform -cache "${{ runner.temp }}/cache/kubeconform" -strict -summary
+              | ${{ github.workspace }}/ci-tools/kubeconform.sh
             popd
           done

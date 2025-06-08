@@ -42,7 +42,6 @@ least a piece of complexity and a possibile point for a subtle breakdown.)
 And for the key services, it's nice to be able to route and aggregate their
 notifications through the same channel as everyone else.
 
-So, this namespace provides a shared apprise-api service 
-
-The UI also provides a way to build and test configurations before embedding them
-in sidecars for robust delivery.
+So, this namespace provides a shared apprise-api service, both for the common
+path and as a way to proof out config before pushing it to the key services
+through a secret.

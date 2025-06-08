@@ -17,9 +17,9 @@ jobs:
           pushd /usr/local/bin
           $GITHUB_WORKSPACE/ci-tools/eget.sh
           eget yannh/kubeconform
-          eget helm/helm
           eget grafana/tanka
           eget jsonnet-bundler/jsonnet-bundler
+          eget https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
           popd
       - name: Find modules
         id: modules

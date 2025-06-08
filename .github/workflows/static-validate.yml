@@ -1,0 +1,76 @@
+name: Static Validation
+
+on:
+  push:
+    branches: [$default-branch]
+  pull_request:
+    branches: [$default-branch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          set -euxo pipefail
+          pushd /usr/local/bin
+          $GITHUB_WORKSPACE/ci-tools/eget.sh
+          eget yannh/kubeconform
+          eget helm/helm
+          eget grafana/tanka
+          eget jsonnet-bundler/jsonnet-bundler
+          popd
+      - name: Find modules
+        id: modules
+        run: |
+          set -euxo pipefail
+          charts=$(find "${{ github.workspace }}" -name Chart.yaml -exec dirname {} \;)
+          echo "CHARTS=${charts}" | tee -a "$GITHUB_OUTPUT"
+          tanka=$(find "${{ github.workspace }}" -name jsonnetfile.json -exec dirname {} \;)
+          echo "TANKA=${tanka}" | tee -a "$GITHUB_OUTPUT"
+          chartArr=(${charts})
+          for c in "${!chartArr[@]}"; do
+              chartArr[c]="${chartArr[c]}/charts"
+          done
+          tankaArr=(${tanka})
+          for c in "${!tankaArr[@]}"; do
+              tankaArr[c]="${tankaArr[c]}/vendor"
+          done
+          echo "CACHE_DIRS=${chartArr[*]}${tankaArr[*]}" | tee -a "$GITHUB_OUTPUT"
+      - name: Kubeconform schema cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}/cache/kubeconform
+          key: ${{ runner.os }}-kubeconform
+      - name: Deps cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.modules.outputs.CACHE_DIRS }}
+          key: ${{ runner.os }}-deps
+      - name: Check Tanka
+        run: |
+          set -euxo pipefail
+          for dir in ${{ steps.modules.outputs.TANKA }}; do
+            pushd "${{ github.workspace }}/$dir"
+            jb update
+            tk fmt -v -t
+            tk export "${{ runner.temp }}/${dir}" environments/default
+            #  -ignore-missing-schemas
+            kubeconform -cache "${{ runner.temp }}/cache/kubeconform" -strict -summary \
+              "${{ runner.temp }}/${dir}"
+            popd
+          done
+      - name: Check Helm charts
+        run: |
+          set -euxo pipefail
+          for chart in ${{ steps.modules.outputs.CHARTS }}; do
+            pushd "$chart"
+            helm dep build
+            helm lint .
+            # --validate wants connection to the server
+            helm template --dry-run=client . \
+              | kubeconform -cache "${{ runner.temp }}/cache/kubeconform" -strict -summary
+            popd
+          done

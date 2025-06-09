@@ -56,7 +56,7 @@ local apprise = {
           probe.withInitialDelaySeconds(10)
           + probe.withPeriodSeconds(10)
           + probe.httpGet.withPath('/status')
-          + probe.httpGet.withPort(config.port)
+          + probe.httpGet.withPort(config.port.containerPort)
           + probe.httpGet.withScheme('HTTP')
           + probe.withSuccessThreshold(1);
         local livenessProbe = kContainer.livenessProbe;

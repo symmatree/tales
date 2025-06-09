@@ -18,7 +18,7 @@ local apprise = {
     // Ref https://github.com/caronc/apprise-api#environment-variables
     envSecret: 'apprise-env',
     htpasswdSecret: 'apprise-admin',
-    port: kPort.new('https', 8000),
+    port: kPort.new('http', 8000),
     ingressAnnotations: {
       'cert-manager.io/cluster-issuer': 'real-cert',
     },

@@ -5,7 +5,8 @@ on:
   # pull_request: {}
   workflow_dispatch: {}
 jobs:
-  build:
+  static-validate:
+    name: Static Validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

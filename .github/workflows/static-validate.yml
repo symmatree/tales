@@ -20,13 +20,23 @@ jobs:
           set -euo pipefail
           mkdir -p ${{ runner.temp }}/bin
           pushd ${{ runner.temp }}/bin
-          $GITHUB_WORKSPACE/ci-tools/eget.sh
-          ./eget --upgrade-only yannh/kubeconform
-          ./eget --upgrade-only grafana/tanka
-          mv tanka tk
-          ./eget --upgrade-only jsonnet-bundler/jsonnet-bundler
-          mv jsonnet-bundler jb
-          ./eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
+          if ! [ -f ./eget ]; then
+            $GITHUB_WORKSPACE/ci-tools/eget.sh
+          fi
+          if ! [ -f ./kubeconform ]; then
+            ./eget --upgrade-only yannh/kubeconform
+          fi
+          if ! [ -f ./tk ]; then
+            ./eget --upgrade-only grafana/tanka
+            mv tanka tk
+          fi
+          if ! [ -f ./jb ]; then
+            ./eget --upgrade-only jsonnet-bundler/jsonnet-bundler
+            mv jsonnet-bundler jb
+          fi
+          if ! [ -f ./helm ]; then
+            ./eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
+          fi
           popd
       - name: Find modules
         id: modules
@@ -42,10 +52,13 @@ jobs:
           for c in "${!tanka[@]}"; do
               tanka[c]="${tanka[c]}/vendor"
           done
-          echo "CACHE_DIRS=${charts[*]} ${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
-          for dir in ${charts[*]} ${tanka[*]}; do
+          echo "CACHE_DIRS<<EOF" | tee -a "$GITHUB_OUTPUT"
+          cache_dirs=("${charts[@]}" "${tanka[@]}")
+          for dir in "${cache_dirs[@]}"; do
+            echo "$dir" | tee -a "$GITHUB_OUTPUT"
             mkdir -p "$dir"
           done
+          echo "EOF" | tee -a "$GITHUB_OUTPUT"
       - name: Kubeconform schema cache
         uses: actions/cache@v4
         with:

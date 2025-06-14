@@ -4,19 +4,19 @@
 
 Features and stuff:
 
-* Jupyter notebook servers in Kubernetes
-* Managed per-user; currently I have a single server but allows a user to have
+- Jupyter notebook servers in Kubernetes
+- Managed per-user; currently I have a single server but allows a user to have
   multiple configurations (images and resource allocations primarily)
-* Log in with Google for identity. Currently authorization is just lists of
+- Log in with Google for identity. Currently authorization is just lists of
   usernames in values.yaml. (Should be a group from Google but that's a whole Thing
   because Google OIDC doesn't provide group membership, and it gets tangled up
   with GAFYD and google enterprise stuff that I don't have.)
-* Use any of the [Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/)
+- Use any of the [Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/)
   images (or an image derived from them). Multiple server configs make it
   easier to resist the all-in-one image (though that's still what I do).
-* Jupyter web UI allows terminal access to bootstrap and troubleshoot the pod as
+- Jupyter web UI allows terminal access to bootstrap and troubleshoot the pod as
   a remote dev machine. (In addition to actually running notebooks of course!)
-* Via terminal, can run a VSCode Tunnel endpoint allowing VSCode `Remote-Tunnel` access.
+- Via terminal, can run a VSCode Tunnel endpoint allowing VSCode `Remote-Tunnel` access.
   This allows Chromebook-based local or remote development with a fully-powered terminal,
   using the chosen identity provider (generally Github), through https://vscode.dev/. The
   tunnel requires in-network (or VPN of some kind) access to notebook.local.symmatree.com
@@ -25,20 +25,20 @@ Features and stuff:
   (e.g. before going on a trip); a few minutes of VPN access suffice to enable it otherwise.
   NOTE that this only gives "vanilla" VSCode; Cursor is not allowed to use the Remote Tunnels
   extension or something like that.
-    * Semi-related - the tunnel method also works from inside a WSL environment on Windows,
-      where ssh-inbound is hard to get working. There is a native WSL VSCode extension but
-      it repeatedly left a corrupt filesystem in the WSL VM, but tunnels work without damage.
-      However this does not work for Cursor since it cannot use the WSL nor the Tunnel extensions.
-* Passwordless SSH login to the per-user machine, interactively I guess, but specifically
+  - Semi-related - the tunnel method also works from inside a WSL environment on Windows,
+    where ssh-inbound is hard to get working. There is a native WSL VSCode extension but
+    it repeatedly left a corrupt filesystem in the WSL VM, but tunnels work without damage.
+    However this does not work for Cursor since it cannot use the WSL nor the Tunnel extensions.
+- Passwordless SSH login to the per-user machine, interactively I guess, but specifically
   to enable VSCode `Remote-SSH` development. Keys managed through 1Password. This allows
   Cursor to connect. (This is pretty key - given the licensing around WSL and Remote Tunnels,
   it's hard to use Cursor for linux-based development without actually running a Linux box
   or a real VM. There may be a different approach but this was a major motivator in the ssh
   setup.)
-* Software installed outside the home dir is transient (stored in the container's anonymous overlay
+- Software installed outside the home dir is transient (stored in the container's anonymous overlay
   filesystem) and will be replaced when the user stops and restarts the server (which deletes the pod).
   This allows testing a new config and then baking it into the Dockerfile and rebuilding.
-* User's home dir is persistent unless explicitly deleted (by deleting the corresponding
+- User's home dir is persistent unless explicitly deleted (by deleting the corresponding
   PersistentVolumeClaim). This allows dotfiles, `authorized_keys`, and ad hoc application configs
   of all kinds to persist independently of server lifetime (which in turn allows frequent
   rebuilds and updates of the underlying image).
@@ -80,15 +80,15 @@ op item get blahblah --reveal --fields private\ key --format json
   "id": "private_key",
   "type": "SSHKEY",
   "label": "private key",
-  "value": "-----BEGIN PRIVATE KEY-----\r\n...snip...=\r\n-----END PRIVATE KEY-----\r\n",
+  "value": "<private-key-format>\r\n",
   "reference": "op://tales-secrets/jupyterhub-ssh-key/private key",
   "ssh_formats": {
     "openssh": {
       "reference": "op://tales-secrets/jupyterhub-ssh-key/private key?ssh-format=openssh",
-      "value": "-----BEGIN OPENSSH PRIVATE KEY-----\n...snip...\n...snip...\n-----END OPENSSH PRIVATE KEY-----\n"
+      "value": "<openssh-private-key format>\n"
     }
   }
-}                   
+}
 ```
 
 Connect with a config
@@ -99,8 +99,6 @@ eval `ssh-agent`
 ssh-add ~/.ssh/id_jupyterhub
 ssh jovyan@notebook-ssh.local.symmatree.com
 ```
-
-
 
 ```
 eval `ssh-agent`
@@ -136,7 +134,7 @@ whatever repos you actually want to work on; this is just one-time plumbing for 
 jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ mkdir -p ~/.ssh
 jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ chmod 0700 ~/.ssh
 jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ cp /mnt/keys/authorized_keys ~/.ssh
-jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ chmod 0600 ~/.ssh/authorized_keys 
+jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ chmod 0600 ~/.ssh/authorized_keys
 jovyan@jupyter-seth-porter-gmail-com---39d0c2f0:~$ sudo systemctl start ssh
 ```
 
@@ -147,11 +145,12 @@ TODO: Automate authorized_keys and permissions stuff. https://github.com/symmatr
 - `eval $(op account add --address my.1password.com --email symmetry@pobox.com --signin)`
 - `./semipro/dotfiles/install.sh`. Will need your password for `chsh`[^chsh]
 
-[^chsh]: The chsh only partially works - the notebook login session already
-  exists, so you'll need to run `zsh` manually (or `tmux attach` and
-  choose a shell inside tmux) in Jupyter. However ssh should be producing
-  a new login so it may take effect there (but would be lost at server
-  restart).
+[^chsh]:
+    The chsh only partially works - the notebook login session already
+    exists, so you'll need to run `zsh` manually (or `tmux attach` and
+    choose a shell inside tmux) in Jupyter. However ssh should be producing
+    a new login so it may take effect there (but would be lost at server
+    restart).
 
 ## Per-server-startup
 
@@ -173,6 +172,6 @@ TODO: https://github.com/symmatree/tales/issues/6 - fix the startup bit
 
 ## Wishlist
 
-* https://github.com/symmatree/tales/issues/7 - multiple users for ssh
-* https://github.com/symmatree/tales/issues/8 - multiple servers per user
-* https://github.com/symmatree/tales/issues/9 - factor docker stuff into another repo
+- https://github.com/symmatree/tales/issues/7 - multiple users for ssh
+- https://github.com/symmatree/tales/issues/8 - multiple servers per user
+- https://github.com/symmatree/tales/issues/9 - factor docker stuff into another repo

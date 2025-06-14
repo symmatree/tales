@@ -1,9 +1,5 @@
 #! /usr/bin/env bash
 set -euo pipefail
-OUT_DIR=`pwd`
-pushd "$(dirname "$0")"
-SCRIPT_DIR=`pwd`
-
 # TODO: Refactor somewhere more general.
 
 VAULT=tales-secrets

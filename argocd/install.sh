@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euxo pipefail
-OUT_DIR=`pwd`
+OUT_DIR="$(pwd)"
 pushd "$(dirname "$0")"
-SAVE_DIR=`pwd`
+SAVE_DIR="$(pwd)"
 
 helm dep update
 popd
@@ -19,5 +19,5 @@ fi
 helm template argocd ${SAVE_DIR} --namespace argocd > ${SAVE_DIR}/manifest.yaml
 # Close to what argo itself will do.
 kubens argocd
-kubectl apply -f ${SAVE_DIR}/manifest.yaml -n argocd --server-side 
+kubectl apply -f ${SAVE_DIR}/manifest.yaml -n argocd --server-side
 rm ${SAVE_DIR}/manifest.yaml

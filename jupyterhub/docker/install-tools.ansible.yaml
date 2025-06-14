@@ -8,7 +8,7 @@
       register: dpkg_arch
       changed_when: false
     - set_fact:
-        dpkg_arch: '{{ dpkg_arch.stdout }}'
+        dpkg_arch: "{{ dpkg_arch.stdout }}"
     - name: Install initial packages
       apt:
         name:
@@ -92,6 +92,7 @@
           # vscode wants libasound2 but that is a virtual package.
           - libasound2t64
           - procps
+          - shellcheck
           - stow
           - sudo
           - tmux

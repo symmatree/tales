@@ -72,7 +72,7 @@ straight from their github repo: `./prometheus-operator-crd/install.sh` (which j
 
 ## Install Cilium
 
-Now we can install cilium: 
+Now we can install cilium:
 
 ```
 ./prometheus-operator-crd/install.sh
@@ -98,7 +98,7 @@ in fact boot correctly off the Virtual Hard Drive and come back up healthy.
 
 ### Worker
 
-The worker is simpler because it does not have to deal with the two-step dance to install Cilium. 
+The worker is simpler because it does not have to deal with the two-step dance to install Cilium.
 
 ```
 talosctl apply-config --insecure --nodes 10.0.1.100 --file worker.yaml
@@ -230,7 +230,7 @@ Okay what do these columns mean? [kernel docs](https://docs.kernel.org/admin-gui
 
 * `memory.low`
 
-> Best-effort memory protection. If the memory usage of a cgroup is within its effective low boundary, the cgroup’s memory won’t be reclaimed unless there is no reclaimable memory available in unprotected cgroups. 
+> Best-effort memory protection. If the memory usage of a cgroup is within its effective low boundary, the cgroup’s memory won’t be reclaimed unless there is no reclaimable memory available in unprotected cgroups.
 
 * `memory.high`
 

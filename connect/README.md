@@ -8,4 +8,4 @@ Create a new Connect Server in your 1password vault. The token can be readily re
 save the `1password-credentials.json` file into a new file-type Item named `tales-secrets-1password-credentials.json`
 
 `./install.sh` uses `op` CLI to allocate a token and store it in a secret, and fetches the credentials blob that we saved when
-we created this thing. 
+we created this thing.

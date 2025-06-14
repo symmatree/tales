@@ -28,5 +28,5 @@ kubectl create namespace cilium \
 helm template cilium ${SAVE_DIR} --namespace cilium > ${SAVE_DIR}/manifest.yaml
 # Close to what argo itself will do.
 kubens cilium
-kubectl apply -f ${SAVE_DIR}/manifest.yaml --server-side 
+kubectl apply -f ${SAVE_DIR}/manifest.yaml --server-side
 rm ${SAVE_DIR}/manifest.yaml

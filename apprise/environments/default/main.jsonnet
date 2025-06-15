@@ -62,7 +62,7 @@ local apprise = {
         local livenessProbe = kContainer.livenessProbe;
         local readinessProbe = kContainer.readinessProbe;
         kContainer.new(config.name, std.format('%s:%s', [config.image, config.version]))
-        + kContainer.withPorts([config.port])
+        + kContainer.withPortsMixin([config.port])
         + kContainer.withEnvMap({
           // The nginx config explicitly listens and forwards ipv6.
           // IPV4_ONLY: 'yes',
@@ -89,7 +89,7 @@ local apprise = {
         '/etc/nginx/.htpasswd',
         kVolumeMount.withSubPath('.htpasswd') + kVolumeMount.withReadOnly(true)
       ),
-    service: k_util.serviceFor(self.deployment, nameFormat='%(container)s'),
+    service: k_util.serviceFor(self.deployment),
     local kIngress = k.networking.v1.ingress,
     local kIngressRule = k.networking.v1.ingressRule,
     local kHttpIngressPath = k.networking.v1.httpIngressPath,
@@ -104,7 +104,7 @@ local apprise = {
           kHttpIngressPath.withPath('/')
           + kHttpIngressPath.withPathType('Prefix')
           + kHttpIngressPath.backend.service.withName(self.service.metadata.name)
-          + kHttpIngressPath.backend.service.port.withName(config.port.name)
+          + kHttpIngressPath.backend.service.port.withName(appriseObj.service.spec.ports[0].name)
         ),
       ])
       + kIngress.spec.withTlsMixin([

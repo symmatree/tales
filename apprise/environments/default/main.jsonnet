@@ -64,7 +64,8 @@ local apprise = {
         kContainer.new(config.name, std.format('%s:%s', [config.image, config.version]))
         + kContainer.withPorts([config.port])
         + kContainer.withEnvMap({
-          IPV4_ONLY: 'yes',
+          // The nginx config explicitly listens and forwards ipv6.
+          // IPV4_ONLY: 'yes',
           APPRISE_STATELESS_STORAGE: 'yes',
           APPRISE_ATTACH_SIZE: '500',
           APPRISE_STATEFUL_MODE: 'simple',

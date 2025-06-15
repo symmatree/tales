@@ -19,9 +19,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: apprise
   syncPolicy:
-    # automated:
-    #   prune: true
-    #   selfHeal: true
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true

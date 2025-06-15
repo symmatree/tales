@@ -25,4 +25,3 @@ kubectl directpv label drives use=general \
 kubectl directpv label drives use=minio \
   --ids d03029e1-9506-48d2-a1e2-141f4c8a54d7
 ```
-

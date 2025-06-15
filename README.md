@@ -98,7 +98,7 @@ Common settings:
 * Video card: `vmvga` but I have no examples where it was observably different from `vga`
 * Machine type: `Q35` which I think is a kind of Lexus. I have no context on this one but a newer abstraction seems useful.
 * Storage: 100 GB disk, without space reclamation, attached as Virtual Disk 1 to be the OS install disk. VirtIO Scsi Controller selected.
-* Network: "Default VM Network" 
+* Network: "Default VM Network"
 * ISO for bootup: SEE [talos/README.md](talos/README.md)
 * Autostart: Last State
 * Boot from: For first boot, DVD/CDROM. You will have to change this to Virtual Hard Drive after Talos is installed. (Once installed to the OS, Talos will refuse to boot from the ISO, to avoid killing a live install.)
@@ -115,7 +115,7 @@ it was usable, but higher is better.
 
 ### Shutting Down / Rebooting
 
-Via the Synology UI: The host and VM are supposed to send / catch ACPI events and shut down somewhat gracefully if you click Shutdown in the 
+Via the Synology UI: The host and VM are supposed to send / catch ACPI events and shut down somewhat gracefully if you click Shutdown in the
 Synology UI. Better once we install the guest agent as a daemonset. This is the only way to shut down if you have lost credentials at the talos level.
 
 Via Talos: for example `talosctl reboot -n 10.0.1.100` for the worker. Should guarantee an orderly shutdown one hopes. However this does not ACTUALLY
@@ -149,7 +149,7 @@ to put it first in order, but this is already plenty.)
 
 If you deleted the config and don't have the keys to connect to talos, or the networking is broken in a fundamental way or something, you can
 instead trigger a reset interactively at the GRUB menu - you have to trigger a reboot using the VM controls in Synology, then "catch" the
-menu and startup and choose to reset. 
+menu and startup and choose to reset.
 
 Note: Once the reset is complete, the drives will be wiped and you'll need to change back to boot once from CD-ROM ISO image again.
 

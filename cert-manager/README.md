@@ -52,7 +52,7 @@ kubectl get secret tales-ca-tls -n cert-manager \
 ## Trust the cert in a container
 
 Often there's a way to provide a CA cert in e.g. values.yaml,
-which can be coupled with trust-manager to inject the cert as 
+which can be coupled with trust-manager to inject the cert as
 a ConfigMap (preferable) or a secret.
 
 But if you need to trust it at the OS level rather than the application,

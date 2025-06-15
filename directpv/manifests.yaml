@@ -1288,4 +1288,3 @@ spec:
             type: DirectoryOrCreate
           name: socket-dir
 ---
-

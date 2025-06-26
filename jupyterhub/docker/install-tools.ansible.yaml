@@ -136,6 +136,7 @@
           - helm
           - kubectx
           - talosctl
+          - mimirtool
           # - minio/stable/mc
           - cilium-cli
         state: present

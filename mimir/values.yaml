@@ -17,6 +17,27 @@ mimir-distributed:
   # We have minio at home.
   minio:
     enabled: false
+  nginx:
+    # https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-to-unified-proxy-deployment/
+    enabled: false
+  gateway:
+    enabledNonEnterprise: true
+    service:
+      # Maintain compat with existing in-cluster references.
+      nameOverride: mimir-nginx
+    ingress:
+      enabled: true
+      ingressClassName: cilium
+      hosts:
+        - host: mimir.local.symmatree.com
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: mimir-gateway-tls
+          hosts:
+            - mimir.local.symmatree.com
+
   # Make everyone Recreate to reduce pod overlaps that spoil the rings.
   alertmanager:
     strategy:

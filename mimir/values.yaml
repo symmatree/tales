@@ -28,6 +28,8 @@ mimir-distributed:
     ingress:
       enabled: true
       ingressClassName: cilium
+      annotations:
+        cert-manager.io/cluster-issuer: real-cert
       hosts:
         - host: mimir.local.symmatree.com
           paths:

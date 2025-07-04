@@ -5,10 +5,8 @@ local mochi = {
   local kDeployment = k.apps.v1.deployment,
   local kContainer = k.core.v1.container,
   local kPort = k.core.v1.containerPort,
-  local kService = k.core.v1.service,
   local kConfigMap = k.core.v1.configMap,
   local kVolumeMount = k.core.v1.volumeMount,
-  local kVolume = k.core.v1.volume,
   local kPersistentVolumeClaim = k.core.v1.persistentVolumeClaim,
 
   local defaults = {

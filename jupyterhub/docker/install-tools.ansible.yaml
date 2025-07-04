@@ -136,6 +136,7 @@
           - helm
           - kubectx
           - talosctl
+          - tanka
           - mimirtool
           # - minio/stable/mc
           - cilium-cli
@@ -157,3 +158,8 @@
           apt:
             deb: https://go.microsoft.com/fwlink/?LinkID=760868
             state: present
+    - name: Install pip modules
+      pip:
+        name:
+          - pre-commit
+        state: present

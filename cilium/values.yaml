@@ -130,7 +130,9 @@ cilium:
       # grafana can import dashboards based on the label and value
       # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
       dashboards:
-        enabled: true
+        enabled: false
+        annotations:
+          k8s-sidecar-target-directory: /tmp/Cilium
     # -- TLS configuration for Hubble
     tls:
       # -- Enable mutual TLS for listenAddress. Setting this value to false is
@@ -241,7 +243,9 @@ cilium:
       trustCRDsExist: true
       enabled: true
   dashboards:
-    enabled: true
+    enabled: false
+    annotations:
+      k8s-sidecar-target-directory: /tmp/Cilium
   # Configure Cilium Envoy options.
   envoy:
     enabled: true
@@ -271,7 +275,9 @@ cilium:
         enabled: true
         trustCRDsExist: true
     dashboards:
-      enabled: true
+      enabled: false
+      annotations:
+        k8s-sidecar-target-directory: /tmp/Cilium
   # -- Configure cgroup related configuration
   cgroup:
     # Talos provides this mount.

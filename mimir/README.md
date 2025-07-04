@@ -1,5 +1,12 @@
 # tales/mimir
 
+## Status
+
+- Updated for https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-to-unified-proxy-deployment/
+- Alert Manager serving outside the cluster over https at https://mimir.local.symmatree.com/alertmanager/
+- TODO: AlertManager-to-Apprise config
+- We have a few alerts for Loki, Mimir, ArgoCD coming from their own Helm.
+
 ## Debugging
 
 A bunch of services serve UIs on 8080. Any of

@@ -20,7 +20,7 @@ local mixin = {
         + kConfigMap.metadata.withNamespace(config.namespace)
         + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
         + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })
-        + kConfigMap.withData({ name: dashBlobs[name] }),
+        + kConfigMap.withData({ [name]: std.manifestJson(dashBlobs[name]) }),
       std.objectFields(dashBlobs)
     ),
 

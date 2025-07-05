@@ -2,12 +2,38 @@ version: 2
 updates:
   - package-ecosystem: "docker"
     directories:
-      - "*"
+      - /alloy
+      - /argocd
+      - /cert-manager
+      - /cilium
+      - /connect
+      - /external-dns
+      - /kubernetes-dashboard
+      - /minio-operator
+      - /static-certs
+      - /tales-tenant
+      - /grafana
+      - /jupyterhub
+      - /loki
+      - /mimir
     schedule:
       interval: "daily"
   - package-ecosystem: "helm"
     directories:
-      - "*"
+      - /alloy
+      - /argocd
+      - /cert-manager
+      - /cilium
+      - /connect
+      - /external-dns
+      - /kubernetes-dashboard
+      - /minio-operator
+      - /static-certs
+      - /tales-tenant
+      - /grafana
+      - /jupyterhub
+      - /loki
+      - /mimir
     schedule:
       interval: "daily"
   - package-ecosystem: "github-actions"

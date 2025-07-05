@@ -17,7 +17,7 @@ updates:
       - /loki
       - /mimir
     schedule:
-      interval: "daily"
+      interval: "weekly"
   - package-ecosystem: "helm"
     directories:
       - /alloy
@@ -34,9 +34,12 @@ updates:
       - /jupyterhub
       - /loki
       - /mimir
+    ignore:
+      - dependency-name: "argocd"
+        versions: ["2.0.0"]
     schedule:
-      interval: "daily"
+      interval: "weekly"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"

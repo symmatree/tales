@@ -6,5 +6,5 @@ version: 0.1.1
 appVersion: "7.1"
 dependencies:
   - name: operator
-    version: ~7.1
+    version: 7.1.1
     repository: https://operator.min.io

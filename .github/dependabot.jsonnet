@@ -1,3 +1,4 @@
+#! jsonnet --string
 local config = {
   helmDirs: [
     '/alloy',

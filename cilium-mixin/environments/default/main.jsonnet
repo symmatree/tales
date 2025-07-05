@@ -16,7 +16,8 @@ local mixin = {
     local dashBlobs = ciliumMixin.grafanaDashboards,
     dashboards: std.map(
       function(name)
-        kConfigMap.new(name)
+        local k8sName = std.strReplace(std.asciiLower(name), ' ', '-');
+        kConfigMap.new(k8sName)
         + kConfigMap.metadata.withNamespace(config.namespace)
         + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
         + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })

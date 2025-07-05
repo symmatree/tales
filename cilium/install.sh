@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euxo pipefail
-OUT_DIR=`pwd`
 pushd "$(dirname "$0")"
-SAVE_DIR=`pwd`
+SAVE_DIR=$(pwd)
 
 helm dep update
 
@@ -20,13 +19,13 @@ sleep 60
 # `enforce` is what it actually allows you to do, but `warn` will log a warning that looks awfully fatal (at least to me) and send you off on
 # a wild goose chase, so we disable both.
 
-kubectl create namespace cilium \
-  && kubectl label namespace cilium pod-security.kubernetes.io/enforce=privileged \
-  && kubectl label namespace cilium pod-security.kubernetes.io/warn=privileged
+kubectl create namespace cilium &&
+	kubectl label namespace cilium pod-security.kubernetes.io/enforce=privileged &&
+	kubectl label namespace cilium pod-security.kubernetes.io/warn=privileged
 
 # helm upgrade --install --namespace cilium cilium "${SAVE_DIR}"
-helm template cilium ${SAVE_DIR} --namespace cilium > ${SAVE_DIR}/manifest.yaml
+helm template cilium "${SAVE_DIR}" --namespace cilium >"${SAVE_DIR}/manifest.yaml"
 # Close to what argo itself will do.
 kubens cilium
-kubectl apply -f ${SAVE_DIR}/manifest.yaml --server-side
-rm ${SAVE_DIR}/manifest.yaml
+kubectl apply -f "${SAVE_DIR}/manifest.yaml" --server-side
+rm "${SAVE_DIR}/manifest.yaml"

@@ -14,6 +14,7 @@ helm \
 	-a cert-manager.io/v1/CertificateRequest \
 	-a cert-manager.io/v1/ClusterIssuer \
 	-a cert-manager.io/v1/Issuer \
+	-a collectors.grafana.com/v1alpha1/Alloy \
 	-a cilium.io/v2 \
 	-a cilium.io/v2/CiliumClusterwideEnvoyConfig \
 	-a cilium.io/v2/CiliumClusterwideNetworkPolicy \

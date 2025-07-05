@@ -104,3 +104,5 @@ jobs:
               | ${{ github.workspace }}/ci-tools/kubeconform.sh
             popd
           done
+      - uses: pre-commit-ci/lite-action@v1.1.0
+        if: always()

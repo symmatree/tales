@@ -4,6 +4,6 @@ set -euo pipefail
 
 VAULT=tales-secrets
 ITEM=apprise-admin
-htpasswd=$(op item get --vault $VAULT "$ITEM" --fields password | \
-  htpasswd -b -n -i "$(op item get --vault $VAULT "$ITEM" --fields username)")
+htpasswd=$(op item get --vault $VAULT "$ITEM" --fields password |
+	htpasswd -b -n -i "$(op item get --vault $VAULT "$ITEM" --fields username)")
 op item edit --vault $VAULT "$ITEM" "\\.htpasswd=$htpasswd"

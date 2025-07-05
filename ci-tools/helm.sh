@@ -2,59 +2,59 @@
 set -euo pipefail
 # From Helm Capabilities.APIVersions.
 helm \
--a acme.cert-manager.io/v1 \
--a acme.cert-manager.io/v1/Challenge \
--a acme.cert-manager.io/v1/Order \
--a argoproj.io/v1alpha1 \
--a argoproj.io/v1alpha1/Application \
--a argoproj.io/v1alpha1/ApplicationSet \
--a argoproj.io/v1alpha1/AppProject \
--a cert-manager.io/v1 \
--a cert-manager.io/v1/Certificate \
--a cert-manager.io/v1/CertificateRequest \
--a cert-manager.io/v1/ClusterIssuer \
--a cert-manager.io/v1/Issuer \
--a cilium.io/v2 \
--a cilium.io/v2/CiliumClusterwideEnvoyConfig \
--a cilium.io/v2/CiliumClusterwideNetworkPolicy \
--a cilium.io/v2/CiliumEndpoint \
--a cilium.io/v2/CiliumEnvoyConfig \
--a cilium.io/v2/CiliumExternalWorkload \
--a cilium.io/v2/CiliumIdentity \
--a cilium.io/v2/CiliumNetworkPolicy \
--a cilium.io/v2/CiliumNode \
--a cilium.io/v2/CiliumNodeConfig \
--a cilium.io/v2alpha1 \
--a cilium.io/v2alpha1/CiliumCIDRGroup \
--a cilium.io/v2alpha1/CiliumL2AnnouncementPolicy \
--a cilium.io/v2alpha1/CiliumLoadBalancerIPPool \
--a cilium.io/v2alpha1/CiliumNodeConfig \
--a cilium.io/v2alpha1/CiliumPodIPPool \
--a directpv.min.io/v1beta1 \
--a directpv.min.io/v1beta1/DirectPVDrive \
--a directpv.min.io/v1beta1/DirectPVInitRequest \
--a directpv.min.io/v1beta1/DirectPVNode \
--a directpv.min.io/v1beta1/DirectPVVolume \
--a externaldns.k8s.io/v1alpha1 \
--a externaldns.k8s.io/v1alpha1/DNSEndpoint \
--a minio.min.io/v2 \
--a minio.min.io/v2/Tenant \
--a monitoring.coreos.com/v1 \
--a monitoring.coreos.com/v1/Alertmanager \
--a monitoring.coreos.com/v1/PodMonitor \
--a monitoring.coreos.com/v1/Probe \
--a monitoring.coreos.com/v1/Prometheus \
--a monitoring.coreos.com/v1/PrometheusRule \
--a monitoring.coreos.com/v1/Scale \
--a monitoring.coreos.com/v1/ServiceMonitor \
--a monitoring.coreos.com/v1/ThanosRuler \
--a monitoring.coreos.com/v1alpha1 \
--a monitoring.coreos.com/v1alpha1/AlertmanagerConfig \
--a monitoring.coreos.com/v1alpha1/PrometheusAgent \
--a monitoring.coreos.com/v1alpha1/Scale \
--a monitoring.coreos.com/v1alpha1/ScrapeConfig \
--a onepassword.com/v1 \
--a onepassword.com/v1/OnePasswordItem \
--a trust.cert-manager.io/v1alpha1 \
--a trust.cert-manager.io/v1alpha1/Bundle \
-"$@"
+	-a acme.cert-manager.io/v1 \
+	-a acme.cert-manager.io/v1/Challenge \
+	-a acme.cert-manager.io/v1/Order \
+	-a argoproj.io/v1alpha1 \
+	-a argoproj.io/v1alpha1/Application \
+	-a argoproj.io/v1alpha1/ApplicationSet \
+	-a argoproj.io/v1alpha1/AppProject \
+	-a cert-manager.io/v1 \
+	-a cert-manager.io/v1/Certificate \
+	-a cert-manager.io/v1/CertificateRequest \
+	-a cert-manager.io/v1/ClusterIssuer \
+	-a cert-manager.io/v1/Issuer \
+	-a cilium.io/v2 \
+	-a cilium.io/v2/CiliumClusterwideEnvoyConfig \
+	-a cilium.io/v2/CiliumClusterwideNetworkPolicy \
+	-a cilium.io/v2/CiliumEndpoint \
+	-a cilium.io/v2/CiliumEnvoyConfig \
+	-a cilium.io/v2/CiliumExternalWorkload \
+	-a cilium.io/v2/CiliumIdentity \
+	-a cilium.io/v2/CiliumNetworkPolicy \
+	-a cilium.io/v2/CiliumNode \
+	-a cilium.io/v2/CiliumNodeConfig \
+	-a cilium.io/v2alpha1 \
+	-a cilium.io/v2alpha1/CiliumCIDRGroup \
+	-a cilium.io/v2alpha1/CiliumL2AnnouncementPolicy \
+	-a cilium.io/v2alpha1/CiliumLoadBalancerIPPool \
+	-a cilium.io/v2alpha1/CiliumNodeConfig \
+	-a cilium.io/v2alpha1/CiliumPodIPPool \
+	-a directpv.min.io/v1beta1 \
+	-a directpv.min.io/v1beta1/DirectPVDrive \
+	-a directpv.min.io/v1beta1/DirectPVInitRequest \
+	-a directpv.min.io/v1beta1/DirectPVNode \
+	-a directpv.min.io/v1beta1/DirectPVVolume \
+	-a externaldns.k8s.io/v1alpha1 \
+	-a externaldns.k8s.io/v1alpha1/DNSEndpoint \
+	-a minio.min.io/v2 \
+	-a minio.min.io/v2/Tenant \
+	-a monitoring.coreos.com/v1 \
+	-a monitoring.coreos.com/v1/Alertmanager \
+	-a monitoring.coreos.com/v1/PodMonitor \
+	-a monitoring.coreos.com/v1/Probe \
+	-a monitoring.coreos.com/v1/Prometheus \
+	-a monitoring.coreos.com/v1/PrometheusRule \
+	-a monitoring.coreos.com/v1/Scale \
+	-a monitoring.coreos.com/v1/ServiceMonitor \
+	-a monitoring.coreos.com/v1/ThanosRuler \
+	-a monitoring.coreos.com/v1alpha1 \
+	-a monitoring.coreos.com/v1alpha1/AlertmanagerConfig \
+	-a monitoring.coreos.com/v1alpha1/PrometheusAgent \
+	-a monitoring.coreos.com/v1alpha1/Scale \
+	-a monitoring.coreos.com/v1alpha1/ScrapeConfig \
+	-a onepassword.com/v1 \
+	-a onepassword.com/v1/OnePasswordItem \
+	-a trust.cert-manager.io/v1alpha1 \
+	-a trust.cert-manager.io/v1alpha1/Bundle \
+	"$@"

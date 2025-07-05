@@ -39,12 +39,6 @@ repos:
           - --allow-multiple-documents
         exclude: ".*\\.helm\\.yaml"
 
-  # This requires docker; local install is easier.
-  # - repo: https://github.com/koalaman/shellcheck-precommit
-  #   rev: v0.10.0
-  #   hooks:
-  #     - id: shellcheck
-
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.24.2
     hooks:
@@ -55,14 +49,27 @@ repos:
     hooks:
       - id: actionlint
 
-  # Disabled because it does not currently pass, we will get there.
-  # - repo: local
-  #   hooks:
-  #     # Requires apt-get install shellcheck
-  #     - id: shellcheck
-  #       name: shellcheck
-  #       description: Test shell scripts with shellcheck
-  #       entry: shellcheck
-  #       language: python
-  #       types: [shell]
-  #       require_serial: true # shellcheck can detect sourcing this way
+  - repo: https://github.com/grafana/tanka
+    rev: v0.33.0
+    hooks:
+      - id: tanka-format
+
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.11.0-1
+    hooks:
+      - id: shfmt # prebuilt upstream executable
+
+  # Local because the alternative,
+  # https://github.com/koalaman/shellcheck-precommit requires docker.
+  - repo: local
+    hooks:
+      # Requires apt-get install shellcheck
+      - id: shellcheck
+        name: shellcheck
+        # Vendored script.
+        exclude: ^ci-tools/eget.sh
+        description: Test shell scripts with shellcheck
+        entry: shellcheck
+        language: python
+        types: [shell]
+        require_serial: true # shellcheck can detect sourcing this way

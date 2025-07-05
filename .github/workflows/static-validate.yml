@@ -26,10 +26,19 @@ jobs:
           key: ${{ runner.os }}-tools-${{ hashFiles('ci-tools/install-tools.sh') }}
           restore-keys: |
             ${{ runner.os }}-tools-
+      - name: Precommit
+        run: |
+          set -euo pipefail
+          # Install pre-commit if not already installed.
+          if ! command -v pre-commit &>/dev/null; then
+            python3 -m pip install --user pre-commit
+          fi
+          # Run pre-commit hooks.
+          pre-commit run --all-files --show-diff-on-failure
       - name: Install tools
         run: |
           set -euo pipefail
-          export TOOLDIR=${{ runner.temp }}/bin
+          export TOOLDIR="${{ runner.temp }}/bin"
           export GET_EGET="$GITHUB_WORKSPACE/ci-tools/eget.sh"
           "$GITHUB_WORKSPACE/ci-tools/install-tools.sh"
       - name: Find modules
@@ -79,7 +88,6 @@ jobs:
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           for dir in ${{ steps.modules.outputs.TANKA }}; do
             pushd "$dir"
-            tk fmt -v -t .
             jb update
             tk show --dangerous-allow-redirect \
               environments/default  \

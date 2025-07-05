@@ -34,9 +34,6 @@ updates:
       - /jupyterhub
       - /loki
       - /mimir
-    ignore:
-      - dependency-name: "argocd"
-        versions: ["2.0.0"]
     schedule:
       interval: "weekly"
   - package-ecosystem: "github-actions"

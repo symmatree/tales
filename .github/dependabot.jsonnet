@@ -17,7 +17,7 @@ local config = {
   ],
 };
 
-[{
+std.manifestYamlDoc(quote_keys=false, value={
   version: 2,
   updates: [
     {
@@ -37,4 +37,4 @@ local config = {
       },
     },
   ],
-}]
+})

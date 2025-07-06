@@ -7,7 +7,7 @@ jobs:
     name: Static Validation
     runs-on: ubuntu-latest
     steps:
-      - name: Wireguar
+      - name: Wireguard
         run: |
           set -euo pipefail
           if [ -z "${{ secrets.WIREGUARD_CONF }}" ]; then
@@ -15,14 +15,13 @@ jobs:
             exit 1
           fi
           echo "Setting up Wireguard..."
-          time sudo apt-get -qq install -y wireguard-tools
+          time sudo apt-get -qq -y -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0" \
+            install wireguard-tools
           echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"
           chmod 0600 "$HOME/wg0.conf"
+          echo "Connecting..."
           time sudo wg-quick up "$HOME/wg0.conf"
           echo "Connected"
-      - name: curl
-        run: |
-          curl https://borgmon.local.symmatree.com
       - name: DateAndTimeStamps
         id: stamps
         run: |
@@ -37,7 +36,8 @@ jobs:
         with:
           path: |
             ${{ runner.temp }}/bin
-          key: ${{ runner.os }}-tools-${{ hashFiles('ci-tools/install-tools.sh') }}
+          # Use date so we refetch once a day no matter what.
+          key: ${{ runner.os }}-tools-${{ env.DATESTAMP }}-${{ hashFiles('ci-tools/install-tools.sh') }}
           restore-keys: |
             ${{ runner.os }}-tools-
       - uses: actions/setup-python@v5.6.0
@@ -83,6 +83,7 @@ jobs:
             ${{ runner.os }}-kubeconform-${{ steps.stamps.outputs.DATESTAMP }}
             ${{ runner.os }}-kubeconform-
       - name: Deps cache
+        id: deps-cache
         uses: actions/cache@v4
         with:
           path: ${{ steps.modules.outputs.CACHE_DIRS }}
@@ -91,34 +92,41 @@ jobs:
             ${{ runner.os }}-deps-
       - name: Check Tanka
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           for dir in ${{ steps.modules.outputs.TANKA }}; do
-            echo "::group::$dir"
+            echo "$dir"
             pushd "$dir"
-            jb update
+            if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
+              jb update
+            fi
             tk show --dangerous-allow-redirect \
               environments/default  \
               | ${{ github.workspace }}/ci-tools/kubeconform.sh
             popd > /dev/null
-            echo "::endgroup::"
+            echo "end $dir"
           done
       - name: Check Helm charts
         run: |
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
-          ${{ github.workspace }}/ci-tools/helm-add-repos.sh
+          if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
+            ${{ github.workspace }}/ci-tools/helm-add-repos.sh
+            helm repo update
+          fi
           for chart in ${{ steps.modules.outputs.CHARTS }}; do
-            echo "::group::$chart"
+            echo "$chart"
             pushd "$chart"
-            helm dep build --skip-refresh
+            if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
+              helm dep build --skip-refresh
+            fi
             helm lint .
             ${{ github.workspace }}/ci-tools/helm.sh template --dry-run=client . \
               | ${{ github.workspace }}/ci-tools/kubeconform.sh
             popd > /dev/null
-            echo "::endgroup::"
+            echo "end $chart"
           done
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()

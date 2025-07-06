@@ -8,7 +8,5 @@ for url in "${urls[@]}"; do
 		echo "Adding Helm repository: $url"
 		helm repo add "$(basename "$url")-${repo_num}" "$url"
 		((++repo_num))
-	else
-		echo "Helm repository already exists: $url"
 	fi
 done

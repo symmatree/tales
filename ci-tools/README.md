@@ -36,8 +36,8 @@ AllowedIPs = 0.0.0.0/0
 Endpoint = ...:4443
 ```
 
-- Edit the config file to replace `AllowedIPs = 0.0.0.0/0` with `AllowedIPs = 10.0.0.0/16` which is the top-level VLAN
-  for the Unifi. This avoids capturing non-local traffic into the VPN.
+- Edit the config file to replace `AllowedIPs = 0.0.0.0/0` with `AllowedIPs = 10.0.0.0/16,10.1.0.0/24` which is the top-level VLAN
+  for the Unifi plus the VPN subnet itself (for DNS we hope). This avoids capturing non-local traffic into the VPN.
 - Copy the config file into a 1Password secret `github-vpn-config` (for the future, when we might push this to Github using
   terraform or something)
 - Copy the config file into a Github Action secret `WIREGUARD_CONF`

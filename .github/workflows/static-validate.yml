@@ -1,7 +1,5 @@
 name: Static Validation
 on:
-  # This is cheap enough, just run it.
-  push: {}
   pull_request: {}
   workflow_dispatch: {}
 jobs:
@@ -17,7 +15,7 @@ jobs:
             exit 1
           fi
           echo "Setting up Wireguard..."
-          # sudo apt-get install -y wireguard-tools
+          sudo apt-get install -y wireguard-tools
           echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"
           chmod 0600 "$HOME/wg0.conf"
           sudo wg-quick up "$HOME/wg0.conf"

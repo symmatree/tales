@@ -1,0 +1,29 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: talos-control
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: talos-control.local.symmatree.com
+spec:
+  type: ExternalName
+  externalName: talos-control-1.local.symmatree.com
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: talos-control-1
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: talos-control-1.local.symmatree.com
+spec:
+  type: ExternalName
+  externalName: 10.0.1.50
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: talos-worker-1
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: talos-worker-1.local.symmatree.com
+spec:
+  type: ExternalName
+  externalName: 10.0.1.100

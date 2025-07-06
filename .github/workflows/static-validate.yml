@@ -15,10 +15,13 @@ jobs:
             exit 1
           fi
           echo "Setting up Wireguard..."
-          sudo apt-get install -y wireguard-tools
+          time sudo apt-get -qq install -y wireguard-tools
           echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"
           chmod 0600 "$HOME/wg0.conf"
-          sudo wg-quick up "$HOME/wg0.conf"
+          time sudo wg-quick up "$HOME/wg0.conf"
+          echo "Connected"
+      - name: curl
+        run: |
           curl https://borgmon.local.symmatree.com
       - name: DateAndTimeStamps
         id: stamps

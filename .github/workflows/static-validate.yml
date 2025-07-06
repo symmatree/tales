@@ -119,7 +119,9 @@ jobs:
       # If we get this far, connect and validate.
       - uses: azure/setup-kubectl@v4
         with:
-          version: "<version>" # default is latest stable
+          # Directly interpolated into download URL, so no fanciness.
+          # Explicit to avoid resolving "latest" every time.
+          version: "v1.33.2"
         id: install
 
       - name: Wireguard

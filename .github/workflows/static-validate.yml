@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wireguard
+        id: wireguard
         run: |
           set -euo pipefail
           if [ -z "${{ secrets.WIREGUARD_CONF }}" ]; then
@@ -22,6 +23,7 @@ jobs:
           echo "Connecting..."
           time sudo wg-quick up "$HOME/wg0.conf"
           echo "Connected"
+          echo "WIREGUARD=1" | tee -a "$GITHUB_OUTPUT"
       - name: DateAndTimeStamps
         id: stamps
         run: |
@@ -131,5 +133,12 @@ jobs:
             popd > /dev/null
             echo "end $chart"
           done
+      - name: De-wireguard
+        if: steps.wireguard.outputs.WIREGUARD == '1'
+        run: |
+          set -euo pipefail
+          echo "Disconnecting Wireguard..."
+          time sudo wg-quick down "$HOME/wg0.conf"
+          echo "Disconnected"
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()

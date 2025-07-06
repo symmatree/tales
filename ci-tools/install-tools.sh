@@ -13,17 +13,25 @@ if ! [ -f ./eget ]; then
 	bash -c "$GET_EGET"
 fi
 if ! [ -f ./kubeconform ]; then
-	./eget --upgrade-only yannh/kubeconform
+	if ! command -v kubeconform >/dev/null 2>&1; then
+		./eget --upgrade-only yannh/kubeconform
+	fi
 fi
 if ! [ -f ./tk ]; then
-	./eget --upgrade-only grafana/tanka
-	mv tanka tk
+	if ! command -v tk >/dev/null 2>&1; then
+		./eget --upgrade-only grafana/tanka
+		mv tanka tk
+	fi
 fi
 if ! [ -f ./jb ]; then
-	./eget --upgrade-only jsonnet-bundler/jsonnet-bundler
-	mv jsonnet-bundler jb
+	if ! command -v jb >/dev/null 2>&1; then
+		./eget --upgrade-only jsonnet-bundler/jsonnet-bundler
+		mv jsonnet-bundler jb
+	fi
 fi
 if ! [ -f ./helm ]; then
-	./eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
+	if ! command -v helm >/dev/null 2>&1; then
+		./eget --upgrade-only https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz --file helm
+	fi
 fi
 popd >/dev/null

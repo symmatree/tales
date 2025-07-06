@@ -2,13 +2,26 @@ name: Static Validation
 on:
   # This is cheap enough, just run it.
   push: {}
-  # pull_request: {}
+  pull_request: {}
   workflow_dispatch: {}
 jobs:
   static-validate:
     name: Static Validation
     runs-on: ubuntu-latest
     steps:
+      - name: Wireguar
+        run: |
+          set -euo pipefail
+          if [ -z "${{ secrets.WIREGUARD_CONF }}" ]; then
+            echo "No Wireguard config provided"
+            exit 1
+          fi
+          echo "Setting up Wireguard..."
+          # sudo apt-get install -y wireguard-tools
+          echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"
+          chmod 0600 "$HOME/wg0.conf"
+          sudo wg-quick up "$HOME/wg0.conf"
+          curl https://borgmon.local.symmatree.com
       - name: DateAndTimeStamps
         id: stamps
         run: |
@@ -29,7 +42,6 @@ jobs:
       - uses: actions/setup-python@v5.6.0
         with:
           python-version: ">=3.11"
-      # - uses: pre-commit/action@v3.0.1
       - name: Install tools
         run: |
           set -euo pipefail
@@ -82,12 +94,14 @@ jobs:
           export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           for dir in ${{ steps.modules.outputs.TANKA }}; do
+            echo "::group::$dir"
             pushd "$dir"
             jb update
             tk show --dangerous-allow-redirect \
               environments/default  \
               | ${{ github.workspace }}/ci-tools/kubeconform.sh
-            popd
+            popd > /dev/null
+            echo "::endgroup::"
           done
       - name: Check Helm charts
         run: |
@@ -96,13 +110,14 @@ jobs:
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           ${{ github.workspace }}/ci-tools/helm-add-repos.sh
           for chart in ${{ steps.modules.outputs.CHARTS }}; do
-            echo "Checking chart: $chart"
+            echo "::group::$chart"
             pushd "$chart"
             helm dep build --skip-refresh
             helm lint .
             ${{ github.workspace }}/ci-tools/helm.sh template --dry-run=client . \
               | ${{ github.workspace }}/ci-tools/kubeconform.sh
-            popd
+            popd > /dev/null
+            echo "::endgroup::"
           done
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()

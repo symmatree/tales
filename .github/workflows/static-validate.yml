@@ -157,14 +157,14 @@ jobs:
 
       - name: Diff Helm against cluster
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
           for chart in ${{ steps.modules.outputs.CHARTS }}; do
             NAMESPACE=$(basename "$chart")
             echo "Namespace: ${NAMESPACE} (${chart})"
             pushd "$chart"
             DIFFS=$(../ci-tools/helm.sh template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . \
-             | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true)
+             | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
             popd > /dev/null
             if [ -n "$DIFFS" ]; then
               echo "::notice file=${chart},title=${NAMESPACE}-Diffs::${DIFFS}"
@@ -186,9 +186,10 @@ jobs:
             echo "$dir"
             pushd "$dir"
             NAMESPACE=$(basename "$dir")
+            echo "Namespace: ${NAMESPACE} (${dir})"
             DIFFS=$(tk show --dangerous-allow-redirect \
               environments/default  \
-              | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true)
+              | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
             popd > /dev/null
             if [ -n "$DIFFS" ]; then
               echo "::notice file=${dir},title=${NAMESPACE}-Diffs::${DIFFS}"
@@ -202,9 +203,13 @@ jobs:
           done
 
       - name: De-wireguard
-        if: steps.wireguard.outputs.WIREGUARD == '1'
+        if: always()
         run: |
           set -euo pipefail
+          if [ -z "${{ steps.wireguard.outputs.WIREGUARD }}" ]; then
+            echo "No Wireguard connection established, skipping disconnection."
+            exit 0
+          fi
           echo "Disconnecting Wireguard..."
           time sudo wg-quick down "$HOME/wg0.conf"
           echo "Disconnected"

@@ -157,12 +157,12 @@ jobs:
 
       - name: Diff Helm against cluster
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
           for chart in ${{ steps.modules.outputs.CHARTS }}; do
-            echo "$chart"
-            pushd "$chart"
             NAMESPACE=$(basename "$chart")
+            echo "Namespace: ${NAMESPACE} (${chart})"
+            pushd "$chart"
             DIFFS=$(../ci-tools/helm.sh template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . \
              | kubectl diff --server-side=true -f - --force-conflicts=true)
             popd > /dev/null

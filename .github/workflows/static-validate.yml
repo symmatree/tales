@@ -133,7 +133,7 @@ jobs:
             exit 1
           fi
           echo "Setting up Wireguard..."
-          time sudo apt-get -y --no-install-recommends \
+          time sudo apt-get -y \
            -qq -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0" \
             install wireguard-tools
           echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"

@@ -164,7 +164,7 @@ jobs:
             echo "Namespace: ${NAMESPACE} (${chart})"
             pushd "$chart"
             DIFFS=$(../ci-tools/helm.sh template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . \
-             | kubectl diff --server-side=true -f - --force-conflicts=true)
+             | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true)
             popd > /dev/null
             if [ -n "$DIFFS" ]; then
               echo "::notice file=${chart},title=${NAMESPACE}-Diffs::${DIFFS}"
@@ -188,7 +188,7 @@ jobs:
             NAMESPACE=$(basename "$dir")
             DIFFS=$(tk show --dangerous-allow-redirect \
               environments/default  \
-              | kubectl diff --server-side=true -f - --force-conflicts=true)
+              | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true)
             popd > /dev/null
             if [ -n "$DIFFS" ]; then
               echo "::notice file=${dir},title=${NAMESPACE}-Diffs::${DIFFS}"

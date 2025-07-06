@@ -37,8 +37,9 @@ jobs:
           path: |
             ${{ runner.temp }}/bin
           # Use date so we refetch once a day no matter what.
-          key: ${{ runner.os }}-tools-${{ env.DATESTAMP }}-${{ hashFiles('ci-tools/install-tools.sh') }}
+          key: ${{ runner.os }}-tools-${{ steps.stamps.outputs.DATESTAMP }}-${{ hashFiles('ci-tools/install-tools.sh') }}
           restore-keys: |
+            ${{ runner.os }}-tools-${{ steps.stamps.outputs.DATESTAMP }}-
             ${{ runner.os }}-tools-
       - uses: actions/setup-python@v5.6.0
         with:
@@ -78,6 +79,7 @@ jobs:
         with:
           path: |
             ${{ runner.temp }}/cache/kubeconform
+          # Use timestamp so we always push back (if changed)
           key: ${{ runner.os }}-kubeconform-${{ steps.stamps.outputs.TIMESTAMP }}
           restore-keys: |
             ${{ runner.os }}-kubeconform-${{ steps.stamps.outputs.DATESTAMP }}
@@ -87,8 +89,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.modules.outputs.CACHE_DIRS }}
-          key: ${{ runner.os }}-deps-${{ env.DATESTAMP }}-${{ hashFiles('**/Chart.lock', '**/jsonnetfile.lock.json') }}
+          key: ${{ runner.os }}-deps-${{ steps.stamps.outputs.DATESTAMP }}-${{ hashFiles('**/Chart.lock', '**/jsonnetfile.lock.json') }}
           restore-keys: |
+            ${{ runner.os }}-deps-${{ steps.stamps.outputs.DATESTAMP }}-
             ${{ runner.os }}-deps-
       - name: Check Tanka
         run: |

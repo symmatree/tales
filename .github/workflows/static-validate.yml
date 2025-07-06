@@ -7,23 +7,6 @@ jobs:
     name: Static Validation
     runs-on: ubuntu-latest
     steps:
-      - name: Wireguard
-        id: wireguard
-        run: |
-          set -euo pipefail
-          if [ -z "${{ secrets.WIREGUARD_CONF }}" ]; then
-            echo "No Wireguard config provided"
-            exit 1
-          fi
-          echo "Setting up Wireguard..."
-          time sudo apt-get -qq -y -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0" \
-            install wireguard-tools
-          echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"
-          chmod 0600 "$HOME/wg0.conf"
-          echo "Connecting..."
-          time sudo wg-quick up "$HOME/wg0.conf"
-          echo "Connected"
-          echo "WIREGUARD=1" | tee -a "$GITHUB_OUTPUT"
       - name: DateAndTimeStamps
         id: stamps
         run: |
@@ -133,6 +116,76 @@ jobs:
             popd > /dev/null
             echo "end $chart"
           done
+      # If we get this far, connect and validate.
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: "<version>" # default is latest stable
+        id: install
+
+      - name: Wireguard
+        id: wireguard
+        run: |
+          set -euo pipefail
+          if [ -z "${{ secrets.WIREGUARD_CONF }}" ]; then
+            echo "No Wireguard config provided"
+            exit 1
+          fi
+          echo "Setting up Wireguard..."
+          time sudo apt-get -qq -y -o Dpkg::Progress-Fancy="0" -o APT::Color="0" -o Dpkg::Use-Pty="0" \
+            install wireguard-tools
+          echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"
+          chmod 0600 "$HOME/wg0.conf"
+          echo "Connecting..."
+          time sudo wg-quick up "$HOME/wg0.conf"
+          echo "Connected"
+          echo "WIREGUARD=1" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Diff Helm against cluster
+        run: |
+          set -euo pipefail
+          export PATH="${{ runner.temp }}/bin:$PATH"
+          for chart in ${{ steps.modules.outputs.CHARTS }}; do
+            echo "$chart"
+            pushd "$chart"
+            NAMESPACE=$(basename "$chart")
+            DIFFS=$(../ci-tools/helm.sh template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . \
+             | kubectl diff --server-side=true -f - --force-conflicts=true)
+            popd > /dev/null
+            if [ -n "$DIFFS" ]; then
+              echo "::notice file=${chart},title=${NAMESPACE}-Diffs::${DIFFS}"
+              # echo "::group::Diffs for $NAMESPACE"
+              # echo "Differences found in $chart:"
+              # echo "$DIFFS"
+              # echo "::endgroup::"
+            else
+              echo "No differences found in $chart."
+            fi
+            echo "end $chart"
+          done
+
+      - name: Diff Tanka against cluster
+        run: |
+          set -euo pipefail
+          export PATH="${{ runner.temp }}/bin:$PATH"
+          for dir in ${{ steps.modules.outputs.TANKA }}; do
+            echo "$dir"
+            pushd "$dir"
+            NAMESPACE=$(basename "$dir")
+            DIFFS=$(tk show --dangerous-allow-redirect \
+              environments/default  \
+              | kubectl diff --server-side=true -f - --force-conflicts=true)
+            popd > /dev/null
+            if [ -n "$DIFFS" ]; then
+              echo "::notice file=${dir},title=${NAMESPACE}-Diffs::${DIFFS}"
+              #echo "Differences found in $dir:"
+              #echo "$DIFFS"
+              # echo "::endgroup::"
+            else
+              echo "No differences found in $dir."
+            fi
+            echo "end $dir"
+          done
+
       - name: De-wireguard
         if: steps.wireguard.outputs.WIREGUARD == '1'
         run: |

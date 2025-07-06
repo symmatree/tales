@@ -87,7 +87,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.modules.outputs.CACHE_DIRS }}
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/Chart.lock', '**/jsonnetfile.lock.json') }}
+          key: ${{ runner.os }}-deps-${{ env.DATESTAMP }}-${{ hashFiles('**/Chart.lock', '**/jsonnetfile.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-deps-
       - name: Check Tanka

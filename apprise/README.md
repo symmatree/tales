@@ -2,6 +2,30 @@
 
 https://github.com/caronc/apprise-api/tree/master
 
+## What
+
+Delivers notifications in a centrally-routed way. Which I sometimes bypass but prefer not
+to.
+
+### Tags
+
+Defined tags for routing:
+
+* Bond - for house-related things
+* Tales - for the cluster and internal stuff
+* Priority - things I might actually need to know
+
+### Config
+
+Most of those are delivered via Slack with an echo to a GMail account (via an app-password)
+for posterity (since free Slack does not keep long-term archives).
+
+The actual config YML is stored in `apprise-config` in 1password, paste back into the
+UI if it gets wiped.
+
+TODO: Move this into a proper, provisioned secret sometime.
+
+
 ## Why
 
 I want two tiers (at least) of notification delivery and robustness.

@@ -45,14 +45,17 @@ mimir-distributed:
     strategy:
       type: Recreate
       rollingUpdate: null
-  # compactor:
-  #   strategy:
-  #     type: Recreate
-  #     rollingUpdate: null
-  # distributor:
-  #   strategy:
-  #     type: Recreate
-  #     rollingUpdate: null
+    extraContainers:
+    - name: alert-forward
+      image: ghcr.io/symmatree/internal/mimir-webhook:2025-07-12
+      ports:
+        - name: webhook
+          containerPort: 3000
+          protocol: TCP
+      env:
+        APPRISE_URL: http://apprise.apprise.svc:8000/notify
+        TEMPLATE: alertmanager
+        APPRISE_KEY: apprise
   ingester:
     replicas: 2
     zoneAwareReplication:

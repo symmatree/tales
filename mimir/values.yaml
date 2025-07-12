@@ -53,9 +53,10 @@ mimir-distributed:
           containerPort: 3000
           protocol: TCP
       env:
-        APPRISE_URL: http://apprise.apprise.svc:8000/notify
-        TEMPLATE: alertmanager
-        APPRISE_KEY: apprise
+        - name: APPRISE_URL
+          value: http://apprise.apprise.svc:8000/notify
+        - name: APPRISE_KEY
+          value: apprise
   ingester:
     replicas: 2
     zoneAwareReplication:

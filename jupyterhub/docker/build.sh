@@ -10,7 +10,7 @@ TAG=$(date +%Y-%m-%d)
 
 BASE_IMAGE=quay.io/jupyter/datascience-notebook
 # https://quay.io/repository/jupyter/datascience-notebook?tab=tags&tag=latest
-BASE_TAG=2025-05-24
+BASE_TAG=2025-07-07
 
 # Pull first to avoid collision on creds (the base image is in a different
 # repo, which doesn't accept our creds of course).

@@ -40,6 +40,9 @@ mimir-distributed:
           hosts:
             - mimir.local.symmatree.com
 
+  image:
+    pullSecrets:
+    - ghcr-pull-secret
   # Make everyone Recreate to reduce pod overlaps that spoil the rings.
   alertmanager:
     strategy:

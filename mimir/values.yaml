@@ -48,6 +48,7 @@ mimir-distributed:
     strategy:
       type: Recreate
       rollingUpdate: null
+    terminationGracePeriodSeconds: 30
     extraContainers:
       - name: alert-forward
         image: ghcr.io/symmatree/internal/mimir-webhook:2025-07-13

@@ -31,27 +31,29 @@ local rendered = {
         },
         showMultiCluster: true,
       },
-      local dashBlobs = mixin.grafanaDashboards,
-      dashboards: std.map(
-        function(name)
-          local k8sName = std.strReplace(std.asciiLower(name), ' ', '-');
-          kConfigMap.new(k8sName)
-          + kConfigMap.metadata.withNamespace(config.namespace)
-          + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
-          + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })
-          + kConfigMap.withData({ [name]: std.manifestJson(dashBlobs[name]) }),
-        std.objectFields(dashBlobs)
-      ),
 
-      local alertGroups = mixin.prometheusAlerts.groups,
-      alerts: std.map(
-        function(group)
-          local name = std.strReplace(std.asciiLower(group.name), ' ', '-');
-          kPrometheusRule.new(name)
-          + kPrometheusRule.metadata.withNamespace(config.namespace)
-          + kPrometheusRule.spec.withGroups([group]), alertGroups
-      ),
+
     },
+    local dashBlobs = mixin.grafanaDashboards,
+    dashboards: std.map(
+      function(name)
+        local k8sName = std.strReplace(std.asciiLower(name), ' ', '-');
+        kConfigMap.new(k8sName)
+        + kConfigMap.metadata.withNamespace(config.namespace)
+        + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
+        + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })
+        + kConfigMap.withData({ [name]: std.manifestJson(dashBlobs[name]) }),
+      std.objectFields(dashBlobs)
+    ),
+
+    local alertGroups = mixin.prometheusAlerts.groups,
+    alerts: std.map(
+      function(group)
+        local name = std.strReplace(std.asciiLower(group.name), ' ', '-');
+        kPrometheusRule.new(name)
+        + kPrometheusRule.metadata.withNamespace(config.namespace)
+        + kPrometheusRule.spec.withGroups([group]), alertGroups
+    ),
   },
 };
 

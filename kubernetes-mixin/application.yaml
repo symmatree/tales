@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubernetes-mixin
+  namespace: argocd
+  labels:
+    name: kubernetes-mixin
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/symmatree/tales.git
+    targetRevision: main
+    path: kubernetes-mixin
+    plugin:
+      env:
+        - name: TK_ENV
+          value: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubernetes-mixin
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

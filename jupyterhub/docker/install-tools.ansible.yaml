@@ -134,6 +134,7 @@
         name:
           - argocd
           - helm
+          - jsonnet-bundler
           - kubectx
           - talosctl
           - tanka

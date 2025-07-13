@@ -54,6 +54,16 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/jsonnet-libs/prometheus-operator-libsonnet.git",
+          "subdir": "0.77"
+        }
+      },
+      "version": "8055c684fc951ae857bd0e09cf14cb2aeb57b813",
+      "sum": "pjNJAI6ch15p0EwHy50FKncuXVcghJwrIKD578Ho8NU="
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/jsonnet-libs/xtd.git",
           "subdir": ""
         }

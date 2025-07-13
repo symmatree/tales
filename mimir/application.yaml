@@ -18,10 +18,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: mimir
   syncPolicy:
-    # Mimir rings don't handle auto-sync well.
-    # automated:
-    #   prune: true
-    #   selfHeal: true
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true

@@ -50,7 +50,7 @@ mimir-distributed:
       rollingUpdate: null
     extraContainers:
     - name: alert-forward
-      image: ghcr.io/symmatree/internal/mimir-webhook:2025-07-12
+      image: ghcr.io/symmatree/internal/mimir-webhook:2025-07-13
       ports:
         - name: webhook
           containerPort: 3000

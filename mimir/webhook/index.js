@@ -25,6 +25,7 @@ const server = http.createServer((request, response) => {
           const key = query.key || process.env['APPRISE_KEY'] || ''
           const appriseUrl = url.resolve(APPRISE_URL, key)
           const message = env.render(template + '.njk', JSON.parse(body))
+          console.log(`Posting to ${appriseUrl}`)
           const appriseResponse = await axios.post(appriseUrl, {body: message, title: query.title, tag: query.tag, type: query.type})
           responseCode = 200
           responseText = `Sent ${message} to ${appriseUrl} using ${template} with a response ${appriseResponse.status} ${appriseResponse.data}`
@@ -33,6 +34,7 @@ const server = http.createServer((request, response) => {
         responseCode = 500
         responseText = error.response ? `${error.response.status} ${error.response.statusText}` : error.request || error
       }
+      console.log(`Returning ${responseCode} : ${responseText}`)
       response.writeHead(responseCode)
       response.end(responseText + '')
     })

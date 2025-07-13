@@ -11,7 +11,7 @@ env.addFilter('localdate', str => new Date(str).toLocaleString())
 
 const server = http.createServer((request, response) => {
   if (request.method == 'POST') {
-    let body = '' 
+    let body = ''
     request.on('data', data => {
       body += data
     })

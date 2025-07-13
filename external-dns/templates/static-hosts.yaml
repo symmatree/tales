@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: raconteur
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: raconteur.ad.local.symmatree.com
+spec:
+  type: ExternalName
+  externalName: 10.0.99.1
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: morpheus
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: morpheus.local.symmatree.com
+spec:
+  type: ExternalName
+  externalName: 10.0.0.1
+---

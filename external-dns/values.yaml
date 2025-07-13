@@ -3,7 +3,6 @@
 
 external-dns:
   serviceMonitor:
-    # -- If `true`, create a `ServiceMonitor` resource to support the _Prometheus Operator_.
     enabled: true
   tolerations:
     - effect: NoSchedule
@@ -12,7 +11,6 @@ external-dns:
   nodeSelector:
     kubernetes.io/os: linux
     node-role.kubernetes.io/control-plane: ""
-  # -- Log format.
   logFormat: text # @schema enum:["text", "json"]; type:string; default: "text"
   # -- Interval for DNS updates.
   interval: 1m
@@ -25,6 +23,7 @@ external-dns:
   txtOwnerId: tales
   # -- Limit possible target zones by domain suffixes.
   domainFilters:
+    - ad.local.symmatree.com
     - local.symmatree.com
     - 0.10.in-addr.arpa
   provider:

@@ -31,6 +31,13 @@ cluster:
     # Cilium will replace the proxy
     disabled: true
 machine:
+  # https://www.talos.dev/v1.10/talos-guides/configuration/containerd/#exposing-metrics
+  files:
+    - content: |
+        [metrics]
+          address = "0.0.0.0:11234"
+      path: /etc/cri/conf.d/20-customization.part
+      op: create
   features:
     rbac: true
     diskQuotaSupport: true

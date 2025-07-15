@@ -146,7 +146,7 @@ jobs:
         run: |
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
-          ./ci-tools/diff-helm.sh ${{ steps.modules.outputs.TANKA }}
+          ./ci-tools/diff-tanka.sh ${{ steps.modules.outputs.TANKA }}
 
       - name: De-wireguard
         if: always()

@@ -9,6 +9,12 @@ local rendered = {
   local defaults = {
     folder: 'Kubernetes',
     namespace: 'kubernetes-mixin',
+    dashboardsToDrop: [
+      'proxy',
+    ],
+    rulesToDrop: [
+      'kubernetes-system-kube-proxy',
+    ],
   },
   new(overrides):: {
     local config = defaults + overrides,
@@ -37,12 +43,13 @@ local rendered = {
     local dashBlobs = mixin.grafanaDashboards,
     dashboards: std.map(
       function(name)
-        local k8sName = std.strReplace(std.asciiLower(name), ' ', '-');
-        kConfigMap.new(k8sName)
-        + kConfigMap.metadata.withNamespace(config.namespace)
-        + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
-        + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })
-        + kConfigMap.withData({ [name]: std.manifestJson(dashBlobs[name]) }),
+        local k8sName = std.strReplace(std.strReplace(std.asciiLower(name), ' ', '-'), '.json', '');
+        if !std.member(config.dashboardsToDrop, k8sName) then
+          kConfigMap.new(k8sName)
+          + kConfigMap.metadata.withNamespace(config.namespace)
+          + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
+          + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })
+          + kConfigMap.withData({ [name]: std.manifestJson(dashBlobs[name]) }),
       std.objectFields(dashBlobs)
     ),
 
@@ -50,9 +57,10 @@ local rendered = {
     alerts: std.map(
       function(group)
         local name = std.strReplace(std.asciiLower(group.name), ' ', '-');
-        kPrometheusRule.new(name)
-        + kPrometheusRule.metadata.withNamespace(config.namespace)
-        + kPrometheusRule.spec.withGroups([group]), alertGroups
+        if !std.member(config.rulesToDrop, name) then
+          kPrometheusRule.new(name)
+          + kPrometheusRule.metadata.withNamespace(config.namespace)
+          + kPrometheusRule.spec.withGroups([group]), alertGroups
     ),
   },
 };

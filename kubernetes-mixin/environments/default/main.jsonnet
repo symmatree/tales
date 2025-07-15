@@ -41,26 +41,31 @@ local rendered = {
 
     },
     local dashBlobs = mixin.grafanaDashboards,
-    dashboards: std.map(
+    dashboards: std.filterMap(
       function(name)
         local k8sName = std.strReplace(std.strReplace(std.asciiLower(name), ' ', '-'), '.json', '');
-        if !std.member(config.dashboardsToDrop, k8sName) then
-          kConfigMap.new(k8sName)
-          + kConfigMap.metadata.withNamespace(config.namespace)
-          + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
-          + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })
-          + kConfigMap.withData({ [name]: std.manifestJson(dashBlobs[name]) }),
+        !std.member(config.dashboardsToDrop, k8sName),
+      function(name)
+        local k8sName = std.strReplace(std.strReplace(std.asciiLower(name), ' ', '-'), '.json', '');
+        kConfigMap.new(k8sName)
+        + kConfigMap.metadata.withNamespace(config.namespace)
+        + kConfigMap.metadata.withLabelsMixin({ grafana_dashboard: '1' })
+        + kConfigMap.metadata.withAnnotationsMixin({ 'k8s-sidecar-target-directory': '/tmp/dashboards/' + config.folder })
+        + kConfigMap.withData({ [name]: std.manifestJson(dashBlobs[name]) }),
       std.objectFields(dashBlobs)
     ),
 
     local alertGroups = mixin.prometheusAlerts.groups,
-    alerts: std.map(
+    alerts: std.filterMap(
       function(group)
         local name = std.strReplace(std.asciiLower(group.name), ' ', '-');
-        if !std.member(config.rulesToDrop, name) then
-          kPrometheusRule.new(name)
-          + kPrometheusRule.metadata.withNamespace(config.namespace)
-          + kPrometheusRule.spec.withGroups([group]), alertGroups
+        !std.member(config.rulesToDrop, name),
+      function(group)
+        local name = std.strReplace(std.asciiLower(group.name), ' ', '-');
+        kPrometheusRule.new(name)
+        + kPrometheusRule.metadata.withNamespace(config.namespace)
+        + kPrometheusRule.spec.withGroups([group]),
+      alertGroups
     ),
   },
 };

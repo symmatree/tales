@@ -140,48 +140,13 @@ jobs:
         run: |
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
-          for chart in ${{ steps.modules.outputs.CHARTS }}; do
-            NAMESPACE=$(basename "$chart")
-            echo "Namespace: ${NAMESPACE} (${chart})"
-            pushd "$chart"
-            DIFFS=$(../ci-tools/helm.sh template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . \
-             | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
-            popd > /dev/null
-            if [ -n "$DIFFS" ]; then
-              echo "::notice file=${chart},title=${NAMESPACE}-Diffs::${DIFFS}"
-              # echo "::group::Diffs for $NAMESPACE"
-              # echo "Differences found in $chart:"
-              # echo "$DIFFS"
-              # echo "::endgroup::"
-            else
-              echo "No differences found in $chart."
-            fi
-            echo "end $chart"
-          done
+          ./ci-tools/diff-helm.sh "${{ steps.modules.outputs.CHARTS }}"
 
       - name: Diff Tanka against cluster
         run: |
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
-          for dir in ${{ steps.modules.outputs.TANKA }}; do
-            echo "$dir"
-            pushd "$dir"
-            NAMESPACE=$(basename "$dir")
-            echo "Namespace: ${NAMESPACE} (${dir})"
-            DIFFS=$(tk show --dangerous-allow-redirect \
-              environments/default  \
-              | kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
-            popd > /dev/null
-            if [ -n "$DIFFS" ]; then
-              echo "::notice file=${dir},title=${NAMESPACE}-Diffs::${DIFFS}"
-              #echo "Differences found in $dir:"
-              #echo "$DIFFS"
-              # echo "::endgroup::"
-            else
-              echo "No differences found in $dir."
-            fi
-            echo "end $dir"
-          done
+          ./ci-tools/diff-helm.sh "${{ steps.modules.outputs.TANKA }}"
 
       - name: De-wireguard
         if: always()

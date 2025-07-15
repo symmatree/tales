@@ -28,3 +28,4 @@ for chart in "${CHARTS[@]}"; do
 	fi
 	echo "end $chart"
 done
+echo "All Helm charts diffed successfully."

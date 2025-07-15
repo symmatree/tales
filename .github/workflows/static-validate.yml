@@ -87,7 +87,7 @@ jobs:
           if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
             export UPDATE=1
           fi
-          ./ci-tools/check-tanka.sh "${{ steps.modules.outputs.TANKA }}"
+          ./ci-tools/check-tanka.sh ${{ steps.modules.outputs.TANKA }}
       - name: Check Helm charts
         run: |
           set -euo pipefail
@@ -96,7 +96,7 @@ jobs:
           if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
             export UPDATE=1
           fi
-          ./ci-tools/check-helm.sh "${{ steps.modules.outputs.CHARTS }}"
+          ./ci-tools/check-helm.sh ${{ steps.modules.outputs.CHARTS }}
       # If we get this far, connect and validate.
       - uses: azure/setup-kubectl@v4
         with:
@@ -140,13 +140,13 @@ jobs:
         run: |
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
-          ./ci-tools/diff-helm.sh "${{ steps.modules.outputs.CHARTS }}"
+          ./ci-tools/diff-helm.sh ${{ steps.modules.outputs.CHARTS }}
 
       - name: Diff Tanka against cluster
         run: |
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
-          ./ci-tools/diff-helm.sh "${{ steps.modules.outputs.TANKA }}"
+          ./ci-tools/diff-helm.sh ${{ steps.modules.outputs.TANKA }}
 
       - name: De-wireguard
         if: always()

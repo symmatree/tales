@@ -41,9 +41,9 @@ jobs:
           set -euo pipefail
           # Locate Helm and Tanka configs for validation
           cd "${{ github.workspace }}"
-          mapfile -t charts < <(find . -name Chart.yaml -exec dirname {} \;)
+          mapfile -t charts < <(find . -name Chart.yaml -exec dirname "$(realpath {})" \;)
           echo "CHARTS=${charts[*]}" | tee -a "$GITHUB_OUTPUT"
-          mapfile -t tanka < <(find . -name jsonnetfile.json -exec dirname {} \;)
+          mapfile -t tanka < <(find . -name jsonnetfile.json -exec dirname "$(realpath {})" \;)
           echo "TANKA=${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
 
           # Cache vendor directories

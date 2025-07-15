@@ -7,7 +7,7 @@ echo "WORKSPACE: $WORKSPACE"
 TANKA=("$@")
 if [[ ${#TANKA[@]} == 0 ]]; then
 	cd "${WORKSPACE}"
-	mapfile -t TANKA < <(find . -name vendor -prune -o -name jsonnetfile.json -exec dirname "$(realpath {})" \;)
+	mapfile -t TANKA < <(find "$(pwd)" -name vendor -prune -o -name jsonnetfile.json -exec dirname "{}" \;)
 fi
 for dir in "${TANKA[@]}"; do
 	echo "$dir"

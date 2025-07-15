@@ -8,7 +8,7 @@ echo "WORKSPACE: $WORKSPACE"
 cd "${WORKSPACE}"
 CHARTS=("$@")
 if [[ ${#CHARTS[@]} == 0 ]]; then
-	mapfile -t CHARTS < <(find . -name vendor -prune -o -name Chart.yaml -exec dirname "$(realpath {})" \;)
+	mapfile -t CHARTS < <(find "$(pwd)" -name vendor -prune -o -name Chart.yaml -exec dirname "{}" \;)
 fi
 
 for chart in "${CHARTS[@]}"; do

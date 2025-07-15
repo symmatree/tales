@@ -41,20 +41,20 @@ jobs:
           set -euo pipefail
           # Locate Helm and Tanka configs for validation
           cd "${{ github.workspace }}"
-          mapfile -t charts < <(find . -name Chart.yaml -exec dirname "$(realpath {})" \;)
-          echo "CHARTS=${charts[*]}" | tee -a "$GITHUB_OUTPUT"
-          mapfile -t tanka < <(find . -name jsonnetfile.json -exec dirname "$(realpath {})" \;)
-          echo "TANKA=${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
+          mapfile -t CHARTS < <(find "$(pwd)" -name vendor -prune -o -name Chart.yaml -exec dirname "{}" \;)
+          echo "CHARTS=${CHARTS[*]}" | tee -a "$GITHUB_OUTPUT"
+          mapfile -t TANKA < <(find "$(pwd)" -name vendor -prune -o -name jsonnetfile.json -exec dirname "{}" \;)
+          echo "TANKA=${TANKA[*]}" | tee -a "$GITHUB_OUTPUT"
 
           # Cache vendor directories
-          for c in "${!charts[@]}"; do
-              charts[c]="${charts[c]}/charts"
+          for c in "${!CHARTS[@]}"; do
+              CHARTS[c]="${CHARTS[c]}/charts"
           done
-          for c in "${!tanka[@]}"; do
-              tanka[c]="${tanka[c]}/vendor"
+          for c in "${!TANKA[@]}"; do
+              TANKA[c]="${TANKA[c]}/vendor"
           done
           echo "CACHE_DIRS<<EOF" | tee -a "$GITHUB_OUTPUT"
-          cache_dirs=("${charts[@]}" "${tanka[@]}")
+          cache_dirs=("${CHARTS[@]}" "${TANKA[@]}")
           for dir in "${cache_dirs[@]}"; do
             echo "$dir" | tee -a "$GITHUB_OUTPUT"
             mkdir -p "$dir"

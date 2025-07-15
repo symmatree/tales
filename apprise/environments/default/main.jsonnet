@@ -1,5 +1,5 @@
-local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet';
 local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonnet';
+local k = import 'k.libsonnet';
 local op = import 'op.libsonnet';
 
 local apprise = {
@@ -18,7 +18,7 @@ local apprise = {
     // Ref https://github.com/caronc/apprise-api#environment-variables
     envSecret: 'apprise-env',
     htpasswdSecret: 'apprise-admin',
-    port: kPort.new('http', 8000),
+    port: kPort.newNamed(8000, 'http'),
     ingressAnnotations: {
       'cert-manager.io/cluster-issuer': 'real-cert',
     },

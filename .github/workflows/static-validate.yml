@@ -40,9 +40,10 @@ jobs:
         run: |
           set -euo pipefail
           # Locate Helm and Tanka configs for validation
-          mapfile -t charts< <(find "${{ github.workspace }}" -name Chart.yaml -exec dirname {} \;)
+          cd "${{ github.workspace }}"
+          mapfile -t charts < <(find . -name Chart.yaml -exec dirname {} \;)
           echo "CHARTS=${charts[*]}" | tee -a "$GITHUB_OUTPUT"
-          mapfile -t tanka< <(find "${{ github.workspace }}" -name jsonnetfile.json -exec dirname {} \;)
+          mapfile -t tanka < <(find . -name jsonnetfile.json -exec dirname {} \;)
           echo "TANKA=${tanka[*]}" | tee -a "$GITHUB_OUTPUT"
 
           # Cache vendor directories
@@ -83,39 +84,19 @@ jobs:
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
-          for dir in ${{ steps.modules.outputs.TANKA }}; do
-            echo "$dir"
-            pushd "$dir"
-            if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
-              jb update
-            fi
-            tk show --dangerous-allow-redirect \
-              environments/default  \
-              | ${{ github.workspace }}/ci-tools/kubeconform.sh
-            popd > /dev/null
-            echo "end $dir"
-          done
+          if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
+            export UPDATE=1
+          fi
+          ./ci-tools/check-tanka.sh "${{ steps.modules.outputs.TANKA }}"
       - name: Check Helm charts
         run: |
           set -euo pipefail
           export PATH="${{ runner.temp }}/bin:$PATH"
           mkdir -p "${{ runner.temp }}/cache/kubeconform"
           if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
-            ${{ github.workspace }}/ci-tools/helm-add-repos.sh
-            helm repo update
+            export UPDATE=1
           fi
-          for chart in ${{ steps.modules.outputs.CHARTS }}; do
-            echo "$chart"
-            pushd "$chart"
-            if [[ "${{ steps.deps-cache.outputs.cache-hit }}" != "true" ]]; then
-              helm dep build --skip-refresh
-            fi
-            helm lint .
-            ${{ github.workspace }}/ci-tools/helm.sh template --dry-run=client . \
-              | ${{ github.workspace }}/ci-tools/kubeconform.sh
-            popd > /dev/null
-            echo "end $chart"
-          done
+          ./ci-tools/check-helm.sh "${{ steps.modules.outputs.CHARTS }}"
       # If we get this far, connect and validate.
       - uses: azure/setup-kubectl@v4
         with:

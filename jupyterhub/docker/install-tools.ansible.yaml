@@ -141,6 +141,7 @@
           - mimirtool
           # - minio/stable/mc
           - cilium-cli
+          - yq
         state: present
         # update_homebrew: true
         # upgrade_all: true

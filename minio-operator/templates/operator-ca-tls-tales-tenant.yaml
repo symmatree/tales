@@ -3,6 +3,7 @@ apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
   name: operator-ca-tls-tales-tenant
+  namespace: "{{ .Release.Namespace }}"
 spec:
   sources:
     - secret:

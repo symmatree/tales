@@ -2,6 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: jupyterhub-cert
+  namespace: "{{ .Release.Namespace }}"
 spec:
   dnsNames:
     - notebook.local.symmatree.com

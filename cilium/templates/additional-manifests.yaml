@@ -1,6 +1,7 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
 metadata:
+  namespace: "{{ .Release.Namespace }}"
   name: lb-externalip-pool
 spec:
   blocks:
@@ -11,6 +12,7 @@ spec:
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:
+  namespace: "{{ .Release.Namespace }}"
   name: announce-everything
 spec:
   # No serviceSelector, apply to all.

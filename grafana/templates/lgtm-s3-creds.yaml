@@ -1,6 +1,7 @@
 apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
+  namespace: "{{ .Release.Namespace }}"
   name: lgtm-s3-creds
 type: Opaque
 spec:

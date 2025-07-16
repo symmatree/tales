@@ -126,6 +126,7 @@ cilium:
       enableOpenMetrics: true
       serviceMonitor:
         enabled: true
+        relabelings: []
       # -- Grafana dashboards for hubble
       # grafana can import dashboards based on the label and value
       # ref: https://github.com/grafana/helm-charts/tree/main/charts/grafana#sidecar-for-dashboards
@@ -167,6 +168,7 @@ cilium:
         enabled: true
         port: 9966
         serviceMonitor:
+          relabelings: []
           trustCRDsExist: true
           enabled: true
     ui:
@@ -241,6 +243,7 @@ cilium:
     enabled: true
     serviceMonitor:
       trustCRDsExist: true
+      relabelings: []
       enabled: true
   dashboards:
     enabled: false
@@ -258,6 +261,7 @@ cilium:
       enabled: true
       serviceMonitor:
         enabled: true
+        relabelings: []
         trustCRDsExist: true
   # -- Configure TLS configuration in the agent.
   tls:
@@ -274,6 +278,8 @@ cilium:
       serviceMonitor:
         enabled: true
         trustCRDsExist: true
+        relabelings: []
+
     dashboards:
       enabled: false
       annotations:

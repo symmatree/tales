@@ -3,6 +3,7 @@ kind: Bundle
 metadata:
   # The bundle name will also be used for the target
   name: trust-bundle
+  namespace: "{{ .Release.Namespace }}"
 spec:
   sources:
     - useDefaultCAs: true

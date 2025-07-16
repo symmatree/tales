@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: talos-control
+  namespace: "{{ .Release.Namespace }}"
   annotations:
     external-dns.alpha.kubernetes.io/hostname: talos-control.local.symmatree.com
 spec:

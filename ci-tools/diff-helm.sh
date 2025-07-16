@@ -15,8 +15,9 @@ for chart in "${CHARTS[@]}"; do
 	NAMESPACE=$(basename "$chart")
 	echo "Namespace: ${NAMESPACE} (${chart})"
 	cd "$chart"
+	kubens "$NAMESPACE"
 	DIFFS=$("${WORKSPACE}/ci-tools/helm.sh" template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . |
-		kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
+		kubectl diff --server-side=true -f - --force-conflicts=true) || true
 	if [ -n "$DIFFS" ]; then
 		echo "::notice file=${chart},title=${NAMESPACE}-Diffs::${DIFFS}"
 		# echo "::group::Diffs for $NAMESPACE"

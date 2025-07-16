@@ -3,6 +3,7 @@
 tenant:
   tenant:
     name: tales-tenant
+    namespace: tales-tenant
     configSecret:
       # Populated from onepassword
       name: tales-tenant-secret

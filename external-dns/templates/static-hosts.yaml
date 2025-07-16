@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: raconteur
+  namespace: "{{ .Release.Namespace }}"
   annotations:
     external-dns.alpha.kubernetes.io/hostname: raconteur.ad.local.symmatree.com
 spec:

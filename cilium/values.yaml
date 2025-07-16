@@ -171,6 +171,8 @@ cilium:
           relabelings: []
           trustCRDsExist: true
           enabled: true
+          labels:
+            suppress-diff: "true"
     ui:
       # -- Whether to enable the Hubble UI.
       enabled: true

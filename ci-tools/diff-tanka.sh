@@ -15,7 +15,7 @@ for dir in "${TANKA[@]}"; do
 
 	NAMESPACE=$(basename "$dir")
 	echo "Namespace: ${NAMESPACE} (${dir})"
-	kubens "$NAMESPACE"
+	kubectl config set-context --current --namespace="$NAMESPACE"
 	DIFFS=$(tk show --dangerous-allow-redirect \
 		environments/default |
 		kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true

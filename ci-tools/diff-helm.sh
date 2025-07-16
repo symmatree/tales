@@ -15,7 +15,7 @@ for chart in "${CHARTS[@]}"; do
 	NAMESPACE=$(basename "$chart")
 	echo "Namespace: ${NAMESPACE} (${chart})"
 	cd "$chart"
-	kubens "$NAMESPACE"
+	kubectl config set-context --current --namespace="$NAMESPACE"
 	DIFFS=$("${WORKSPACE}/ci-tools/helm.sh" template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . |
 		kubectl diff --server-side=true -f - --force-conflicts=true) || true
 	if [ -n "$DIFFS" ]; then

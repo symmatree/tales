@@ -57,6 +57,13 @@ loki:
         secretAccessKey: ${SECRET_ACCESS_KEY}
         accessKeyId: ${ACCESS_KEY_ID}
         s3ForcePathStyle: true
+  gateway:
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 80
+      initialDelaySeconds: 3
+      periodSeconds: 3
   # We have minio at home.
   minio:
     enabled: false

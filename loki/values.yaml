@@ -58,6 +58,7 @@ loki:
         accessKeyId: ${ACCESS_KEY_ID}
         s3ForcePathStyle: true
   gateway:
+    replicas: 1
     readinessProbe:
       httpGet:
         path: /

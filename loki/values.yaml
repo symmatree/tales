@@ -62,7 +62,7 @@ loki:
     readinessProbe:
       httpGet:
         path: /
-        port: 80
+        port: 8080
       initialDelaySeconds: 3
       periodSeconds: 3
   # We have minio at home.

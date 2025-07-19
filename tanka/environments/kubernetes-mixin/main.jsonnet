@@ -1,4 +1,4 @@
-local k = import 'github.com/jsonnet-libs/k8s-libsonnet/1.29/main.libsonnet';
+local k = import 'github.com/jsonnet-libs/k8s-libsonnet/1.32/main.libsonnet';
 local po = import 'github.com/jsonnet-libs/prometheus-operator-libsonnet/0.77/main.libsonnet';
 local libMixin = import 'github.com/kubernetes-monitoring/kubernetes-mixin/mixin.libsonnet';
 

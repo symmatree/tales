@@ -76,10 +76,6 @@ local mochi = {
         + readinessProbe.withFailureThreshold(3),
       ])
       + kDeployment.spec.template.spec.withTerminationGracePeriodSeconds(30)
-      + kDeployment.spec.template.spec.securityContext.withRunAsNonRoot(true)
-      + kDeployment.spec.template.spec.securityContext.withRunAsUser(config.uid)
-      + kDeployment.spec.template.spec.securityContext.withRunAsGroup(config.gid)
-      + kDeployment.spec.template.spec.securityContext.withFsGroup(config.fsGroup)
       + k_util.pvcVolumeMount(mochiObj.pvc.metadata.name, '/mnt/mochi-pebble')
       + k_util.configMapVolumeMount(mochiObj.serverConfig, '/config.yaml', kVolumeMount.withSubPath('config.yaml') + kVolumeMount.withReadOnly(true)),
     service: k_util.serviceFor(self.deployment, nameFormat='%(port)s'),

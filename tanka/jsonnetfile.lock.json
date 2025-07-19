@@ -25,6 +25,16 @@
       "source": {
         "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "cilium-enterprise-mixin"
+        }
+      },
+      "version": "1cd23af7f31e8ee2f4e6abe16b466c7bfc0ce82a",
+      "sum": "ysCe2gbjTar0ZF7G0koRTjeUvpasQ9heovpD4AeO1pw="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "ksonnet-util"
         }
       },

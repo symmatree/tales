@@ -9,12 +9,12 @@ spec:
   project: default
   source:
     repoURL: https://github.com/symmatree/tales.git
-    targetRevision: main
-    path: cilium-mixin
+    targetRevision: tk-refactor
+    path: tanka
     plugin:
       env:
         - name: TK_ENV
-          value: default
+          value: cilium-mixin
   destination:
     server: https://kubernetes.default.svc
     namespace: cilium

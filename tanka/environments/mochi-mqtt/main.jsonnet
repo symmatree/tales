@@ -12,6 +12,9 @@ local mochi = {
   local defaults = {
     name: 'mochi-mqtt',
     image: 'mochimqtt/server',
+    uid: 405,  // `guest` in alpine
+    gid: 100,  // `users` in alpine
+    fsGroup: 100,  // `users` in alpine
     version: '2.7',
     pvcName: 'mochi-pebble',
   },
@@ -66,12 +69,19 @@ local mochi = {
           kPort.new('websocket', 1882),
           kPort.new('mqtt', 1883),
         ])
+        + kContainer.securityContext.withReadOnlyRootFilesystem(true)
+        + kContainer.securityContext.withAllowPrivilegeEscalation(false)
+        + kContainer.securityContext.capabilities.withDrop(['ALL'])
         + healthProbe(livenessProbe)
         + livenessProbe.withFailureThreshold(6)
         + healthProbe(readinessProbe)
         + readinessProbe.withFailureThreshold(3),
       ])
       + kDeployment.spec.template.spec.withTerminationGracePeriodSeconds(30)
+      + kDeployment.spec.template.spec.securityContext.withRunAsNonRoot(true)
+      + kDeployment.spec.template.spec.securityContext.withRunAsUser(config.uid)
+      + kDeployment.spec.template.spec.securityContext.withRunAsGroup(config.gid)
+      + kDeployment.spec.template.spec.securityContext.withFsGroup(config.fsGroup)
       + k_util.pvcVolumeMount(mochiObj.pvc.metadata.name, '/mnt/mochi-pebble')
       + k_util.configMapVolumeMount(mochiObj.serverConfig, '/config.yaml', kVolumeMount.withSubPath('config.yaml') + kVolumeMount.withReadOnly(true)),
     service: k_util.serviceFor(self.deployment, nameFormat='%(port)s'),

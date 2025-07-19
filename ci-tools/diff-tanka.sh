@@ -16,17 +16,20 @@ for dir in "${TANKA[@]}"; do
 	for env in environments/*; do
 		echo "Validating environment: $env"
 
-		NAMESPACE=$(basename "$env")
+		NAMESPACE=$(jq -r ".spec.namespace" <"$env/spec.json")
+		if [[ -z $NAMESPACE ]]; then
+			echo "No namespace found in $env/spec.json"
+			exit 1
+		fi
 		echo "Namespace: ${NAMESPACE} (${dir}/${env})"
 		kubectl config set-context --current --namespace="$NAMESPACE"
 		DIFFS=$(tk show --dangerous-allow-redirect "$env" |
 			kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
 		if [ -n "$DIFFS" ]; then
 			# echo "::notice file=${dir},env=${env},title=${NAMESPACE}-Diffs::${DIFFS}"
-			echo "::group::${dir} ${env} title=${NAMESPACE}"
-			echo "file=${dir},env=${env},title=${NAMESPACE}-Diffs::${DIFFS}"
+			echo "::group::FOUND DIFFS ${dir} ${env} title=${NAMESPACE}"
 			echo "$DIFFS"
-			# echo "::endgroup::"
+			echo "::endgroup::"
 		else
 			echo "No differences found in $env."
 		fi

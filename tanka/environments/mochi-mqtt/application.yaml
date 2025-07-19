@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/symmatree/tales.git
-    targetRevision: main
+    targetRevision: tk-refactor
     path: tanka
     plugin:
       env:

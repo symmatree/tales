@@ -69,7 +69,6 @@ local mochi = {
           kPort.new('websocket', 1882),
           kPort.new('mqtt', 1883),
         ])
-        + kContainer.securityContext.withAllowPrivilegeEscalation(false)
         + healthProbe(livenessProbe)
         + livenessProbe.withFailureThreshold(6)
         + healthProbe(readinessProbe)

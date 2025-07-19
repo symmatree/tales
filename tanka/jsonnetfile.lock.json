@@ -4,6 +4,26 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-latest"
+        }
+      },
+      "version": "5a8f3d6aa89b7e7513528371d2d1265aedc844bc",
+      "sum": "V9vAj21qJOc2DlMPDgB1eEjSQU4A+sAA4AXuJ6bd4xc="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v11.4.0"
+        }
+      },
+      "version": "5a8f3d6aa89b7e7513528371d2d1265aedc844bc",
+      "sum": "aVAX09paQYNOoCSKVpuk1exVIyBoMt/C50QJI+Q/3nA="
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "ksonnet-util"
         }
@@ -30,6 +50,36 @@
       },
       "version": "14aa0545f3b789c3fa4ffe19ef9709ec5fa8c147",
       "sum": "L70C3SiMFOsNCuIGOxRKAzd6wUBuabAoEGrgvCyeCBc="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/prometheus-operator-libsonnet.git",
+          "subdir": "0.77"
+        }
+      },
+      "version": "8055c684fc951ae857bd0e09cf14cb2aeb57b813",
+      "sum": "pjNJAI6ch15p0EwHy50FKncuXVcghJwrIKD578Ho8NU="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/xtd.git",
+          "subdir": ""
+        }
+      },
+      "version": "4eee017d21cb63a303925d1dcd9fc5c496809b46",
+      "sum": "Kh0GbIycNmJPzk6IOMXn1BbtLNyaiiimclYk7+mvsns="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/kubernetes-monitoring/kubernetes-mixin.git",
+          "subdir": ""
+        }
+      },
+      "version": "02b7ba4c005e5c5b4ba25f95ddc8272b489da6cf",
+      "sum": "Iw3dxtrJJSCpzff/OpVyXSAd3vzoPCiE7/fjP/4nAQ4="
     }
   ],
   "legacyImports": false

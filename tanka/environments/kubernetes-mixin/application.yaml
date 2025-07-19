@@ -10,11 +10,11 @@ spec:
   source:
     repoURL: https://github.com/symmatree/tales.git
     targetRevision: main
-    path: kubernetes-mixin
+    path: tanka
     plugin:
       env:
         - name: TK_ENV
-          value: default
+          value: kubernetes-mixin
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-mixin

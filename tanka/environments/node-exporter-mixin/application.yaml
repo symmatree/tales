@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubernetes-mixin
+  name: node-exporter-mixin
   namespace: argocd
   labels:
-    name: kubernetes-mixin
+    name: node-exporter-mixin
 spec:
   project: default
   source:
@@ -14,7 +14,7 @@ spec:
     plugin:
       env:
         - name: TK_ENV
-          value: kubernetes-mixin
+          value: node-exporter-mixin
   destination:
     server: https://kubernetes.default.svc
     namespace: kubernetes-mixin

@@ -5,7 +5,7 @@
     "name": "environments/node-exporter-mixin"
   },
   "spec": {
-    "namespace": "alloy",
+    "namespace": "kubernetes-mixin",
     "resourceDefaults": {},
     "expectVersions": {}
   }

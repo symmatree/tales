@@ -1,27 +1,26 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubernetes-mixin
+  name: cilium-mixin
   namespace: argocd
   labels:
-    name: kubernetes-mixin
+    name: cilium-mixin
 spec:
   project: default
   source:
     repoURL: https://github.com/symmatree/tales.git
-    targetRevision: main
-    path: kubernetes-mixin
+    targetRevision: tk-refactor
+    path: tanka
     plugin:
       env:
         - name: TK_ENV
-          value: default
+          value: cilium-mixin
   destination:
     server: https://kubernetes.default.svc
-    namespace: kubernetes-mixin
+    namespace: cilium
   syncPolicy:
     # automated:
     #   prune: true
     #   selfHeal: true
     syncOptions:
-      - CreateNamespace=true
       - ServerSideApply=true

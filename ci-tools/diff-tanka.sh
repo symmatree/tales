@@ -13,20 +13,28 @@ for dir in "${TANKA[@]}"; do
 	echo "$dir"
 	cd "$dir"
 
-	NAMESPACE=$(basename "$dir")
-	echo "Namespace: ${NAMESPACE} (${dir})"
-	kubectl config set-context --current --namespace="$NAMESPACE"
-	DIFFS=$(tk show --dangerous-allow-redirect \
-		environments/default |
-		kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
-	if [ -n "$DIFFS" ]; then
-		echo "::notice file=${dir},title=${NAMESPACE}-Diffs::${DIFFS}"
-		#echo "Differences found in $dir:"
-		#echo "$DIFFS"
-		# echo "::endgroup::"
-	else
-		echo "No differences found in $dir."
-	fi
+	for env in environments/*; do
+		echo "Validating environment: $env"
+
+		NAMESPACE=$(jq -r ".spec.namespace" <"$env/spec.json")
+		if [[ -z $NAMESPACE ]]; then
+			echo "No namespace found in $env/spec.json"
+			exit 1
+		fi
+		echo "Namespace: ${NAMESPACE} (${dir}/${env})"
+		kubectl config set-context --current --namespace="$NAMESPACE"
+		DIFFS=$(tk show --dangerous-allow-redirect "$env" |
+			kubectl diff -n "${NAMESPACE}" --server-side=true -f - --force-conflicts=true) || true
+		if [ -n "$DIFFS" ]; then
+			# echo "::notice file=${dir},env=${env},title=${NAMESPACE}-Diffs::${DIFFS}"
+			echo "::group::FOUND DIFFS ${dir} ${env} title=${NAMESPACE}"
+			echo "$DIFFS"
+			echo "::endgroup::"
+		else
+			echo "No differences found in $env."
+		fi
+	done
+
 	echo "end $dir"
 done
 echo "All Tanka environments diffed successfully."

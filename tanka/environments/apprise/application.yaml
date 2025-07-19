@@ -9,12 +9,12 @@ spec:
   project: default
   source:
     repoURL: https://github.com/symmatree/tales.git
-    targetRevision: main
-    path: apprise
+    targetRevision: tk-refactor
+    path: tanka
     plugin:
       env:
         - name: TK_ENV
-          value: default
+          value: apprise
   destination:
     server: https://kubernetes.default.svc
     namespace: apprise
@@ -25,3 +25,6 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/warn: baseline

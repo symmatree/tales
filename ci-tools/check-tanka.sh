@@ -15,9 +15,12 @@ for dir in "${TANKA[@]}"; do
 	if [[ -n ${UPDATE:-true} ]]; then
 		jb update
 	fi
-	tk show --dangerous-allow-redirect \
-		environments/default |
-		"$WORKSPACE/ci-tools/kubeconform.sh"
+	for env in environments/*; do
+		echo "Validating environment: $env"
+		tk show --dangerous-allow-redirect "$env" |
+			"$WORKSPACE/ci-tools/kubeconform.sh"
+		echo "Environment $env done."
+	done
 	echo "end $dir"
 done
 echo "All Tanka environments validated successfully."

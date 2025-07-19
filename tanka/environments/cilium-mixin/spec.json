@@ -2,10 +2,10 @@
   "apiVersion": "tanka.dev/v1alpha1",
   "kind": "Environment",
   "metadata": {
-    "name": "environments/default"
+    "name": "environments/cilium-mixin"
   },
   "spec": {
-    "namespace": "apprise",
+    "namespace": "cilium",
     "resourceDefaults": {},
     "expectVersions": {}
   }

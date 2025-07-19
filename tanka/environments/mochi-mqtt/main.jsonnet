@@ -12,6 +12,9 @@ local mochi = {
   local defaults = {
     name: 'mochi-mqtt',
     image: 'mochimqtt/server',
+    uid: 405,  // `guest` in alpine
+    gid: 100,  // `users` in alpine
+    fsGroup: 100,  // `users` in alpine
     version: '2.7',
     pvcName: 'mochi-pebble',
   },

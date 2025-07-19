@@ -1,0 +1,49 @@
+global:
+    http_config:
+        enable_http2: true
+        follow_redirects: true
+        proxy_url: null
+        tls_config:
+            insecure_skip_verify: false
+    opsgenie_api_url: https://api.opsgenie.com/
+    pagerduty_url: https://events.pagerduty.com/v2/enqueue
+    resolve_timeout: 5m
+    smtp_hello: localhost
+    smtp_require_tls: true
+    smtp_smarthost: ""
+    telegram_api_url: https://api.telegram.org
+    victorops_api_url: https://alert.victorops.com/integrations/generic/20131114/alert/
+    webex_api_url: https://webexapis.com/v1/messages
+    wechat_api_url: https://qyapi.weixin.qq.com/cgi-bin/
+receivers:
+    - name: default-receiver
+    - name: bond
+      webhook_configs:
+        - max_alerts: 0
+          send_resolved: true
+          url: http://localhost:3000?template=alertmanager&tag=bond
+    - name: tales
+      webhook_configs:
+        - max_alerts: 0
+          send_resolved: true
+          url: http://localhost:3000/?template=alertmanager&tag=tales
+    - name: priority
+      webhook_configs:
+        - max_alerts: 0
+          send_resolved: true
+          url: http://localhost:3000?template=alertmanager&tag=priority
+route:
+    continue: false
+    group_by:
+        - namespace
+    group_interval: 5m
+    group_wait: 30s
+    matchers: []
+    mute_time_intervals: []
+    receiver: tales
+    repeat_interval: 4h
+    routes: []
+templates: []
+
+
+Templates:

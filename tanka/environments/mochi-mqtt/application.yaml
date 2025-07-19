@@ -10,18 +10,18 @@ spec:
   source:
     repoURL: https://github.com/symmatree/tales.git
     targetRevision: main
-    path: mochi-mqtt
+    path: tanka
     plugin:
       env:
         - name: TK_ENV
-          value: default
+          value: mochi-mqtt
   destination:
     server: https://kubernetes.default.svc
     namespace: mochi-mqtt
   syncPolicy:
-    # automated:
-    #   prune: true
-    #   selfHeal: true
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true

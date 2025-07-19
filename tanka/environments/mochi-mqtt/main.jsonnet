@@ -71,7 +71,6 @@ local mochi = {
         ])
         + kContainer.securityContext.withReadOnlyRootFilesystem(true)
         + kContainer.securityContext.withAllowPrivilegeEscalation(false)
-        + kContainer.securityContext.capabilities.withDrop(['ALL'])
         + healthProbe(livenessProbe)
         + livenessProbe.withFailureThreshold(6)
         + healthProbe(readinessProbe)

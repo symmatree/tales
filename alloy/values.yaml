@@ -61,6 +61,12 @@ k8s-monitoring:
       prometheus.exporter.blackbox "blackbox_exporter" {
         config = "{ modules: { http_2xx: { prober: http, timeout: 5s } } }"
       }
+    alloy:
+      resources: # Set 2025-07-20
+        requests:
+          memory: 768Mi
+        limits:
+          memory: 1Gi
   alloy-singleton:
     enabled: true
     serviceMonitor:
@@ -69,6 +75,12 @@ k8s-monitoring:
       mimir.rules.kubernetes "default" {
         address = "http://mimir-ruler.mimir.svc:8080"
       }
+    alloy:
+      resources: # Set 2025-07-20
+        requests:
+          memory: 256Mi
+        limits:
+          memory: 512Mi
   alloy-logs:
     enabled: true
     serviceMonitor:

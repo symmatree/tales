@@ -16,5 +16,7 @@ python "$WORKSPACE/../dashpint/extract.py" "--grafana-token=$TOKEN" "--grafana-u
 # Move to work_dir so we can use "find ." to generate relative paths for input and output.
 cd "$WORK_DIR"
 # NOTE: pint doesn't write to stdout, we need stderr
-find . -name "*.yaml" -exec \
-	pint --no-color --config "$WORKSPACE/.pint.hcl" --log-level info lint --json "$REPORT_DIR/$(basename "{}" .yaml).json" --min-severity warning "{}" \;
+# shellcheck disable=SC2156
+find . -name "*.yaml" \
+	-exec bash -c 'mkdir -p "$(dirname /home/jovyan/pint-report/{})"' \; \
+	-exec pint --no-color --config "$WORKSPACE/.pint.hcl" --log-level info lint --json "$REPORT_DIR/{}.json" --min-severity warning "{}" \;

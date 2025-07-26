@@ -75,8 +75,6 @@ mimirtool alertmanager get \
 This is actually testing the upstream alert definitions / configs (e.g. kubernetes-mixin),
 but the mechanics of testing are at the mimir level.
 
-By hand at present:
-
 One-time setup:
 
 ```
@@ -86,18 +84,6 @@ sudo eget https://github.com/cloudflare/pint --asset=pint-linux-amd64
 sudo mv pint-linux-amd64 pint
 ```
 
-```
-export OUT_DIR=/tmp/rules
-mkdir -p "$OUT_DIR"
-mimirtool rules print \
-  --address=https://mimir.local.symmatree.com --id=anonymous \
-  --output-dir="$OUT_DIR"
-```
+then run `ci-tools/check-mimir-rules.sh`
 
-then (from the root directory of the repo because that's where `.pint.hcl` lives),
-
-```
-export TARGET=kubernetes-mixin
-pint lint -n info \
-  "${OUT_DIR}/alloy_${TARGET}*"
-```
+See also `ci-tools/check-dashboards.sh` which connects Grafana dashboards to the same checks.

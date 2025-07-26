@@ -9,20 +9,25 @@ local po = import 'github.com/jsonnet-libs/prometheus-operator-libsonnet/0.77/ma
     folder: 'Misc',
     namespace: error 'namespace',
     dashboardsToDrop: [],  // Dashboards to remove
-    alertsToDrop: [],  // Groups to remove
-    rulesToDrop: [],  // Groups to remove
+    alertGroupsToDrop: [],
+    alertsToDrop: {},  // Map from group-name to list of alerts
+    ruleGroupsToDrop: [],
     dirAnnotation: 'k8s-sidecar-target-directory',  // This aligns with grafana/values.yaml
   },
   new(mixin, overrides)::
     {
-      fields:: std.trace(
-        'mixin fields: ' + std.join(', ', std.objectFields(mixin)),
-      ),
-
       local toK8s(name) =
         std.strReplace(std.strReplace(std.strReplace(std.asciiLower(name), ' ', '-'), '_', '-'), '.json', ''),
       mixin:: mixin,
       local config = defaults + overrides,
+      local filterAlertGroup(group, alertsToDrop) =
+        local toDrop = std.get(alertsToDrop, group.name, []);
+        group {
+          rules: std.filter(
+            function(rule) !std.member(toDrop, rule.alert),
+            group.rules
+          ),
+        },
       local dashBlobs = mixin.grafanaDashboards,
       dashboards: std.filterMap(
         function(name)
@@ -40,18 +45,20 @@ local po = import 'github.com/jsonnet-libs/prometheus-operator-libsonnet/0.77/ma
       // Each group in a separate object to limit max size.
       alerts: std.filterMap(
         function(group)
-          !std.member(config.rulesToDrop, toK8s(group.name)),
+          !std.member(config.ruleGroupsToDrop, toK8s(group.name)),
         function(group)
           kPrometheusRule.new(toK8s(group.name))
           + kPrometheusRule.metadata.withNamespace(config.namespace)
-          + kPrometheusRule.spec.withGroups([group]),
+          + kPrometheusRule.spec.withGroups([
+            filterAlertGroup(group, config.alertsToDrop),
+          ]),
         mixin.prometheusAlerts.groups
       ),
 
       // Each group in a separate object to limit max size.
       rules: std.filterMap(
         function(group)
-          !std.member(config.rulesToDrop, toK8s(group.name)),
+          !std.member(config.ruleGroupsToDrop, toK8s(group.name)),
         function(group)
           kPrometheusRule.new(toK8s(group.name))
           + kPrometheusRule.metadata.withNamespace(config.namespace)

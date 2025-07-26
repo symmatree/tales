@@ -28,8 +28,14 @@ libMonResources.new(
     dashboardsToDrop: [
       'proxy',
     ],
-    rulesToDrop: [
+    ruleGroupsToDrop: [
       'kubernetes-system-kube-proxy',
     ],
+    alertsToDrop: {
+      'kubernetes-resources': [
+        'KubeCPUOvercommit',  // Fires if you cannot spare the largest node.
+        'KubeMemoryOvercommit',  // Fires if you cannot spare the largest node.
+      ],
+    },
   },
 )

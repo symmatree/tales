@@ -21,7 +21,7 @@ local po = import 'github.com/jsonnet-libs/prometheus-operator-libsonnet/0.77/ma
       mixin:: mixin,
       local config = defaults + overrides,
       local filterAlertGroup(group, alertsToDrop) =
-        local toDrop = std.get(alertsToDrop, group.name, []);
+        local toDrop = std.get(alertsToDrop, toK8s(group.name), []);
         group {
           rules: std.filter(
             function(rule) !std.member(toDrop, rule.alert),

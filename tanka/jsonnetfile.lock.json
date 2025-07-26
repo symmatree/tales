@@ -28,7 +28,7 @@
           "subdir": "cilium-enterprise-mixin"
         }
       },
-      "version": "1cd23af7f31e8ee2f4e6abe16b466c7bfc0ce82a",
+      "version": "6226b75e3f026d26e56103df08b7350b26b7a183",
       "sum": "ysCe2gbjTar0ZF7G0koRTjeUvpasQ9heovpD4AeO1pw="
     },
     {
@@ -38,7 +38,7 @@
           "subdir": "ksonnet-util"
         }
       },
-      "version": "1cd23af7f31e8ee2f4e6abe16b466c7bfc0ce82a",
+      "version": "6226b75e3f026d26e56103df08b7350b26b7a183",
       "sum": "0y3AFX9LQSpfWTxWKSwoLgbt0Wc9nnCwhMH2szKzHv0="
     },
     {
@@ -88,8 +88,8 @@
           "subdir": ""
         }
       },
-      "version": "02b7ba4c005e5c5b4ba25f95ddc8272b489da6cf",
-      "sum": "Iw3dxtrJJSCpzff/OpVyXSAd3vzoPCiE7/fjP/4nAQ4="
+      "version": "1da53ae8652b014b34a0c2346fc67e0bbca7559c",
+      "sum": "g1CTW1CQwszC4bhp1nHrg7bHzIttvLGPmlKUAhLDzUI="
     },
     {
       "source": {

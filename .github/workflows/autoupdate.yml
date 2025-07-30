@@ -1,11 +1,15 @@
 name: autoupdate
 on:
+  pull_request: {}
+  workflow_dispatch: {}
   # This will trigger on all pushes to all branches.
   # push: {}
   # Alternatively, you can only trigger if commits are pushed to certain branches, e.g.:
+  # TODO: What actually happens on push to main - does this update all branches targeting it?
   push:
     branches:
       - main
+
 jobs:
   autoupdate:
     name: autoupdate

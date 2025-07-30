@@ -38,6 +38,7 @@ jobs:
       - uses: pre-commit/action@v3.0.1
         name: pre-commit
         with:
+          # Diff on failure is a default arg.
           extra_args: "--all-files"
       - name: Find modules
         id: modules

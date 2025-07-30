@@ -12,6 +12,9 @@ on:
 
 jobs:
   autoupdate:
+    permissions:
+      contents: write
+      pull-requests: write
     name: autoupdate
     runs-on: ubuntu-22.04
     steps:

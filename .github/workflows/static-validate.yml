@@ -35,6 +35,10 @@ jobs:
           export TOOLDIR="${{ runner.temp }}/bin"
           export GET_EGET="$GITHUB_WORKSPACE/ci-tools/eget.sh"
           "$GITHUB_WORKSPACE/ci-tools/install-tools.sh"
+      - uses: pre-commit/action@v3.0.1
+        name: pre-commit
+        with:
+          extra_args: "--all-files"
       - name: Find modules
         id: modules
         run: |

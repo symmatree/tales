@@ -42,6 +42,9 @@ jobs:
           "$GITHUB_WORKSPACE/ci-tools/install-tools.sh"
       - uses: pre-commit/action@v3.0.1
         name: pre-commit
+        env:
+          # `no-commit-to-branch` fails when run --all-files against main.
+          SKIP: "no-commit-to-branch"
         with:
           # Diff on failure is a default arg.
           extra_args: "--all-files"

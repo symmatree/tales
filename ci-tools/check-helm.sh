@@ -6,7 +6,7 @@ WORKSPACE=$(dirname "$CI_TOOLS")
 echo "WORKSPACE: $WORKSPACE"
 
 cd "${WORKSPACE}"
-if [[ -n ${UPDATE:-true} ]]; then
+if [[ ${UPDATE:-1} == 1 ]]; then
 	"$WORKSPACE/ci-tools/helm-add-repos.sh"
 	helm repo update
 fi
@@ -18,7 +18,7 @@ fi
 for chart in "${CHARTS[@]}"; do
 	echo "$chart"
 	cd "$chart"
-	if [[ -n ${UPDATE:-true} ]]; then
+	if [[ ${UPDATE:-1} == 1 ]]; then
 		helm dep build --skip-refresh
 	fi
 	helm lint .

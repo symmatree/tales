@@ -16,6 +16,6 @@ prometheus "tales-mimir" {
 # https://cloudflare.github.io/pint/checks/promql/series.html
 check "promql/series" {
   lookbackRange           = "2d"
-  ignoreMetrics           = [ "(.*)", ... ]
-  ignoreLabelsValue       = { "...": [ "...", ... ] }
+  # ignoreMetrics           = [ "(.*)", ... ]
+  # ignoreLabelsValue       = { "...": [ "...", ... ] }
 }

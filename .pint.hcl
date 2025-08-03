@@ -13,3 +13,9 @@ prometheus "tales-mimir" {
   uri = "https://mimir.local.symmatree.com/prometheus"
   required = true
 }
+# https://cloudflare.github.io/pint/checks/promql/series.html
+check "promql/series" {
+  lookbackRange           = "2d"
+  # ignoreMetrics           = [ "(.*)", ... ]
+  # ignoreLabelsValue       = { "...": [ "...", ... ] }
+}

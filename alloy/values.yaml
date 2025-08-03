@@ -41,6 +41,7 @@ k8s-monitoring:
           - "node_pressure.*"
           - "node_xfs.*"
           - "node_time_seconds"
+          - "node_bonding.*"
         dropMetricsForFilesystem:
           - ramfs
           - tmpfs

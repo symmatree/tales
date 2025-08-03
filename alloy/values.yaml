@@ -31,6 +31,22 @@ k8s-monitoring:
     windows-exporter:
       enabled: false
       deploy: false
+    node-exporter:
+      enabled: true
+      deploy: true
+      metricsTuning:
+        useDefaultAllowList: true
+        useIntegrationAllowList: true
+        includeMetrics:
+          - "node_pressure.*"
+          - "node_xfs.*"
+        dropMetricsForFilesystem:
+          - ramfs
+          - tmpfs
+          - nsfs
+          - overlayfs
+      extraArgs:
+        - --collector.filesystem.fs-types-exclude=^(ramfs|tmpfs|nsfs|overlayfs)$
     kepler:
       enabled: false
     opencost:

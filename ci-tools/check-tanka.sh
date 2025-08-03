@@ -12,7 +12,7 @@ fi
 for dir in "${TANKA[@]}"; do
 	echo "$dir"
 	cd "$dir"
-	if [[ -n ${UPDATE:-true} ]]; then
+	if [[ ${UPDATE:-1} == 1 ]]; then
 		jb update
 	fi
 	for env in environments/*; do

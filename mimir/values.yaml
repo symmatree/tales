@@ -1,3 +1,4 @@
+# Upstream: https://github.com/grafana/mimir/blob/main/operations/helm/charts/mimir-distributed/values.yaml
 global:
   extraEnvFrom:
     - secretRef:
@@ -110,6 +111,11 @@ mimir-distributed:
         abort_if_cluster_join_fails: true
         rejoin_interval: 5m
         message_history_buffer_bytes: 1048576
+      limits:
+        align_queries_with_step: true
+        enabled_promql_experimental_functions: "all"
+        ruler_max_rules_per_rule_group: 0
+        ruler_max_rule_groups_per_tenant: 0
       common:
         storage:
           backend: s3

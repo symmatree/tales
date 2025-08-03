@@ -31,7 +31,7 @@ for dir in "${TANKA[@]}"; do
 			echo "$DIFFS"
 			echo "::endgroup::"
 		else
-			echo "No differences found in $env."
+			echo "::notice file=${dir}/${env},title=${NAMESPACE}-No-Diffs::No diffs found for $env"
 		fi
 	done
 

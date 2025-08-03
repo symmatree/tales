@@ -20,4 +20,4 @@ cd "$WORK_DIR"
 # shellcheck disable=SC2156
 find . -name "*.yaml" \
 	-exec bash -c 'mkdir -p "$(dirname /home/jovyan/pint-report/{})"' \; \
-	-exec pint --workers 1 --no-color --config "$WORKSPACE/.pint.hcl" --log-level info lint --json "$REPORT_DIR/{}.json" --min-severity warning "{}" \;
+	-exec pint --workers 1 --config "$WORKSPACE/.pint.hcl" --log-level info lint --json "$REPORT_DIR/{}.json" --min-severity warning "{}" \;

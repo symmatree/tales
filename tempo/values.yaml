@@ -14,7 +14,7 @@ tempo:
           secretAccessKey: ${SECRET_ACCESS_KEY}
           accessKeyId: ${ACCESS_KEY_ID}
     extraArgs:
-      - -config.expand-env=true
+      config.expand-env: "true"
     extraEnvFrom:
       - secretRef:
           name: lgtm-s3-creds

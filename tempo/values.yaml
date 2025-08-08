@@ -1,4 +1,14 @@
 tempo:
+  extraVolumes:
+    - name: ca-certificates
+      configMap:
+        name: trust-bundle
+  replicas: 1
+  persistence:
+    enabled: true
+    enableStatefulSetAutoDeletePVC: true
+  serviceMonitor:
+    enabled: true
   tempo:
     storage:
       trace:
@@ -21,10 +31,6 @@ tempo:
     extraEnv:
       - name: SSL_CERT_FILE
         value: /etc/ssl/certs/ca-certificates.crt
-    extraVolumes:
-      - name: ca-certificates
-        configMap:
-          name: trust-bundle
     extraVolumeMounts:
       - name: ca-certificates
         mountPath: /etc/ssl/certs

@@ -14,15 +14,15 @@ tempo:
       trace:
         backend: s3
         s3:
-          bucketName: tempo-storage
+          bucket: tempo-storage
           # The output values if minio was enabled are found here:
           # https://github.com/grafana/loki/blob/main/production/helm/loki/templates/_helpers.tpl#L213C2-L218C17
           # We cannot directly use them but it is a good reference.
           endpoint: https://minio.tales-tenant.svc
           # For unclear reasons the Kubernetes dollar-paren syntax is not
           # expanded but this is Loki's native expansion syntax with config.expand-env=true
-          secretAccessKey: ${SECRET_ACCESS_KEY}
-          accessKeyId: ${ACCESS_KEY_ID}
+          access_key: ${SECRET_ACCESS_KEY}
+          secret_key: ${ACCESS_KEY_ID}
     extraArgs:
       config.expand-env: "true"
     extraEnvFrom:

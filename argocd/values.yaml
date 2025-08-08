@@ -110,7 +110,7 @@ argo-cd:
           - BackgroundScanReport
           - ClusterBackgroundScanReport
           - UpdateRequest
-      
+
     rbac:
       policy.default: role:admin
     # Argo CD configuration parameters

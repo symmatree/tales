@@ -1,0 +1,31 @@
+tempo:
+  tempo:
+    storage:
+      trace:
+        backend: s3
+        s3:
+          bucketName: tempo-storage
+          # The output values if minio was enabled are found here:
+          # https://github.com/grafana/loki/blob/main/production/helm/loki/templates/_helpers.tpl#L213C2-L218C17
+          # We cannot directly use them but it is a good reference.
+          endpoint: https://minio.tales-tenant.svc
+          # For unclear reasons the Kubernetes dollar-paren syntax is not
+          # expanded but this is Loki's native expansion syntax with config.expand-env=true
+          secretAccessKey: ${SECRET_ACCESS_KEY}
+          accessKeyId: ${ACCESS_KEY_ID}
+    extraArgs:
+      - -config.expand-env=true
+    extraEnvFrom:
+      - secretRef:
+          name: lgtm-s3-creds
+    extraEnv:
+      - name: SSL_CERT_FILE
+        value: /etc/ssl/certs/ca-certificates.crt
+    extraVolumes:
+      - name: ca-certificates
+        configMap:
+          name: trust-bundle
+    extraVolumeMounts:
+      - name: ca-certificates
+        mountPath: /etc/ssl/certs
+        readOnly: true

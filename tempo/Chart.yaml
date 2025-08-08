@@ -1,0 +1,10 @@
+apiVersion: v2
+name: tempo
+description: tempo
+type: application
+version: 0.1.0
+appVersion: 2.8.1
+dependencies:
+  - name: tempo
+    version: 1.23.2
+    repository: https://grafana.github.io/helm-charts

@@ -6,6 +6,8 @@ global:
   extraEnv:
     - name: SSL_CERT_FILE
       value: /etc/ssl/certs/ca-certificates.crt
+    - name: OTEL_TRACES_EXPORTER
+      value: none
   extraVolumes:
     - name: ca-certificates
       configMap:

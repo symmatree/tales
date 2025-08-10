@@ -7,7 +7,6 @@ local config = {
     '/cilium',
     '/connect',
     '/external-dns',
-    '/kubernetes-dashboard',
     '/minio-operator',
     '/static-certs',
     '/tales-tenant',

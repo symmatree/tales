@@ -135,6 +135,7 @@
         name:
           - argocd
           - helm
+          - go-jsonnet
           - jsonnet-bundler
           - kubectx
           - talosctl

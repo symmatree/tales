@@ -98,6 +98,7 @@
           - tmux
           - tree
           - xdg-utils
+          - yq
           - zsh
           - zsh-autosuggestions
           - zsh-syntax-highlighting

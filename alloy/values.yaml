@@ -85,18 +85,13 @@ k8s-monitoring:
     processors:
       kubernetes_node:
         enabled: true
-      batch:
-        maxSize: 2048
     connectors:
       spanLogs:
         enabled: true
-        process: true
         roots: true
         spans: false
       spanMetrics:
         enabled: true
-        histogram:
-          enabled: false
     metrics:
       enabled: false
     logs:

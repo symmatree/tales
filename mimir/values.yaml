@@ -7,7 +7,7 @@ global:
     - name: SSL_CERT_FILE
       value: /etc/ssl/certs/ca-certificates.crt
     - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-      value: "http://alloy-alloy-receiver.alloy.svc:4318/v1/traces"
+      value: http://alloy-alloy-receiver.alloy.svc:4318/v1/traces
   extraVolumes:
     - name: ca-certificates
       configMap:

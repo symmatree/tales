@@ -1,62 +1,58 @@
 updates:
-  - directory: "/alloy"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/argocd"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/cert-manager"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/cilium"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/connect"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/external-dns"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/kubernetes-dashboard"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/minio-operator"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/static-certs"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/tales-tenant"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/grafana"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/jupyterhub"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/loki"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/mimir"
-    package-ecosystem: "helm"
-    schedule:
-      interval: "weekly"
-  - directory: "/"
-    package-ecosystem: "github-actions"
-    schedule:
-      interval: "weekly"
+- directory: "/alloy"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/argocd"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/cert-manager"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/cilium"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/connect"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/external-dns"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/minio-operator"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/static-certs"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/tales-tenant"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/grafana"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/jupyterhub"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/loki"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/mimir"
+  package-ecosystem: "helm"
+  schedule:
+    interval: "weekly"
+- directory: "/"
+  package-ecosystem: "github-actions"
+  schedule:
+    interval: "weekly"
 version: 2

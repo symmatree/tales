@@ -19,7 +19,8 @@ for chart in "${CHARTS[@]}"; do
 	DIFFS=$("${WORKSPACE}/ci-tools/helm.sh" template --is-upgrade --no-hooks --skip-crds "$NAMESPACE" -n "$NAMESPACE" . |
 		kubectl diff --server-side=true -f - --force-conflicts=true) || true
 	if [ -n "$DIFFS" ]; then
-		# echo "::notice file=${chart},title=${NAMESPACE}-Diffs::${DIFFS}"
+		# warning adds it to a list of items; group makes it a zippy
+		echo "::warning file=${chart},title=${NAMESPACE}-Diffs::FOUND DIFFS for $chart"
 		echo "::group::Diffs for $NAMESPACE"
 		echo "Differences found in $chart:"
 		echo "$DIFFS"

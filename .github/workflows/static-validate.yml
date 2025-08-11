@@ -1,7 +1,13 @@
 name: Static Validation
 on:
   pull_request: {}
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      skip_pristine:
+        description: Unless true, ensure pre-commit did nothing.
+        default: false
+        required: false
+
   push:
     branches:
       - main # Run post-commit to validate, also to update caches.
@@ -48,6 +54,11 @@ jobs:
         with:
           # Diff on failure is a default arg.
           extra_args: "--all-files"
+      - name: Check pristine
+        if: ${{ ! inputs.skip_pristine }}
+        run: |
+          echo "Ensure pre-commit made no changes."
+          git diff --exit-code --color --word-diff=color
       - name: Find modules
         id: modules
         run: |

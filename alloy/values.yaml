@@ -22,8 +22,8 @@ k8s-monitoring:
       url: http://loki-gateway.loki.svc/loki/api/v1/push
     - name: localTempo
       type: otlp
-      protocol: grpc
-      url: tempo.tempo.svc:4317
+      protocol: http
+      url: http://tempo.tempo.svc:4318/v1/traces
       logs:
         enabled: false
       metrics:

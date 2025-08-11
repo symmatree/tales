@@ -22,9 +22,14 @@ k8s-monitoring:
       url: http://loki-gateway.loki.svc/loki/api/v1/push
     - name: localTempo
       type: otlp
-      url: http://tempo.tempo.svc:4318/api/traces
-      "logs.enabled": false
-      "metrics.enabled": false
+      protocol: grpc
+      url: tempo.tempo.svc:4317
+      logs:
+        enabled: false
+      metrics:
+        enabled: false
+      traces:
+        enabled: true
   # https://github.com/grafana/k8s-monitoring-helm/blob/main/charts/k8s-monitoring/charts/feature-cluster-metrics/values.yaml
   clusterMetrics:
     enabled: true

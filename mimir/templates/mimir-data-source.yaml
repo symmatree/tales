@@ -16,3 +16,6 @@ data:
         isDefault: true
         jsonData:
           prometheusType: Mimir
+          alertmanagerUid: alertmanager
+        secureJsonData:
+          tlsCACert: $__file{/etc/ssl/certs/ca-certificates.crt}

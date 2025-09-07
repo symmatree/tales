@@ -16,3 +16,5 @@ data:
         isDefault: true
         jsonData:
           prometheusType: Mimir
+        secureJsonData:
+          tlsCACert: $__file{/etc/ssl/certs/ca-certificates.crt}

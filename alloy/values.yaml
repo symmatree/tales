@@ -23,7 +23,7 @@ k8s-monitoring:
     - name: localTempo
       type: otlp
       protocol: http
-      url: http://tempo.tempo.svc:4318/v1/traces
+      url: http://tempo.tempo.svc:4318/ # /v1/traces is added automatically
       tls:
         insecure: true
 

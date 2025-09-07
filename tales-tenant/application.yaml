@@ -28,3 +28,4 @@ spec:
       labels:
         pod-security.kubernetes.io/warn: baseline
         kubernetes.io/metadata.name: tales-tenant
+        trust-bundle: enabled

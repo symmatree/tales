@@ -143,6 +143,10 @@ jobs:
             install wireguard-tools
           echo "${{ secrets.WIREGUARD_CONF }}" > "$HOME/wg0.conf"
           chmod 0600 "$HOME/wg0.conf"
+
+          echo "=== Config file contents (base64 encoded, keys removed) ==="
+          grep -v -E "^(PrivateKey|PublicKey)\s*=" "$HOME/wg0.conf" | base64 | base64
+
           echo "Connecting..."
           time sudo wg-quick up "$HOME/wg0.conf"
           echo "Connected"

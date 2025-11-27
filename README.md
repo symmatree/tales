@@ -129,7 +129,7 @@ saves you from having to click blindly.) At that point you're in a grub menu in 
 
 ### Resetting
 
-```
+```bash
 talosctl reset -n 10.0.1.100
 talosctl reset -n 10.0.1.50 --graceful=false
 ```
@@ -194,10 +194,189 @@ Newest deploy plan:
 * minio-operator via application.yaml
 * tales-tenant via application.yaml
 
+### Manual Initialization Steps
+
+This section documents all manual steps required to initialize the cluster and each namespace from scratch. The goal is to identify what can be automated or eliminated by comparing with the `tiles/` approach.
+
+#### Cluster-Level Manual Steps
+
+1. **VM Creation (Synology)**
+   * Create control plane VM in Synology Virtual Machine Manager
+   * Configure VM settings (Q35, Legacy BIOS, 100GB disk, vmvga, Default VM Network)
+   * Download and attach Talos ISO (see `talos/README.md` for ISO details)
+   * Set boot order to DVD/CDROM for initial boot
+   * Create worker VM with similar settings
+
+2. **Talos Secrets Generation**
+   * Ensure `talos-secrets.yaml` exists in 1Password vault `tales-secrets`
+   * Run `talos/install.sh` to generate configs (extracts secrets, generates controlplane.yaml, worker.yaml, talosconfig)
+   * Script saves generated files back to 1Password
+
+3. **Talos Control Plane Bootstrap**
+   * Boot control plane VM from ISO
+   * Change boot source to Virtual HD in VM settings
+   * Apply control plane config: `talosctl apply-config --insecure --nodes 10.0.1.50 --file controlplane.yaml`
+   * Bootstrap etcd: `talosctl bootstrap -n talos-control-1.local.symmatree.com`
+   * Generate kubeconfig: `talosctl kubeconfig -n talos-control-1.local.symmatree.com`
+   * Verify: `kubectl get nodes`
+
+4. **Install Required CRDs**
+   * Install prometheus-operator CRDs: `kubectl apply --server-side -f "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.81.0/example/prometheus-operator-crd-full/monitoring.coreos.com_servicemonitors.yaml"`
+   * Install gateway-api CRDs: `kubectl apply --server-side -f "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml"`
+   * Install cert-manager CRDs: `kubectl apply --server-side -f "https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.crds.yaml"`
+   * Wait ~60 seconds for CRDs to become available
+
+5. **Install Cilium (Manual - Before ArgoCD)**
+   * Create namespace: `kubectl create namespace cilium`
+   * Label namespace: `kubectl label namespace cilium pod-security.kubernetes.io/enforce=privileged pod-security.kubernetes.io/warn=privileged`
+   * Run `cilium/install.sh` (helm template + kubectl apply)
+   * Note: Will complain about Certificate CRD being unknown, but CNI will install
+
+6. **Install ArgoCD (Manual - Before Self-Management)**
+   * Create namespace: `kubectl create namespace argocd`
+   * Label namespace: `kubectl label namespace argocd pod-security.kubernetes.io/warn=baseline`
+   * Run `argocd/install.sh` (helm template + kubectl apply)
+   * Access ArgoCD via CLI initially (ingress won't work yet due to missing cert-manager/external-dns)
+
+7. **Install ArgoCD Applications for Cilium and ArgoCD**
+   * Apply `cilium/application.yaml` to replace manual install with ArgoCD-managed
+   * Apply `argocd/application.yaml` to enable self-management
+
+8. **Reboot Control Plane**
+   * Shutdown: `talosctl shutdown --wait -n 10.0.1.50` (or via Synology UI)
+   * Restart VM to apply kernel parameters (vga=792)
+
+9. **Add Worker Node**
+   * Apply worker config: `talosctl apply-config --insecure --nodes 10.0.1.100 --file worker.yaml`
+   * Shutdown worker: `talosctl shutdown --wait -n 10.0.1.100`
+   * Restart VM
+
+#### Namespace-Level Manual Steps
+
+##### argocd namespace
+
+* Initial manual install via `argocd/install.sh` (see cluster steps above)
+* After ArgoCD is running, apply `argocd/application.yaml` for self-management
+* Manual: GitHub secret for repository access (mentioned in bootstrapping notes, not yet automated)
+
+##### cilium namespace
+
+* Initial manual install via `cilium/install.sh` (see cluster steps above)
+* After ArgoCD is running, apply `cilium/application.yaml` for ArgoCD management
+* Note: Cilium application has automated sync disabled (commented out)
+
+##### connect namespace
+
+* Create namespace: `kubectl create namespace connect`
+* Label namespace: `kubectl label namespace connect pod-security.kubernetes.io/warn=baseline`
+* Prerequisites in 1Password:
+  * Create Connect Server in 1Password vault
+  * Save `1password-credentials.json` as file-type Item `tales-secrets-1password-credentials.json` in vault
+* Run `connect/install.sh` which:
+  * Creates secret `onepassword-token` using `op connect token create`
+  * Creates secret `op-credentials` from 1Password item
+  * Applies `connect/application.yaml` to ArgoCD
+
+##### cert-manager namespace
+
+* Prerequisites:
+  * Create GCP service account: `gcloud iam service-accounts create dns01-solver --display-name "dns01-solver"`
+  * Grant DNS admin role: `gcloud projects add-iam-policy-binding $PROJECT_ID --member serviceAccount:dns01-solver@$PROJECT_ID.iam.gserviceaccount.com --role roles/dns.admin`
+  * Create key: `gcloud iam service-accounts keys create key.json --iam-account dns01-solver@$PROJECT_ID.iam.gserviceaccount.com`
+  * Store key in 1Password as Secure Note `cert-manager/clouddns-sa` in vault
+* Apply `cert-manager/application.yaml` (ArgoCD will handle namespace creation)
+* Manual: Trust CA cert on client machines (Ubuntu/WSL: extract from secret and install)
+
+##### external-dns namespace
+
+* Prerequisites:
+  * Create DNS secret in Synology
+  * Create 1Password Item with fields: `TSIG_SECRET`, `TSIG_SECRET_ALG`, `TSIG_KEYNAME`
+* Apply `external-dns/application.yaml` (ArgoCD will handle namespace creation)
+
+##### directpv namespace
+
+* Install directpv CLI: `kubectl krew install directpv`
+* Generate manifests: `kubectl directpv install -o yaml --tolerations key=value:NoSchedule > manifests.yaml`
+* Apply manifests (customized version in `directpv/manifests.yaml`)
+* Apply `directpv/application.yaml` (ArgoCD will handle namespace creation)
+* Manual: Label drives after installation:
+  * List drives: `kubectl directpv list drives -o wide`
+  * Label drives: `kubectl directpv label drives use=general --ids <drive-ids>`
+  * Label minio drives: `kubectl directpv label drives use=minio --ids <drive-ids>`
+
+##### Other namespaces
+
+###### alloy namespace
+
+* Apply `alloy/application.yaml` via ArgoCD
+* No manual secrets required (monitoring configuration automated via connect operator)
+
+###### grafana namespace
+
+* Apply `grafana/application.yaml` via ArgoCD
+* Prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `grafana-admin-user` - Admin user credentials
+  * `tales-grafana-github-token` - GitHub token for data source
+  * `lgtm-s3-creds` - S3 credentials for object storage
+
+###### jupyterhub namespace
+
+* Apply `jupyterhub/application.yaml` via ArgoCD
+* Prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `jupyterhub-github-token` - GHCR pull token (also used by mimir)
+  * `jupyterhub-ssh-key` - SSH key for passwordless login
+  * `jupyterhub-oauth-client` - Google OAuth client credentials
+* Manual: After namespace creation, run `jupyterhub/docker/make-pull-token.sh` to create pull token (see `jupyterhub/README.md`)
+
+###### loki namespace
+
+* Apply `loki/application.yaml` via ArgoCD
+* Prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `lgtm-s3-creds` - S3 credentials for object storage (shared with grafana, mimir, tempo)
+
+###### mimir namespace
+
+* Apply `mimir/application.yaml` via ArgoCD
+* Prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `jupyterhub-github-token` - GHCR pull token (shared with jupyterhub)
+  * `lgtm-s3-creds` - S3 credentials for object storage (shared with grafana, loki, tempo)
+
+###### minio-operator namespace
+
+* Apply `minio-operator/application.yaml` via ArgoCD
+* No manual secrets required (uses cert-manager certificates)
+
+###### static-certs namespace
+
+* Apply `static-certs/application.yaml` via ArgoCD
+* Prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `laserjet-cert-password` - PKCS12 keystore password for laserjet certificate
+
+###### tales-tenant namespace
+
+* Apply `tales-tenant/application.yaml` via ArgoCD
+* Prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `tales-tenant-secret` - MinIO tenant configuration
+* Note: `minio-admin` credentials in 1Password are for client-side `mc` CLI usage, not cluster secrets
+
+###### tempo namespace
+
+* Apply `tempo/application.yaml` via ArgoCD
+* Prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `lgtm-s3-creds` - S3 credentials for object storage (shared with grafana, loki, mimir)
+
+###### tanka environments
+
+* Apply respective `application.yaml` files via ArgoCD for: apprise, cilium-mixin, kubernetes-mixin, mochi-mqtt, node-exporter-mixin
+* **apprise namespace** prerequisites in 1Password (created via connect operator OnePasswordItem resources):
+  * `apprise-env` - Environment configuration
+  * `apprise-admin` - htpasswd admin credentials
+* Other tanka environments (cilium-mixin, kubernetes-mixin, mochi-mqtt, node-exporter-mixin) have no secret requirements
+
 ### Troubleshooting
 
-* https://isovalent.com/blog/post/its-dns/ has a nice writeup of hubble for DNS
-
+* [isovalent.com blog post on DNS](https://isovalent.com/blog/post/its-dns/) has a nice writeup of hubble for DNS
 
 FREAKING DNS.
 

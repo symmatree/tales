@@ -28,7 +28,7 @@ jobs:
           echo "DATESTAMP=${datestamp}" | tee -a "$GITHUB_OUTPUT"
       - uses: actions/checkout@v5
       - name: Tool cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ runner.temp }}/bin
@@ -85,7 +85,7 @@ jobs:
           done
           echo "EOF" | tee -a "$GITHUB_OUTPUT"
       - name: Kubeconform schema cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ runner.temp }}/cache/kubeconform
@@ -96,7 +96,7 @@ jobs:
             ${{ runner.os }}-kubeconform-
       - name: Deps cache
         id: deps-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.modules.outputs.CACHE_DIRS }}
           key: ${{ runner.os }}-deps-${{ steps.stamps.outputs.DATESTAMP }}-${{ hashFiles('**/Chart.lock', '**/jsonnetfile.lock.json') }}

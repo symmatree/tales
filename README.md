@@ -1,5 +1,9 @@
 # tales
 
+ARCHIVED; replaced by symmatree/tiles which builds a similar cluster but on ProxMox
+VMs rather than manually-provisioned Synology-hosted VMs, with Terraform setup for
+almost all the manual steps which this repo (tales) required.
+
 Self-contained description of a Kubernetes cluster on Talos Linux within a Synology device
 
 ## Links
